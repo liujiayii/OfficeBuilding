@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.Region;
 
 public interface RegionMapper {
@@ -39,4 +41,6 @@ public interface RegionMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Region record);
+
+	List<Region> listRegionByPid(String pid);
 }

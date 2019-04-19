@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.Picture;
 
 public interface PictureMapper {
@@ -39,4 +41,5 @@ public interface PictureMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Picture record);
+	public List<Picture> selectPic(long id);
 }

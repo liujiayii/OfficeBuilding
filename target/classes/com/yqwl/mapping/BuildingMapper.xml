@@ -24,6 +24,7 @@
     <result column="conditioners_fee" jdbcType="DECIMAL" property="conditioners_fee" />
     <result column="intro" jdbcType="VARCHAR" property="intro" />
     <result column="circum" jdbcType="VARCHAR" property="circum" />
+    <result column="broker_id" jdbcType="BIGINT" property="broker_id" />
     <result column="longitude" jdbcType="VARCHAR" property="longitude" />
     <result column="latitude" jdbcType="VARCHAR" property="latitude" />
   </resultMap>
@@ -35,7 +36,7 @@
     `id`, `mansion_name`, `mansion_picture`, `region_sh_id`, `region_shname`, `region_city_id`, 
     `region_cityname`, `region_id`, `region_name`, `district`, `floor`, `traffic_condition`, 
     `activate_time`, `property_fee`, `parking_fee`, `conditioners_fee`, `intro`, `circum`, 
-    `longitude`, `latitude`
+    `broker_id`, `longitude`, `latitude`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -68,15 +69,15 @@
       `region_id`, `region_name`, `district`, 
       `floor`, `traffic_condition`, `activate_time`, 
       `property_fee`, `parking_fee`, `conditioners_fee`, 
-      `intro`, `circum`, `longitude`, 
-      `latitude`)
+      `intro`, `circum`, `broker_id`, 
+      `longitude`, `latitude`)
     values (#{mansion_name,jdbcType=VARCHAR}, #{mansion_picture,jdbcType=VARCHAR}, #{region_sh_id,jdbcType=INTEGER}, 
       #{region_shname,jdbcType=VARCHAR}, #{region_city_id,jdbcType=INTEGER}, #{region_cityname,jdbcType=VARCHAR}, 
       #{region_id,jdbcType=INTEGER}, #{region_name,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
       #{floor,jdbcType=INTEGER}, #{traffic_condition,jdbcType=VARCHAR}, #{activate_time,jdbcType=TIMESTAMP}, 
       #{property_fee,jdbcType=DECIMAL}, #{parking_fee,jdbcType=DECIMAL}, #{conditioners_fee,jdbcType=DECIMAL}, 
-      #{intro,jdbcType=VARCHAR}, #{circum,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
-      #{latitude,jdbcType=VARCHAR})
+      #{intro,jdbcType=VARCHAR}, #{circum,jdbcType=VARCHAR}, #{broker_id,jdbcType=BIGINT}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yqwl.pojo.Building">
     <!--
@@ -139,6 +140,9 @@
       <if test="circum != null">
         `circum`,
       </if>
+      <if test="broker_id != null">
+        `broker_id`,
+      </if>
       <if test="longitude != null">
         `longitude`,
       </if>
@@ -197,6 +201,9 @@
       </if>
       <if test="circum != null">
         #{circum,jdbcType=VARCHAR},
+      </if>
+      <if test="broker_id != null">
+        #{broker_id,jdbcType=BIGINT},
       </if>
       <if test="longitude != null">
         #{longitude,jdbcType=VARCHAR},
@@ -264,6 +271,9 @@
       <if test="circum != null">
         `circum` = #{circum,jdbcType=VARCHAR},
       </if>
+      <if test="broker_id != null">
+        `broker_id` = #{broker_id,jdbcType=BIGINT},
+      </if>
       <if test="longitude != null">
         `longitude` = #{longitude,jdbcType=VARCHAR},
       </if>
@@ -296,8 +306,116 @@
       `conditioners_fee` = #{conditioners_fee,jdbcType=DECIMAL},
       `intro` = #{intro,jdbcType=VARCHAR},
       `circum` = #{circum,jdbcType=VARCHAR},
+      `broker_id` = #{broker_id,jdbcType=BIGINT},
       `longitude` = #{longitude,jdbcType=VARCHAR},
       `latitude` = #{latitude,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
+  <select id="listBuildingByCondition" resultType="com.yqwl.Vo.BuildingVo">
+  	SELECT 
+  		 b.*
+	FROM
+		t_building AS b
+	JOIN t_houses_new AS h ON b.id = h.building_id
+	WHERE
+		b.region_city_id = #{cityId}
+	AND (ISNULL(#{regionId})
+	OR b.region_id = #{regionId})
+	AND (
+		(ISNULL(#{startSpace})
+		OR h.office_space <![CDATA[>=]]> #{startSpace})
+		AND (ISNULL(#{endSpace})
+		OR h.office_space <![CDATA[<=]]> #{endSpace})
+	)
+	<if test="startMoney !=null or endMoney != null">
+	AND (
+		<if test="startMoney != null">
+		h.money <![CDATA[>=]]> #{startMoney}
+		</if>
+		<if test="startMoney != null and endMoney != null">
+		AND h.money <![CDATA[<=]]> #{endMoney}
+		</if>
+		<if test="endMoney != null and startMoney == null">
+		h.money <![CDATA[<=]]> #{endMoney}
+		</if>
+	) 
+	</if>
+	AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
+	GROUP BY b.id
+  </select>
+  <select id="listByBuilding" resultMap="BaseResultMap">
+	SELECT
+		h.*
+	FROM
+		t_building AS b
+	JOIN t_houses_new AS h ON b.id = h.building_id
+	WHERE
+		b.region_city_id = #{cityId}
+	AND (
+		ISNULL(#{condition})
+		OR b.mansion_name LIKE CONCAT('%', #{condition}, '%')
+	)
+	OR (
+		ISNULL(#{condition})
+		OR b.region_name LIKE CONCAT('%', #{condition}, '%')
+	)
+	OR (
+		ISNULL(#{condition})
+		OR b.district LIKE CONCAT('%', #{condition}, '%')
+	)  		
+  </select>
+  <select id="listByHouseCount" resultType="java.lang.Integer">
+  	SELECT
+		COUNT(h.id)
+	FROM
+		t_building AS b
+	JOIN t_houses_new AS h ON b.id = h.building_id
+	WHERE
+		b.region_city_id = #{cityId}
+  </select>
+  
+  <select id="MapSelectBuilding" resultType="com.yqwl.Vo.MapBuildingVo">
+  	SELECT
+	  	b.id,
+		b.mansion_name,
+		b.region_name,
+		b.longitude,
+		b.latitude,
+		b.mansion_picture,
+		(
+		SELECT th.money
+		FROM t_houses_new AS th
+		WHERE th.building_id = b.id
+		ORDER BY th.money ASC
+		LIMIT 1
+		) AS money
+	FROM
+	t_building AS b
+	JOIN t_houses_new AS h ON b.id = h.building_id
+   	WHERE
+		b.region_city_id = #{cityId}
+	AND (ISNULL(#{regionId})
+		OR b.region_id = #{regionId})
+	AND (
+		(ISNULL(#{startSpace})
+		OR h.office_space <![CDATA[>=]]> #{startSpace})
+		AND (ISNULL(#{endSpace})
+		OR h.office_space <![CDATA[<=]]> #{endSpace})
+	)
+	<if test="startMoney !=null or endMoney != null">
+	AND (
+		<if test="startMoney != null">
+		h.money <![CDATA[>=]]> #{startMoney}
+		</if>
+		<if test="startMoney != null and endMoney != null">
+		AND h.money <![CDATA[<=]]> #{endMoney}
+		</if>
+		<if test="endMoney != null and startMoney == null">
+		h.money <![CDATA[<=]]> #{endMoney}
+		</if>
+	) 
+	</if>
+	AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
+	GROUP BY b.id
+  </select>
 </mapper>

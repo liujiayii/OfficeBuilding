@@ -10,7 +10,7 @@
     <result column="real_name" jdbcType="VARCHAR" property="real_name" />
     <result column="user_name" jdbcType="VARCHAR" property="user_name" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="phonemunber" jdbcType="TINYINT" property="phonemunber" />
+    <result column="phonemunber" jdbcType="BIGINT" property="phonemunber" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
     <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
     <result column="roles_id" jdbcType="BIGINT" property="roles_id" />
@@ -56,7 +56,7 @@
       `roles_id`, `state`, `picture`
       )
     values (#{real_name,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{phonemunber,jdbcType=TINYINT}, #{birthday,jdbcType=TIMESTAMP}, #{shop_id,jdbcType=BIGINT}, 
+      #{phonemunber,jdbcType=BIGINT}, #{birthday,jdbcType=TIMESTAMP}, #{shop_id,jdbcType=BIGINT}, 
       #{roles_id,jdbcType=BIGINT}, #{state,jdbcType=INTEGER}, #{picture,jdbcType=VARCHAR}
       )
   </insert>
@@ -109,7 +109,7 @@
         #{password,jdbcType=VARCHAR},
       </if>
       <if test="phonemunber != null">
-        #{phonemunber,jdbcType=TINYINT},
+        #{phonemunber,jdbcType=BIGINT},
       </if>
       <if test="birthday != null">
         #{birthday,jdbcType=TIMESTAMP},
@@ -145,7 +145,7 @@
         `password` = #{password,jdbcType=VARCHAR},
       </if>
       <if test="phonemunber != null">
-        `phonemunber` = #{phonemunber,jdbcType=TINYINT},
+        `phonemunber` = #{phonemunber,jdbcType=BIGINT},
       </if>
       <if test="birthday != null">
         `birthday` = #{birthday,jdbcType=TIMESTAMP},
@@ -174,7 +174,7 @@
     set `real_name` = #{real_name,jdbcType=VARCHAR},
       `user_name` = #{user_name,jdbcType=VARCHAR},
       `password` = #{password,jdbcType=VARCHAR},
-      `phonemunber` = #{phonemunber,jdbcType=TINYINT},
+      `phonemunber` = #{phonemunber,jdbcType=BIGINT},
       `birthday` = #{birthday,jdbcType=TIMESTAMP},
       `shop_id` = #{shop_id,jdbcType=BIGINT},
       `roles_id` = #{roles_id,jdbcType=BIGINT},

@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.math.BigInteger;
+
 import com.yqwl.pojo.Client;
 
 public interface ClientMapper {
@@ -39,4 +41,6 @@ public interface ClientMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Client record);
+	
+	Client seleceFindId(Long phones);
 }

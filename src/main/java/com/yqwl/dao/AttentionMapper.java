@@ -1,5 +1,8 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
+import com.yqwl.Vo.AttentionVo;
 import com.yqwl.pojo.Attention;
 
 public interface AttentionMapper {
@@ -39,4 +42,12 @@ public interface AttentionMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Attention record);
+	
+	Attention selectFinfAll(Attention record);
+	
+	List<AttentionVo> selectScend(AttentionVo records);
+	
+	List<AttentionVo> selectThird(AttentionVo records);
+	
+	Integer selectCount(AttentionVo records);
 }

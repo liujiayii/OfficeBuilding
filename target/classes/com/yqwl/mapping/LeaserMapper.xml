@@ -8,7 +8,7 @@
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="names" jdbcType="VARCHAR" property="names" />
-    <result column="phone" jdbcType="INTEGER" property="phone" />
+    <result column="phone" jdbcType="BIGINT" property="phone" />
     <result column="houses_new_id" jdbcType="BIGINT" property="houses_new_id" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="type" jdbcType="INTEGER" property="type" />
@@ -48,7 +48,7 @@
     </selectKey>
     insert into `t_leaser` (`names`, `phone`, `houses_new_id`, 
       `remark`, `type`)
-    values (#{names,jdbcType=VARCHAR}, #{phone,jdbcType=INTEGER}, #{houses_new_id,jdbcType=BIGINT}, 
+    values (#{names,jdbcType=VARCHAR}, #{phone,jdbcType=BIGINT}, #{houses_new_id,jdbcType=BIGINT}, 
       #{remark,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yqwl.pojo.Leaser">
@@ -82,7 +82,7 @@
         #{names,jdbcType=VARCHAR},
       </if>
       <if test="phone != null">
-        #{phone,jdbcType=INTEGER},
+        #{phone,jdbcType=BIGINT},
       </if>
       <if test="houses_new_id != null">
         #{houses_new_id,jdbcType=BIGINT},
@@ -106,7 +106,7 @@
         `names` = #{names,jdbcType=VARCHAR},
       </if>
       <if test="phone != null">
-        `phone` = #{phone,jdbcType=INTEGER},
+        `phone` = #{phone,jdbcType=BIGINT},
       </if>
       <if test="houses_new_id != null">
         `houses_new_id` = #{houses_new_id,jdbcType=BIGINT},
@@ -127,7 +127,7 @@
     -->
     update `t_leaser`
     set `names` = #{names,jdbcType=VARCHAR},
-      `phone` = #{phone,jdbcType=INTEGER},
+      `phone` = #{phone,jdbcType=BIGINT},
       `houses_new_id` = #{houses_new_id,jdbcType=BIGINT},
       `remark` = #{remark,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=INTEGER}

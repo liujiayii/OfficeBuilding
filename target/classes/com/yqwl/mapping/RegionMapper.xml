@@ -111,4 +111,8 @@
       `sort` = #{sort,jdbcType=INTEGER}
     where `area_id` = #{area_id,jdbcType=INTEGER}
   </update>
+  
+  <select id="listRegionByPid" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from `t_region` where `pid` = #{pid}
+  </select>
 </mapper>

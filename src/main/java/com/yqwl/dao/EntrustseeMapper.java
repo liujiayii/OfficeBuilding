@@ -1,5 +1,8 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
+import com.yqwl.Vo.EntrustseeVo;
 import com.yqwl.pojo.Entrustsee;
 
 public interface EntrustseeMapper {
@@ -39,4 +42,14 @@ public interface EntrustseeMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Entrustsee record);
+	/**
+	 * 修改预约看房状态
+	 */
+	int updateType(Entrustsee record);
+	/**
+	 * 后台查询所有预约看房
+	 */
+	List<EntrustseeVo> selectAllEN(EntrustseeVo record);
+
+	Integer getByHousesNewIdCount(Long id);
 }

@@ -1,6 +1,15 @@
 package com.yqwl.dao;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.yqwl.Vo.BuildingListVo;
+import com.yqwl.Vo.BuildingVo;
+import com.yqwl.Vo.MapBuildingVo;
 import com.yqwl.pojo.Building;
+import com.yqwl.pojo.Region;
 
 public interface BuildingMapper {
 
@@ -39,4 +48,16 @@ public interface BuildingMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Building record);
+
+	List<BuildingVo> listBuildingByCondition(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
+			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment);
+
+	List<Region> listByBuilding(@Param("condition")String condition,@Param("cityId")Integer cityId);
+
+	Integer listByHouseCount(Integer cityId);
+	
+	BuildingListVo selectBuil(long id);
+
+	List<MapBuildingVo> MapSelectBuilding(@Param("cityId")Integer cityId,@Param("regionId") Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,
+			@Param("startMoney")BigDecimal startMoney,@Param("endMoney") BigDecimal endMoney,@Param("fitment") Integer fitment);
 }
