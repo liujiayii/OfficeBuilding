@@ -21,6 +21,8 @@
     <result column="user_names" jdbcType="VARCHAR" property="user_names" />
     <result column="user_number" jdbcType="BIGINT" property="user_number" />
     <result column="times" jdbcType="TIMESTAMP" property="times" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="broker_id" jdbcType="BIGINT" property="broker_id" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -29,7 +31,7 @@
     -->
     `id`, `houses_name`, `province_id`, `province_name`, `city_id`, `city_name`, `areas_id`, 
     `areas_name`, `detail`, `expect_price`, `price_unit`, `office`, `user_names`, `user_number`, 
-    `times`
+    `times`, `status`, `broker_id`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -61,12 +63,14 @@
       `city_id`, `city_name`, `areas_id`, 
       `areas_name`, `detail`, `expect_price`, 
       `price_unit`, `office`, `user_names`, 
-      `user_number`, `times`)
+      `user_number`, `times`, `status`, 
+      `broker_id`)
     values (#{houses_name,jdbcType=VARCHAR}, #{province_id,jdbcType=BIGINT}, #{province_name,jdbcType=VARCHAR}, 
       #{city_id,jdbcType=BIGINT}, #{city_name,jdbcType=VARCHAR}, #{areas_id,jdbcType=BIGINT}, 
       #{areas_name,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, #{expect_price,jdbcType=DECIMAL}, 
       #{price_unit,jdbcType=INTEGER}, #{office,jdbcType=DECIMAL}, #{user_names,jdbcType=VARCHAR}, 
-      #{user_number,jdbcType=BIGINT}, #{times,jdbcType=TIMESTAMP})
+      #{user_number,jdbcType=BIGINT}, #{times,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{broker_id,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.yqwl.pojo.Launch">
     <!--
@@ -120,6 +124,12 @@
       <if test="times != null">
         `times`,
       </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="broker_id != null">
+        `broker_id`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="houses_name != null">
@@ -163,6 +173,12 @@
       </if>
       <if test="times != null">
         #{times,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="broker_id != null">
+        #{broker_id,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -215,6 +231,12 @@
       <if test="times != null">
         `times` = #{times,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="broker_id != null">
+        `broker_id` = #{broker_id,jdbcType=BIGINT},
+      </if>
     </set>
     where `id` = #{id,jdbcType=BIGINT}
   </update>
@@ -237,7 +259,9 @@
       `office` = #{office,jdbcType=DECIMAL},
       `user_names` = #{user_names,jdbcType=VARCHAR},
       `user_number` = #{user_number,jdbcType=BIGINT},
-      `times` = #{times,jdbcType=TIMESTAMP}
+      `times` = #{times,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      `broker_id` = #{broker_id,jdbcType=BIGINT}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
 

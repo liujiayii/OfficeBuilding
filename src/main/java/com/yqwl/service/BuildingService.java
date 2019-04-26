@@ -15,7 +15,7 @@ public interface BuildingService {
 
 	PageInfo<BuildingVo> listBuildingByCondition(Pager pager) throws Exception;
 
-	PageInfo<Region> listByBuilding(Pager pager) throws Exception;
+	PageInfo<BuildingVo> listByBuilding(Pager pager) throws Exception;
 
 	Integer listByHouseCount(Integer cityId) throws Exception;
 

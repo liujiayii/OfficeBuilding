@@ -39,6 +39,6 @@ public interface DelegationMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Delegation record);
-	
+
 	int updateFindID(Delegation record);
 }

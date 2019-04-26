@@ -76,7 +76,7 @@ public class BuildingController {
 		int code = 0;
 		String msg = null;
 		try {
-			PageInfo<Region> result = buildingService.listByBuilding(pager);
+			PageInfo<BuildingVo> result = buildingService.listByBuilding(pager);
 			if (result.getTotal() != 0) {
 				msg = "查询成功";
 				return FastJsonUtil.getResponseJson(code, msg, result);

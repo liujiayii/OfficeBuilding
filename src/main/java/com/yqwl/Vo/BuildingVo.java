@@ -17,6 +17,7 @@ public class BuildingVo extends Building {
 	private List<Photo> Photos;
 	
 	private List<HousesNew> housesNews;
+	
 	private Integer subscribeCount;
 	
 	public Integer getSubscribeCount() {

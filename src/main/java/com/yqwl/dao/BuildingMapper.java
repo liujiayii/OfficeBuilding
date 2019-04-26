@@ -9,7 +9,6 @@ import com.yqwl.Vo.BuildingListVo;
 import com.yqwl.Vo.BuildingVo;
 import com.yqwl.Vo.MapBuildingVo;
 import com.yqwl.pojo.Building;
-import com.yqwl.pojo.Region;
 
 public interface BuildingMapper {
 
@@ -52,7 +51,7 @@ public interface BuildingMapper {
 	List<BuildingVo> listBuildingByCondition(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
 			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment);
 
-	List<Region> listByBuilding(@Param("condition")String condition,@Param("cityId")Integer cityId);
+	List<BuildingVo> listByBuilding(@Param("condition")String condition,@Param("cityId")Integer cityId);
 
 	Integer listByHouseCount(Integer cityId);
 	

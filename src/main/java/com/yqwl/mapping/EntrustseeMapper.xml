@@ -146,8 +146,7 @@
       `type` = #{type,jdbcType=INTEGER}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectAllEN" parameterType="com.yqwl.Vo.EntrustseeVo"
-		resultType="com.yqwl.Vo.EntrustseeVo">
+  <select id="selectAllEN" parameterType="com.yqwl.Vo.EntrustseeVo" resultType="com.yqwl.Vo.EntrustseeVo">
 		SELECT
 		e.type,
 		e.pleasetime,

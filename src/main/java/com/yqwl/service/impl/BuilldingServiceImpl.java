@@ -50,7 +50,6 @@ public class BuilldingServiceImpl implements BuildingService {
 	@Override
 	public PageInfo<BuildingVo> listBuildingByCondition(Pager pager) throws Exception {
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
-		System.out.println(conditions.toString());
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
 		Integer regionId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("regionId")));
 		Integer startSpace = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("startSpace")));
@@ -82,13 +81,25 @@ public class BuilldingServiceImpl implements BuildingService {
 	}
 
 	@Override
-	public PageInfo<Region> listByBuilding(Pager pager) throws Exception {
+	public PageInfo<BuildingVo> listByBuilding(Pager pager) throws Exception {
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		String condition = StringUtils.getFirstString(conditions.get("record"));
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId"))); 
 		PageHelper.startPage(pager);
-		List<Region> list = buildingMapper.listByBuilding(condition,cityId);
-		return new PageInfo<Region>(list);
+		List<BuildingVo> list = buildingMapper.listByBuilding(condition,cityId);
+		PageInfo<BuildingVo> result = new PageInfo<BuildingVo>(list);
+		for (int i = 0; i < result.getList().size(); i++) {
+			BuildingVo buildingVo = result.getList().get(i);
+			List<HousesNew> housesNews = housesNewMapper.listHousesNewByBuildingId(buildingVo.getId());
+			Integer count = 0;
+			for (HousesNew housesNew : housesNews) {
+				count += entrustseeMapper.getByHousesNewIdCount(housesNew.getId());
+			}
+			buildingVo.setHousesNews(housesNews);
+			buildingVo.setSubscribeCount(count);
+			result.getList().set(i, buildingVo);
+		}
+		return result;
 	}
 
 	@Override
@@ -99,7 +110,6 @@ public class BuilldingServiceImpl implements BuildingService {
 
 	@Override
 	public BuildingListVo selectBuil(long id) {
-		// TODO Auto-generated method stub
 		return buildingMapper.selectBuil(id);
 	}
 
@@ -116,6 +126,7 @@ public class BuilldingServiceImpl implements BuildingService {
 		buildingVo.setHousesNews(housesNews);
 		return buildingVo;
 	}
+	
 	@Override
 	public List<MapBuildingVo> MapSelectBuilding(Integer cityId, Integer regionId, Integer startSpace, Integer endSpace,
 			BigDecimal startMoney, BigDecimal endMoney, Integer fitment) throws Exception {

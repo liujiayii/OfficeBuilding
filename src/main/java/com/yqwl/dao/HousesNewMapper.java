@@ -52,7 +52,7 @@ public interface HousesNewMapper {
 
 	List<HousesNew> listHousesNewByCondition(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
 			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment);
-	/*查询可能喜欢的房源信息**/
+	/*查询可能喜欢的房源信�?**/
 	List<HousesNewVo> selectLike(HousesNewVo record);
 
 	List<HousesNew> listHousesNewByBuildingId(Long buildingId);

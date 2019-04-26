@@ -25,6 +25,7 @@
     <result column="solid_broker_id" jdbcType="INTEGER" property="solid_broker_id" />
     <result column="maintain_broker_id" jdbcType="INTEGER" property="maintain_broker_id" />
     <result column="whether" jdbcType="INTEGER" property="whether" />
+    <result column="door_id" jdbcType="INTEGER" property="door_id" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -34,7 +35,7 @@
     `id`, `houes_number`, `building_id`, `work_name`, `house_picture`, `office_space`, 
     `location_number`, `house_type`, `location`, `money`, `money_unit`, `rent_time`, 
     `times`, `fitment`, `types`, `entering_broker_id`, `solid_broker_id`, `maintain_broker_id`, 
-    `whether`
+    `whether`, `door_id`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -67,15 +68,15 @@
       `house_type`, `location`, `money`, 
       `money_unit`, `rent_time`, `times`, 
       `fitment`, `types`, `entering_broker_id`, 
-      `solid_broker_id`, `maintain_broker_id`, `whether`
-      )
+      `solid_broker_id`, `maintain_broker_id`, `whether`, 
+      `door_id`)
     values (#{houes_number,jdbcType=VARCHAR}, #{building_id,jdbcType=BIGINT}, #{work_name,jdbcType=VARCHAR}, 
       #{house_picture,jdbcType=VARCHAR}, #{office_space,jdbcType=INTEGER}, #{location_number,jdbcType=INTEGER}, 
       #{house_type,jdbcType=VARCHAR}, #{location,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, 
       #{money_unit,jdbcType=INTEGER}, #{rent_time,jdbcType=INTEGER}, #{times,jdbcType=TIMESTAMP}, 
       #{fitment,jdbcType=INTEGER}, #{types,jdbcType=INTEGER}, #{entering_broker_id,jdbcType=INTEGER}, 
-      #{solid_broker_id,jdbcType=INTEGER}, #{maintain_broker_id,jdbcType=INTEGER}, #{whether,jdbcType=INTEGER}
-      )
+      #{solid_broker_id,jdbcType=INTEGER}, #{maintain_broker_id,jdbcType=INTEGER}, #{whether,jdbcType=INTEGER}, 
+      #{door_id,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yqwl.pojo.HousesNew">
     <!--
@@ -141,6 +142,9 @@
       <if test="whether != null">
         `whether`,
       </if>
+      <if test="door_id != null">
+        `door_id`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="houes_number != null">
@@ -196,6 +200,9 @@
       </if>
       <if test="whether != null">
         #{whether,jdbcType=INTEGER},
+      </if>
+      <if test="door_id != null">
+        #{door_id,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -260,6 +267,9 @@
       <if test="whether != null">
         `whether` = #{whether,jdbcType=INTEGER},
       </if>
+      <if test="door_id != null">
+        `door_id` = #{door_id,jdbcType=INTEGER},
+      </if>
     </set>
     where `id` = #{id,jdbcType=BIGINT}
   </update>
@@ -286,7 +296,8 @@
       `entering_broker_id` = #{entering_broker_id,jdbcType=INTEGER},
       `solid_broker_id` = #{solid_broker_id,jdbcType=INTEGER},
       `maintain_broker_id` = #{maintain_broker_id,jdbcType=INTEGER},
-      `whether` = #{whether,jdbcType=INTEGER}
+      `whether` = #{whether,jdbcType=INTEGER},
+      `door_id` = #{door_id,jdbcType=INTEGER}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
   <resultMap id="QuerySceneTypeVo" type="com.yqwl.Vo.HousesNewVo">
@@ -372,6 +383,7 @@
 		WHERE
 		b.id=hn.building_id
 		and b.region_city_id=#{region_city_id}
+		and hn.whether = 1
 		ORDER BY
 		hn.times DESC
 		LIMIT #{page},#{limit}
@@ -406,6 +418,7 @@
 	) 
 	</if>
 	AND ((ISNULL(#{fitment})) OR h.fitment = #{fitment})
+	AND h.whether = 1
   </select>
 	
   <select id="listHousesNewByBuildingId" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -413,6 +426,7 @@
     <include refid="Base_Column_List" />
     from `t_houses_new`
     where `building_id` = #{buildingId}
+    and `whether` = 1
     order by `money` ASC
   </select>
 </mapper>

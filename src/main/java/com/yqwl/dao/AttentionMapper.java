@@ -42,7 +42,7 @@ public interface AttentionMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Attention record);
-	
+
 	Attention selectFinfAll(Attention record);
 	
 	List<AttentionVo> selectScend(AttentionVo records);

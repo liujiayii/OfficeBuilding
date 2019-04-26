@@ -1,5 +1,8 @@
 package com.yqwl.dao;
 
+
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.pojo.Broker;
 
 public interface BrokerMapper {
@@ -39,4 +42,9 @@ public interface BrokerMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Broker record);
+
+	Broker getByUserNameAndPassword(@Param("userName")String userName,@Param("password")String password);
+
+	Long getBrokerByCityId(Long group_id);
+
 }

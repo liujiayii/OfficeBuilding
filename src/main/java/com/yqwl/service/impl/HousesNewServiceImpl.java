@@ -71,7 +71,6 @@ public class HousesNewServiceImpl implements HousesNewService{
 	 */
 	@Override
 	public List<HousesNewVo> selectLike(HousesNewVo record) {
-		// TODO Auto-generated method stub
 		return housesNewMapper.selectLike(record);
 	}
 
