@@ -3,6 +3,8 @@ package com.yqwl.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.github.pagehelper.PageInfo;
 import com.yqwl.Vo.HousesNewVo;
 import com.yqwl.common.utils.Pager;
@@ -26,4 +28,11 @@ public interface HousesNewService {
 	List<HousesNewVo> selectLike(HousesNewVo record);
 
 	public List<HousesNew> getMapById(Long buildingId) throws Exception;
+	
+	/** 后台新增房源信息及图片信息 */
+	public int insertSelective(HousesNew record,Long brokerId,String... urls) throws Exception;
+	
+	/** 后台修改房源信息及图片信息*/
+	public int updateByPrimaryKeySelective(HousesNew record,Long brokerId,String... urls) throws Exception;
+
 }

@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.Group;
 
 public interface GroupMapper {
@@ -50,4 +52,6 @@ public interface GroupMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Group record);
+
+	List<Group> ListAll();
 }

@@ -33,7 +33,17 @@ public class MainController {
 	private HomePageRecommendedService homePageRecommendedService;
 	@Autowired
 	private BuildingService buildingService;
-
+	/** 
+	 * 
+	 * @Title: homePageRecommended
+	 * @description 首页显示楼盘房源信息
+	 * @param cityId
+	 * @param type
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年4月24日 上午10:03:44
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/homePageRecommended", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String homePageRecommended(Integer cityId, Integer type) {

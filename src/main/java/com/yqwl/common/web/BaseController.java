@@ -68,7 +68,6 @@ public abstract class BaseController {
 		if (e instanceof CustomException){
 			return e.getMessage() ;
 		}else if(e instanceof BizException){
-			logger.error(e.getMessage(),e);
 			return e.getMessage() ;
 		}else {
 			logger.error(e.getMessage(),e);

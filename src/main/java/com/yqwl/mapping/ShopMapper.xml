@@ -98,4 +98,9 @@
       `region_id` = #{region_id,jdbcType=BIGINT}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
+  <select id="listAll" resultMap="BaseResultMap">
+    select 
+  	<include refid="Base_Column_List" />
+    from `t_shop`
+  </select>
 </mapper>

@@ -14,5 +14,8 @@ import com.yqwl.pojo.Picture;
  */
 public interface PictureService {
 	public List<Picture> selectPic(long id);
+	
+	/** 后台插入房源图片 */
+	public int insertSelective(Picture picture) throws Exception;
 
 }

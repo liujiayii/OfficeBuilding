@@ -46,9 +46,12 @@ public class BuilldingServiceImpl implements BuildingService {
 	private BrokerMapper brokerMapper;
 	@Autowired
 	private EntrustseeMapper entrustseeMapper;
-	
+	/**
+	 * 楼盘条件搜索 (分页)
+	 */
 	@Override
 	public PageInfo<BuildingVo> listBuildingByCondition(Pager pager) throws Exception {
+		//获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
 		Integer regionId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("regionId")));
@@ -63,9 +66,11 @@ public class BuilldingServiceImpl implements BuildingService {
 			endMoney = BigDecimal.valueOf(endMoney1);
 		}
 		Integer fitment = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("fitment")));
+		//分页
 		PageHelper.startPage(pager);
 		List<BuildingVo> list = buildingMapper.listBuildingByCondition(cityId,regionId,startSpace,endSpace,startMoney,endMoney,fitment);
 		PageInfo<BuildingVo> result = new PageInfo<BuildingVo>(list);
+		//遍历查询每个楼盘的房源
 		for (int i = 0; i < result.getList().size(); i++) {
 			BuildingVo buildingVo = result.getList().get(i);
 			List<HousesNew> housesNews = housesNewMapper.listHousesNewByBuildingId(buildingVo.getId());
@@ -79,15 +84,20 @@ public class BuilldingServiceImpl implements BuildingService {
 		}
 		return result;
 	}
-
+	/**
+	 * 搜索框搜索楼盘
+	 */
 	@Override
 	public PageInfo<BuildingVo> listByBuilding(Pager pager) throws Exception {
+		//获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		String condition = StringUtils.getFirstString(conditions.get("record"));
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId"))); 
+		//分页
 		PageHelper.startPage(pager);
 		List<BuildingVo> list = buildingMapper.listByBuilding(condition,cityId);
 		PageInfo<BuildingVo> result = new PageInfo<BuildingVo>(list);
+		//遍历查询每个楼盘的房源
 		for (int i = 0; i < result.getList().size(); i++) {
 			BuildingVo buildingVo = result.getList().get(i);
 			List<HousesNew> housesNews = housesNewMapper.listHousesNewByBuildingId(buildingVo.getId());
@@ -101,7 +111,9 @@ public class BuilldingServiceImpl implements BuildingService {
 		}
 		return result;
 	}
-
+	/**
+	 * 一个城市有多少房源
+	 */
 	@Override
 	public Integer listByHouseCount(Integer cityId) throws Exception {
 		return buildingMapper.listByHouseCount(cityId);
@@ -112,13 +124,19 @@ public class BuilldingServiceImpl implements BuildingService {
 	public BuildingListVo selectBuil(long id) {
 		return buildingMapper.selectBuil(id);
 	}
-
+	/**
+	 * 楼盘详情
+	 */
 	@Override
 	public BuildingVo getBuildingById(Long buildingId) throws Exception {
 		BuildingVo buildingVo = new BuildingVo();
+		//楼盘详情
 		Building building = buildingMapper.selectByPrimaryKey(buildingId);
+		//楼盘图片
 		List<Photo> photos = photoMapper.listByBuildingId(buildingId);
+		//楼盘房源
 		List<HousesNew> housesNews = housesNewMapper.listHousesNewByBuildingId(buildingId);
+		//查询经纪人
 		Broker broker = brokerMapper.selectByPrimaryKey(building.getBroker_id());
 		BeanUtils.copyProperties(building, buildingVo);
 		buildingVo.setPhotos(photos);

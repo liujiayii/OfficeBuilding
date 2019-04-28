@@ -1,5 +1,7 @@
 package com.yqwl.service;
 
+import java.util.List;
+
 import com.yqwl.Vo.BrokerVo;
 import com.yqwl.pojo.Broker;
 
@@ -16,4 +18,12 @@ public interface BrokerService {
 	Broker selectByPrimaryKey(Long id);
 
 	BrokerVo login(String userName, String password) throws Exception;
+
+	Integer insertBroker(Broker broker, Long... roleIds) throws Exception;
+
+	Integer updateBroker(Broker broker, Long... roleIds) throws Exception;
+
+	List<Broker> listAll() throws Exception;
+
+	Broker getById(Long id) throws Exception;
 }

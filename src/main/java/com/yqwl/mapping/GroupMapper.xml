@@ -98,4 +98,10 @@
       `shop_id` = #{shop_id,jdbcType=BIGINT}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="ListAll" resultMap="BaseResultMap">
+    select 
+   	<include refid="Base_Column_List" />
+    from `t_group`
+  </select>
 </mapper>

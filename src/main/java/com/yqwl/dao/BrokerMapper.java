@@ -1,6 +1,8 @@
 package com.yqwl.dao;
 
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.yqwl.pojo.Broker;
@@ -46,5 +48,7 @@ public interface BrokerMapper {
 	Broker getByUserNameAndPassword(@Param("userName")String userName,@Param("password")String password);
 
 	Long getBrokerByCityId(Long group_id);
+
+	List<Broker> listAll();
 
 }

@@ -19,9 +19,11 @@ import com.yqwl.common.utils.MD5Util;
 import com.yqwl.common.utils.StringUtils;
 import com.yqwl.common.web.BizException;
 import com.yqwl.dao.BrokerMapper;
+import com.yqwl.dao.BrokerRoleMapper;
 import com.yqwl.dao.FunctionMapper;
 import com.yqwl.dao.RoleMapper;
 import com.yqwl.pojo.Broker;
+import com.yqwl.pojo.BrokerRole;
 import com.yqwl.pojo.Function;
 import com.yqwl.pojo.Role;
 import com.yqwl.service.BrokerService;
@@ -45,6 +47,8 @@ public class BrokerServiceImpl implements BrokerService{
 	private RoleMapper roleMapper;
 	@Autowired
 	private FunctionMapper functionMapper;
+	@Autowired
+	private BrokerRoleMapper brokerRoleMapper;
 	@Override
 	public Broker selectByPrimaryKey(Long id) {
 		return brokerMapper.selectByPrimaryKey(id);
@@ -89,6 +93,36 @@ public class BrokerServiceImpl implements BrokerService{
 			throw new BizException(FastJsonUtil.getResponseJsonNotEmpty(1000, "用户名或密码错误", null));
 		}
 		return broker;
+	}
+	@Override
+	public Integer insertBroker(Broker broker, Long... roleIds) throws Exception {
+		int i = brokerMapper.insertSelective(broker);
+		for (Long long1 : roleIds) {
+			BrokerRole brokerRole = new BrokerRole();
+			brokerRole.setBroker_id(broker.getId());
+			brokerRole.setRole_id(long1);
+			brokerRoleMapper.insertSelective(brokerRole);
+		}
+		return i;
+	}
+	@Override
+	public Integer updateBroker(Broker broker, Long... roleIds) throws Exception {
+		brokerRoleMapper.delByBrokerId(broker.getId());
+		for (Long long1 : roleIds) {
+			BrokerRole brokerRole = new BrokerRole();
+			brokerRole.setBroker_id(broker.getId());
+			brokerRole.setRole_id(long1);
+			brokerRoleMapper.insertSelective(brokerRole);
+		}
+		return brokerMapper.updateByPrimaryKeySelective(broker);
+	}
+	@Override
+	public List<Broker> listAll() throws Exception {
+		return brokerMapper.listAll();
+	}
+	@Override
+	public Broker getById(Long id) throws Exception {
+		return brokerMapper.selectByPrimaryKey(id);
 	}
 	
 

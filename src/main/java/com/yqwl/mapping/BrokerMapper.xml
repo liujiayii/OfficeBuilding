@@ -175,6 +175,7 @@
     from `t_broker`
     where `user_name` = #{userName}
     and `password` = #{password}
+    and `state` = 1
   </select>
   <select id="getBrokerByCityId" parameterType="java.lang.Long" resultType="java.lang.Long">
 	SELECT
@@ -183,5 +184,10 @@
 		t_shop AS s JOIN t_group AS g ON s.id = g.shop_id
 	JOIN t_region AS r ON s.region_id = r.area_id
 	WHERE g.id = #{group_id}
+  </select>
+  <select id="listAll" resultMap="BaseResultMap">
+	select 
+    <include refid="Base_Column_List" />
+    from `t_broker`
   </select>
 </mapper>

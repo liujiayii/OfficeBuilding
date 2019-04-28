@@ -31,5 +31,12 @@ public class PictureServiceImpl implements PictureService{
 		// TODO Auto-generated method stub
 		return pictureMapper.selectPic(id);
 	}
+	
+	/** 后台插入房源图片 */
+	@Override
+	public int insertSelective(Picture record){
+		
+		return pictureMapper.insertSelective(record);
+	}
 
 }

@@ -138,7 +138,16 @@ public class HousesNewController {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @Title: getMapById
+	 * @description 地图找房点击查询详细信息
+	 * @param BuildingId
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年4月24日 上午10:01:23
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/getMapById", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String getMapById(Long BuildingId) {

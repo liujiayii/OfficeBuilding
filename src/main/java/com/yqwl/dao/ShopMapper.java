@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.Shop;
 
 public interface ShopMapper {
@@ -50,4 +52,6 @@ public interface ShopMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Shop record);
+
+	List<Shop> listAll();
 }

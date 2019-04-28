@@ -50,4 +50,6 @@ public interface BrokerRoleMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(BrokerRole record);
+
+	int delByBrokerId(Long brokerId);
 }
