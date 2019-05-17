@@ -107,6 +107,6 @@
   
   <delete id="delByRoleId" parameterType="java.lang.Long" >
     delete from `t_func_role`
-    where `id` = #{roleId}
+    where `role_id` = #{roleId}
   </delete>
 </mapper>

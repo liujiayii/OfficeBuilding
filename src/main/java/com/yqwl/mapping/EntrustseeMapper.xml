@@ -158,31 +158,127 @@
       `remark` = #{remark,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectAllEN" parameterType="com.yqwl.Vo.EntrustseeVo" resultType="com.yqwl.Vo.EntrustseeVo">
-		SELECT
-		e.type,
-		e.pleasetime,
-		e.phone_number,
-		e.seetype
-		FROM
-		t_entrustsee e
-		ORDER BY
-		e.pleasetime DESC
-		LIMIT #{page},#{limit}
-	</select>
-
+    <!-- 修改数据状态添加备注 -->
 	<update id="updateType" parameterType="com.yqwl.pojo.Entrustsee">
 		UPDATE t_entrustsee e
-		SET
-		e.seetype=#{seetype}
+		<set>
+		<if test="seetype !=null and seetype != ''">
+			e.seetype=#{seetype}
+		</if>
+		<if test="remark !=null and remark != ''">
+			e.remark=#{remark}
+		</if>
+		</set>
 		WHERE
 		e.id=#{id}
 	</update>
-  
-  <select id="getByHousesNewIdCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
-    select COUNT(`id`)
-    from `t_entrustsee`
-    where `houses_new_id` = #{houses_new_id}
-  </select>
 
+	<select id="getByHousesNewIdCount" parameterType="java.lang.Long"
+		resultType="java.lang.Integer">
+		select COUNT(`id`)
+		from `t_entrustsee`
+		where `houses_new_id`
+		= #{houses_new_id}
+	</select>
+	<!-- 查询所有预约 -->
+	<select id="listAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `t_entrustsee`
+	</select>
+	<!-- 通过条件查询预约部分数据type=1 -->
+	<select id="listByCityId" resultMap="BaseResultMap">
+		SELECT
+		e.*
+		FROM
+		t_houses_new AS h
+		JOIN t_building AS b ON h.building_id = b.id
+		JOIN t_entrustsee AS
+		e ON h.id = e.houses_new_id
+		WHERE
+		b.region_city_id = #{cityId}
+		AND e.broker_id = 0
+		AND e.type = 1
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 通过条件查询预约部分数据type=1数据条数 -->
+	<select id="listByCityIdCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(e.id) count
+		FROM
+		t_houses_new AS h
+		JOIN t_building AS b ON h.building_id = b.id
+		JOIN t_entrustsee AS
+		e ON h.id = e.houses_new_id
+		WHERE
+		b.region_city_id = #{cityId}
+		AND e.broker_id = 0
+		AND e.type = 1
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 通过条件查询预约部分数据type=2 -->
+	<select id="listByCityIdAndBuilding" resultMap="BaseResultMap">
+		SELECT
+		e.*
+		FROM
+		t_entrustsee AS e JOIN t_building AS b
+		ON e.houses_new_id = b.id
+		WHERE
+		b.region_city_id = #{cityId}
+		AND e.broker_id = 0
+		AND e.type = 2
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 通过条件查询预约部分数据type=2数据条数 -->
+	<select id="listByCityIdAndBuildingCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(e.id) count
+		FROM
+		t_entrustsee AS e JOIN t_building AS b
+		ON e.houses_new_id = b.id
+		WHERE
+		b.region_city_id = #{cityId}
+		AND e.broker_id = 0
+		AND e.type = 2
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 查询经纪人id查询信息 -->
+	<select id="selectBroker" resultMap="BaseResultMap">
+		SELECT
+		e.*
+		FROM
+		t_entrustsee AS e
+		WHERE
+		e.broker_id = #{broker_id}
+		ORDER BY e.pleasetime DESC
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 查询经纪人id查询信息条数 -->
+	<select id="selectCounts" resultType="java.lang.Integer">
+		SELECT
+		COUNT(e.id)
+		FROM
+		t_entrustsee AS e
+		WHERE
+		e.broker_id = #{broker_id}
+	</select>
+	<!-- 处理抢单 -->
+	<update id="updateBoerk" parameterType="com.yqwl.pojo.Entrustsee">
+		UPDATE t_entrustsee e
+		SET
+		e.broker_id=#{broker_id}
+		WHERE
+		e.id=#{id}
+	</update>
+  <select id="listEntrustseeByHomeId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `t_entrustsee`
+    where `type` = #{type} and `houses_new_id` = #{homeId}
+  </select>
+  
+  <delete id="delByHousesId" parameterType="java.lang.Long">
+    delete from `t_entrustsee`
+    where  `houses_new_id` = #{homeId} and `type` = 1
+  </delete>
 </mapper>

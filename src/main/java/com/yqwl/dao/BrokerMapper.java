@@ -48,7 +48,20 @@ public interface BrokerMapper {
 	Broker getByUserNameAndPassword(@Param("userName")String userName,@Param("password")String password);
 
 	Long getBrokerByCityId(Long group_id);
-
+	/**
+	 * @Title: listAll
+	 * @description 查询所有经纪人
+	 * @param @return    
+	 * @return List<Broker>    
+	 * @author linhongyu
+	 * @createDate 2019年4月29日
+	 */
 	List<Broker> listAll();
+
+	Long getBrokerByShopId(Long id);
+
+	List<Broker> listByCondition(String condition);
+
+	List<Broker> getBrokerByGroupId(Long id);
 
 }

@@ -3,7 +3,6 @@ package com.yqwl.dao;
 import java.util.List;
 
 import com.yqwl.pojo.FuncRole;
-import com.yqwl.pojo.Function;
 
 public interface FuncRoleMapper {
     /**

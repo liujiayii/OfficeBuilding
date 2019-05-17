@@ -16,9 +16,9 @@ import com.yqwl.service.DelegationService;
 /**
  *
  * @ClassName: DelegationController
- * @description 用一句话描述这个类的作用
+ * @description 委托表controller前台控制层
  *
- * @author 姓名全拼
+ * @author linhongyu
  * @createDate 2019年4月10日
  */
 @Controller
@@ -33,7 +33,7 @@ public class DelegationController {
 	 * @param @param record
 	 * @param @return    
 	 * @return String    
-	 * @author 姓名全拼
+	 * @author linhongyu
 	 * @createDate 2019年4月10日
 	 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
@@ -46,35 +46,10 @@ public class DelegationController {
 			record.setMake_time(new Timestamp(df.parse(time).getTime()));
 			record.setMake_type(1);
 			int nun=delegationService.insertSelective(record);
-			//int nun=delegationService.insert(record);
 		 	if(nun!=0){
 		 		return FastJsonUtil.getResponseJson(0, "添加成功", null);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "添加失败", null);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
-		}
-	}
-	/**
-	 * @Title: updateFindID
-	 * @description 修改委托找房当前状态
-	 * @param @param record
-	 * @param @return    
-	 * @return String    
-	 * @author 姓名全拼
-	 * @createDate 2019年4月10日
-	 */
-	@RequestMapping(value = "updateFindID", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
-	@ResponseBody
-	public String updateFindID(Delegation record){
-		try {
-			int num=delegationService.updateFindID(record);
-		 	if(num!=0){
-		 		return FastJsonUtil.getResponseJson(0, "修改成功", null);
-		 	}else {
-		 		return FastJsonUtil.getResponseJson(-1, "修改失败", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

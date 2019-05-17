@@ -102,4 +102,13 @@
     delete from `t_broker_role`
     where `broker_id` = #{brokerId}
   </delete>
+  
+  <select id="listByRoleId" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List" />
+  	from 
+    	`t_broker_role`
+    where
+    	`role_id` = #{id}
+  </select>
 </mapper>

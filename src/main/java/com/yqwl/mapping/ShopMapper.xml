@@ -98,7 +98,12 @@
       `region_id` = #{region_id,jdbcType=BIGINT}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-  <select id="listAll" resultMap="BaseResultMap">
+  <select id="listAll" resultType="com.yqwl.Vo.ShopVo">
+    select 
+  	<include refid="Base_Column_List" />
+    from `t_shop`
+  </select>
+  <select id="listAllPage" resultType="com.yqwl.Vo.ShopVo">
     select 
   	<include refid="Base_Column_List" />
     from `t_shop`

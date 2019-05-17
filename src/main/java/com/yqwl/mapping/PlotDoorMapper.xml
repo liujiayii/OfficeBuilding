@@ -122,4 +122,15 @@
       `status` = #{status,jdbcType=INTEGER}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
+  <select id="getPlotDoorByConditions" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `t_plot_door`
+    where `build_id` = #{buildId}
+  </select>
+  
+  <delete id="deleteByBuildId" parameterType="java.lang.Long">
+    delete from `t_plot_door`
+    where `build_id` = #{id}
+  </delete>
 </mapper>

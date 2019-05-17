@@ -43,4 +43,6 @@ public interface RoleMapper {
 	int updateByPrimaryKey(Role record);
 
 	List<Role> getBrokerByRole(Long brokerId);
+
+	List<Role> listAllRole();
 }

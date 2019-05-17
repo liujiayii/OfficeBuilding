@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.NewsPic;
 
 public interface NewsPicMapper {
@@ -39,4 +41,15 @@ public interface NewsPicMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(NewsPic record);
+	/**
+	 * @Title: selectPic
+	 * @description 删除新闻图片
+	 * @param @param journalism_id
+	 * @param @return    
+	 * @return List<NewsPic>    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
+	List<NewsPic> selectPic(Long journalism_id) throws Exception;
+	
 }

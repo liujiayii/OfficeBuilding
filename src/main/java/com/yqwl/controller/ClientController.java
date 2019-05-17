@@ -1,15 +1,12 @@
 package com.yqwl.controller;
 
 import java.util.Date;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.pojo.Client;
@@ -18,9 +15,9 @@ import com.yqwl.service.ClientService;
 /**
  *
  * @ClassName: ClientController
- * @description 用一句话描述这个类的作用
+ * @description 前台登录注册功能的controller层
  *
- * @author 姓名全拼
+ * @author linhongyu
  * @createDate 2019年4月16日
  */
 @Controller
@@ -32,13 +29,13 @@ public class ClientController {
 	
 	/**
 	 * @Title: insert
-	 * @description 登录
+	 * @description 登录短信验证
 	 * @param @param record
 	 * @param @param validate
 	 * @param @param session
 	 * @param @return    
 	 * @return String    
-	 * @author 姓名全拼
+	 * @author linhongyu
 	 * @createDate 2019年4月16日
 	 */
 	@SuppressWarnings("unused")

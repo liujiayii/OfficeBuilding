@@ -2,6 +2,8 @@ package com.yqwl.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.pojo.Picture;
 
 public interface PictureMapper {
@@ -41,5 +43,7 @@ public interface PictureMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Picture record);
-	public List<Picture> selectPic(long id);
+	public List<Picture> selectPic(@Param("houses_new_id")Long houses_new_id);
+
+	int delByHousesId(Long homeId);
 }

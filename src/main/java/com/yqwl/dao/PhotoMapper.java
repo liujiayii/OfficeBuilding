@@ -41,6 +41,15 @@ public interface PhotoMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Photo record);
-	public List<Photo> selectPhoto(long id);
+	/**
+	 * @Title: selectPhoto
+	 * @description 查询商厦所有图片
+	 * @param @param id
+	 * @param @return    
+	 * @return List<Photo>    
+	 * @author linhongyu
+	 * @createDate 2019年4月28日
+	 */
+	public List<Photo> selectPhoto(Long id);
 	List<Photo> listByBuildingId(Long buildingId);
 }

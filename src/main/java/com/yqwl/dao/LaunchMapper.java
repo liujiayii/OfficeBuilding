@@ -1,5 +1,10 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.yqwl.Vo.LaunchVo;
 import com.yqwl.pojo.Launch;
 
 public interface LaunchMapper {
@@ -39,5 +44,68 @@ public interface LaunchMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Launch record);
-	
+	/**
+	 * @Title: selectLaun
+	 * @description 查询所有投放房源数据
+	 * @param @param recordVo
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月21日
+	 */
+	List<LaunchVo> selectLaun(LaunchVo recordVo);
+	/**
+	 * @Title: selectCountL
+	 * @description 查询所有投放房源数据条数
+	 * @param @param recordVo
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月21日
+	 */
+	Integer selectCountL(LaunchVo recordVo);
+	/**
+	 * @Title: updateStatus
+	 * @description 修改投放房源处理状态
+	 * @param @param records
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月22日
+	 */
+	int updateStatus(Launch records);
+	/**
+	 * @Title: updateLaunBroker
+	 * @description 处理对投放房源的抢单处理
+	 * @param @param broker_id
+	 * @param @param id
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	int updateLaunBroker(@Param("broker_id")Long broker_id,@Param("id")Long id);
+	/**
+	 * @Title: selectMyLaun
+	 * @description 查询经纪人名下对投放房源信息
+	 * @param @param broker_id
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	List<LaunchVo> selectMyLaun(@Param("broker_id")Long broker_id,@Param("page") Integer page,@Param("limit") Integer limit);
+
+	/**
+	 * @Title: selectMyCount
+	 * @description 查询条数
+	 * @param @param broker_id
+	 * @param @return    
+	 * @return Integer    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	Integer selectMyCount(@Param("broker_id")Long broker_id);
 }

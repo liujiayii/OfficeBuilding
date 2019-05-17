@@ -54,4 +54,6 @@ public interface GroupMapper {
     int updateByPrimaryKey(Group record);
 
 	List<Group> ListAll();
+
+	List<Group> getByShopId(Long shopId);
 }

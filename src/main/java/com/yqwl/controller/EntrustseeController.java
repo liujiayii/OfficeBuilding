@@ -5,14 +5,12 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.yqwl.Vo.EntrustseeVo;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.JYSMSUtil;
@@ -24,7 +22,7 @@ import com.yqwl.service.EntrustseeService;
  * @ClassName: EntrustseeController
  * @description 预约看房功能控制器
  *
- * @author 姓名全拼
+ * @author linhongyu
  * @createDate 2019年4月10日
  */
 @Controller
@@ -69,7 +67,7 @@ public class EntrustseeController {
 	 * @param @param record
 	 * @param @return    
 	 * @return String    
-	 * @author 姓名全拼
+	 * @author linhongyu
 	 * @createDate 2019年4月10日
 	 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
@@ -90,58 +88,6 @@ public class EntrustseeController {
 		 		return FastJsonUtil.getResponseJson(0, "预约看房成功", null);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "添加失败", null);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
-		}
-	}
-	/**
-	 * @Title: updateType
-	 * @description 修改预约看房状态
-	 * @param @param seetype
-	 * @param @return    
-	 * @return String    
-	 * @author 姓名全拼
-	 * @createDate 2019年4月10日
-	 */
-	@RequestMapping(value = "updateType", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
-	@ResponseBody
-	public String updateType(Entrustsee record){
-		try {
-			int num=entrustseeService.updateType(record);
-		 	if(num!=0){
-		 		return FastJsonUtil.getResponseJson(0, "修改成功", null);
-		 	}else {
-		 		return FastJsonUtil.getResponseJson(-1, "修改失败", null);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
-		}
-	}
-	/**
-	 * @Title: selectAllEN
-	 * @description 后台查询所有预约看房
-	 * @param @param record
-	 * @param @param page
-	 * @param @param limit
-	 * @param @return    
-	 * @return String    
-	 * @author 姓名全拼
-	 * @createDate 2019年4月10日
-	 */
-	@RequestMapping(value = "selectAllEN", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
-	@ResponseBody
-	public String selectAllEN(EntrustseeVo record,Integer page,Integer limit){
-		try {
-			record.setPage((page-1)*limit);
-			record.setLimit(limit);
-			List<EntrustseeVo> ent=entrustseeService.selectAllEN(record);
-		 	if(ent.size()>0){
-		 		return FastJsonUtil.getResponseJson(0, "查询成功", null);
-		 	}else {
-		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

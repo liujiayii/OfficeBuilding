@@ -275,5 +275,83 @@
       `remark` = #{remark,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-
+	<!-- 查询所有投放房源数据 -->
+	<select id="selectLaun" parameterType="com.yqwl.Vo.LaunchVo"
+		resultType="com.yqwl.pojo.Launch">
+		SELECT
+		l.id,
+		l.houses_name,
+		l.city_name,
+		l.areas_name,
+		l.detail,
+		l.expect_price,
+		l.price_unit,
+		l.office,
+		l.user_names,
+		l.user_number,
+		l.times,
+		l.status
+		FROM
+		t_Launch l
+		WHERE
+		l.broker_id=0
+		AND
+		l.city_id=#{city_id}
+		limit
+		#{page},#{limit}
+	</select>
+	<!-- 查询所有投放房源数据条数 -->
+	<select id="selectCountL" resultType="java.lang.Integer"
+		parameterType="com.yqwl.Vo.LaunchVo">
+		SELECT
+		COUNT(l.id) count
+		FROM
+		t_Launch l
+		WHERE
+		l.broker_id=0
+		AND
+		l.city_id=#{city_id}
+	</select>
+	<!-- 修改投放房源处理状态 -->
+	<update id="updateStatus" parameterType="com.yqwl.pojo.Launch">
+		UPDATE t_Launch l
+		<set>
+		<if test="status !=null and status != ''">
+			l.status=#{status}
+		</if>
+		<if test="remark !=null and remark != ''">
+			l.remark=#{remark}
+		</if>
+		</set>
+		WHERE
+		l.id=#{id}
+	</update>
+	<!-- 处理对投放房源的抢单处理 -->
+	<update id="updateLaunBroker" parameterType="com.yqwl.pojo.Launch">
+		UPDATE t_Launch l
+		SET
+		l.broker_id=#{broker_id}
+		WHERE
+		l.id=#{id}
+	</update>
+	<!-- 查询经纪人名下对投放房源信息 -->
+	<select id="selectMyLaun" resultType="com.yqwl.Vo.LaunchVo">
+		SELECT
+		l.*
+		FROM
+		t_Launch AS l
+		WHERE
+		l.broker_id = #{broker_id}
+		ORDER BY l.times DESC
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 查询条数 -->
+	<select id="selectMyCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(l.id) count
+		FROM
+		t_Launch AS l
+		WHERE
+		l.broker_id = #{broker_id}
+	</select>
 </mapper>

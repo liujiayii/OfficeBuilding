@@ -169,12 +169,87 @@
       `remark` = #{remark,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-
+    <!-- 修改数据处理状态或者添加备注 -->
 	<update id="updateFindID" parameterType="com.yqwl.pojo.Delegation">
 		UPDATE t_delegation d
-		SET
-		d.make_type=#{make_type}
+		<set>
+		<if test="make_type !=null and make_type != ''">
+			d.make_type=#{make_type}
+		</if>
+		<if test="remark !=null and remark != ''">
+			d.remark=#{remark}
+		</if>
+		</set>
 		WHERE
 		d.id=#{id}
 	</update>
+	<!-- 进行抢单的功能 -->
+	<update id="updateDeleBroker" parameterType="com.yqwl.pojo.Delegation">
+		UPDATE t_delegation d
+		SET
+		d.broker_id=#{broker_id}
+		WHERE
+		d.id=#{id}
+	</update>
+	<!-- 通过城市id查询数据 -->
+	<select id="selectDeleAll" parameterType="com.yqwl.Vo.DelegationVo"
+		resultType="com.yqwl.pojo.Delegation">
+		SELECT
+		d.id,
+		d.city_id,
+		d.user_name,
+		d.demand,
+		d.phone_number,
+		d.make_time,
+		d.make_type
+		FROM
+		t_delegation d
+		WHERE
+		d.broker_id=0
+		AND
+		d.city_id=#{city_id}
+		ORDER BY
+		d.make_time DESC
+		limit
+		#{page},#{limit}
+	</select>
+	<!-- 通过城市id查询数据条数 -->
+	<select id="selectCont" resultType="java.lang.Integer"
+		parameterType="com.yqwl.Vo.DelegationVo">
+		SELECT
+		COUNT(d.id) count
+		FROM
+		t_delegation d
+		WHERE
+		d.broker_id=0
+		AND
+		d.city_id=#{city_id}
+	</select>
+	<!-- 通过经纪人id查询数据 -->
+	<select id="selectDeleCount" resultType="com.yqwl.Vo.DelegationVo">
+		SELECT
+		d.id,
+		d.city_id,
+		d.user_name,
+		d.demand,
+		d.phone_number,
+		d.make_time,
+		d.make_type,
+		d.remark
+		FROM
+		t_delegation d
+		WHERE
+		d.broker_id = #{broker_id}
+		ORDER BY d.make_time DESC
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 查询条数 -->
+	<select id="selectCountDel" resultType="java.lang.Integer">
+		SELECT
+		COUNT(d.id) count
+		FROM
+		t_delegation d
+		WHERE
+		d.broker_id = #{broker_id}
+	</select>
 </mapper>

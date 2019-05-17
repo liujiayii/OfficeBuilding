@@ -8,4 +8,6 @@ public interface RegionService {
 
 	List<Region> listRegionByPid(String pid) throws Exception;
 
+	Region getRegionByid(Integer id) throws Exception;
+
 }

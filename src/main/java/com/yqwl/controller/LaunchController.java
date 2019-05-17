@@ -13,9 +13,9 @@ import com.yqwl.service.LaunchService;
 /**
  *
  * @ClassName: LaunchController
- * @description 用一句话描述这个类的作用
+ * @description 前台添加投放房源controller层
  *
- * @author 姓名全拼
+ * @author linhongyu
  * @createDate 2019年4月10日
  */
 @Controller
@@ -39,37 +39,13 @@ public class LaunchController {
 	public String insertFirst(Launch record){
 		try {
 			record.setTimes(new Date());
+			record.setStatus(1);
 			int nun=launchService.insertSelective(record);
 			
 		 	if(nun!=0){
 		 		return FastJsonUtil.getResponseJson(0, "添加成功", null);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "添加失败", null);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
-		}
-	}
-	
-	/**
-	 * @Title: deleteByPrimaryKey
-	 * @description 通过id删除一条数据
-	 * @param @param id
-	 * @param @return    
-	 * @return String    
-	 * @author linhongyu
-	 * @createDate 2019年4月10日
-	 */
-	@RequestMapping(value = "deleteByPrimaryKey", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
-	@ResponseBody
-	public String deleteByPrimaryKey(long id){
-		try {
-			int num=launchService.deleteByPrimaryKey(id);
-		 	if(num!=0){
-		 		return FastJsonUtil.getResponseJson(0, "删除成功", null);
-		 	}else {
-		 		return FastJsonUtil.getResponseJson(-1, "删除失败，或已删除", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

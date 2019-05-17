@@ -13,4 +13,24 @@
          <!--这里给实体类取别名，方便在mapper配置文件中使用--> 
          <package name="com.yqwl.pojo"/>
      </typeAliases>
+     
+     <plugins>
+    	<!--使用分页插件  -->
+     	<plugin interceptor="com.github.pagehelper.PageInterceptor">
+     		<!--
+     		如果觉得某个地方使用分页后，你仍然想通过控制参数查询全部的结果
+     		，你可以配置 pageSizeZero 为 true ， 配置后
+     		，当pageSize=0 或者 RowBounds.limit = 0 就会查询出全部的结果。
+     		  -->
+     		<property name="pageSizeZero" value="true"/>
+     		<!--
+     		如果你分页插件使用于类似分页查看列表式的数据，如新闻列表，软件列表
+     		， 你希望用户输入的页数不在合法范围（第一页到最后一页之外）时能够正确的响应到正确的结果页面
+     		， 那么你可以配置 reasonable 为 true 
+     		，这时如果 pageNum<=0 会查询第一页，如果 pageNum>总页数 会查询最后一页。
+     		  -->
+     		<property name="reasonable" value="true"/>
+     	</plugin>
+     </plugins>
+     
 </configuration>

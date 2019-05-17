@@ -39,11 +39,12 @@ public class AttentionController {
 	 * @param @return    
 	 * @return String    
 	 * @author linhongyu
+	 * @throws Exception 
 	 * @createDate 2019年4月11日
 	 */
 	@RequestMapping(value = "insertSelective", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String insertSelective(Attention record){
+	public String insertSelective(Attention record) throws Exception{
 		Attention nemu=attentionService.selectFinfAll(record);
 		if(nemu!=null){
 			return FastJsonUtil.getResponseJson(2, "收藏成功", null);
@@ -113,7 +114,15 @@ public class AttentionController {
 		}
 	}
 	
-	
+	/**
+	 * @Title: selectThird
+	 * @description 查询收藏房源信息和数量
+	 * @param @param records
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
 	@RequestMapping(value = "selectThird", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
 	public String selectThird(AttentionVo records){

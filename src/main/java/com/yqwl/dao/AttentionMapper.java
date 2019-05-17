@@ -42,12 +42,56 @@ public interface AttentionMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Attention record);
-
+	/**
+	 * @Title: selectFinfAll
+	 * @description 查询id用于查重
+	 * @param @param record
+	 * @param @return    
+	 * @return Attention    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
 	Attention selectFinfAll(Attention record);
-	
+	/**
+	 * @Title: selectScend
+	 * @description 查询收藏的商厦信息
+	 * @param @param records
+	 * @param @return    
+	 * @return List<AttentionVo>    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
 	List<AttentionVo> selectScend(AttentionVo records);
-	
+	/**
+	 * @Title: selectThird
+	 * @description 查询收藏的房源信息
+	 * @param @param records
+	 * @param @return    
+	 * @return List<AttentionVo>    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
 	List<AttentionVo> selectThird(AttentionVo records);
-	
+	/**
+	 * @Title: selectCount
+	 * @description 查询收藏数据条数
+	 * @param @param records
+	 * @param @return    
+	 * @return Integer    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
 	Integer selectCount(AttentionVo records);
+	/**
+	 * @Title: selectAtten
+	 * @description 查询该商厦是否被收藏
+	 * @param @param houses_new_id
+	 * @param @return    
+	 * @return List<Attention>    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
+	List<Attention> selectAtten(Long houses_new_id);
+
+	int delByHousesId(Long homeId);
 }

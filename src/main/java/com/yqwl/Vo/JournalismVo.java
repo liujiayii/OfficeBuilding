@@ -74,6 +74,85 @@ public class JournalismVo implements Serializable{
 	private int page;
 	/** 分页条数 */
 	private int limit;
+	private Integer count;
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((count == null) ? 0 : count.hashCode());
+		result = prime * result + ((genre == null) ? 0 : genre.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + limit;
+		result = prime * result + page;
+		result = prime * result + ((page_view == null) ? 0 : page_view.hashCode());
+		result = prime * result + ((source == null) ? 0 : source.hashCode());
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JournalismVo other = (JournalismVo) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
+		if (count == null) {
+			if (other.count != null)
+				return false;
+		} else if (!count.equals(other.count))
+			return false;
+		if (genre == null) {
+			if (other.genre != null)
+				return false;
+		} else if (!genre.equals(other.genre))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (limit != other.limit)
+			return false;
+		if (page != other.page)
+			return false;
+		if (page_view == null) {
+			if (other.page_view != null)
+				return false;
+		} else if (!page_view.equals(other.page_view))
+			return false;
+		if (source == null) {
+			if (other.source != null)
+				return false;
+		} else if (!source.equals(other.source))
+			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		} else if (!time.equals(other.time))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+	public Integer getCount() {
+		return count;
+	}
+	public void setCount(Integer count) {
+		this.count = count;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -135,7 +214,7 @@ public class JournalismVo implements Serializable{
 	public String toString() {
 		return "JournalismVo [id=" + id + ", genre=" + genre + ", title=" + title + ", source=" + source + ", time="
 				+ time + ", page_view=" + page_view + ", content=" + content + ", page=" + page + ", limit=" + limit
-				+ "]";
+				+ ", count=" + count + "]";
 	}
 	
 }

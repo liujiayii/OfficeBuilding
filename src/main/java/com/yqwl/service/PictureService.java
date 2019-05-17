@@ -7,15 +7,34 @@ import com.yqwl.pojo.Picture;
 /**
  *
  * @ClassName: PictureService
- * @description 用一句话描述这个类的作用
+ * @description 图片表service接口
  *
- * @author 姓名全拼
+ * @author linhongyu
  * @createDate 2019年4月10日
  */
 public interface PictureService {
-	public List<Picture> selectPic(long id);
+	/**
+	 * @Title: selectPic
+	 * @description 通过条件查询图片
+	 * @param @param id
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return List<Picture>    
+	 * @author linhongyu
+	 * @createDate 2019年4月29日
+	 */
+	public List<Picture> selectPic(Long id) throws Exception;
 	
-	/** 后台插入房源图片 */
+	/**
+	 * @Title: insertSelective
+	 * @description 后台插入房源图片
+	 * @param @param picture
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年4月29日
+	 */
 	public int insertSelective(Picture picture) throws Exception;
 
 }

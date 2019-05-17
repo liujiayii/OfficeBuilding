@@ -112,7 +112,7 @@ public class FastJsonUtil {
      */
 	public static String getResponseJson(String err,String msg){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("err", err);
+		map.put("code", err);
 		map.put("msg", msg);
 		String json = toJsonString(map);
 		return json;
@@ -162,7 +162,7 @@ public class FastJsonUtil {
 	 */
 	public static String getResponseJsonNotEmpty(String err,String msg){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("err", err);
+		map.put("code", err);
 		map.put("msg", msg);
 		String json = toJsonStringNotEmpty(map);
 		return json;
@@ -206,7 +206,7 @@ public class FastJsonUtil {
 	 */
 	public static String getResponseJsonWithTime(String err,String msg){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("err", err);
+		map.put("code", err);
 		map.put("msg", msg);
 		String json = toJsonStringWithTime(map);
 		return json;
@@ -256,7 +256,7 @@ public class FastJsonUtil {
 	 */
 	public static String getResponseJsonNotEmptyWithTime(String err,String msg){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("err", err);
+		map.put("code", err);
 		map.put("msg", msg);
 		String json = toJsonStringNotEmptyWithTime(map);
 		return json;

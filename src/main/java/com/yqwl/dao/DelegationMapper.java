@@ -1,5 +1,10 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.yqwl.Vo.DelegationVo;
 import com.yqwl.pojo.Delegation;
 
 public interface DelegationMapper {
@@ -39,6 +44,68 @@ public interface DelegationMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Delegation record);
-
+	/**
+	 * @Title: updateFindID
+	 * @description 修改委托找房当前状态
+	 * @param @param record
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月10日
+	 */
 	int updateFindID(Delegation record);
+	/**
+	 * @Title: selectDeleAll
+	 * @description 后台查询委托看房数据
+	 * @param @param recorrdVo
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月20日
+	 */
+	List<DelegationVo> selectDeleAll(DelegationVo recorrdVo);
+	/**
+	 * @Title: selectDeleAll
+	 * @description 后台查询委托看房数据条数
+	 * @param @param recorrdVo
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月20日
+	 */
+	Integer selectCont(DelegationVo recorrdVo);
+	/**
+	 * @Title: updateDeleBroker
+	 * @description 对委托找房进行抢单
+	 * @param @param broker_id
+	 * @param @param id
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	int updateDeleBroker(@Param("broker_id")Long broker_id,@Param("id")Long id);
+	/**
+	 * @Title: selectDeleCount
+	 * @description 经纪人查询自己的需要处理的委托信息
+	 * @param @param broker_id
+	 * @param @param page
+	 * @param @param limit
+	 * @param @return    
+	 * @return List<DelegationVo>    
+	 * @author linhongyu
+	 * @createDate 2019年4月25日
+	 */
+	List<DelegationVo> selectDeleCount(@Param("broker_id")Long broker_id,@Param("page") Integer page,@Param("limit") Integer limit);
+
+	/**
+	 * @Title: selectCountDel
+	 * @description 经纪人查询自己的需要处理的委托信息条数
+	 * @param @param broker_id    
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	Integer selectCountDel(@Param("broker_id")Long broker_id);
 }

@@ -111,14 +111,18 @@
       `picture` = #{picture,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-  
+  <!-- 查询图片 -->
   <select id="selectPic" parameterType="java.lang.Long"
 		resultMap="BaseResultMap">
 		SELECT
-		p.picture
+		<include refid="Base_Column_List" />
 		FROM
 		t_picture p
 		WHERE
-		p.houses_new_id=#{id}
+		p.houses_new_id=#{houses_new_id}
 	</select>
+  <delete id="delByHousesId" parameterType="java.lang.Long">
+    delete from `t_picture`
+    where  `houses_new_id` = #{homeId}
+  </delete>
 </mapper>

@@ -8,8 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.Pager;
+import com.yqwl.common.web.BizException;
+import com.yqwl.dao.BrokerMapper;
 import com.yqwl.dao.GroupMapper;
+import com.yqwl.pojo.Broker;
 import com.yqwl.pojo.Group;
 import com.yqwl.service.GroupService;
 @Service("groupService")
@@ -17,7 +21,8 @@ import com.yqwl.service.GroupService;
 public class GroupServiceImpl implements GroupService {
 	@Autowired
 	private GroupMapper groupMapper;
-
+	@Autowired
+	private BrokerMapper brokerMapper;
 	@Override
 	public Integer insert(Group group) throws Exception {
 		return groupMapper.insertSelective(group);
@@ -38,6 +43,18 @@ public class GroupServiceImpl implements GroupService {
 		PageHelper.startPage(pager);
 		List<Group> list = groupMapper.ListAll();
 		return new PageInfo<Group>(list);
+	}
+
+	@Override
+	public List<Group> getByShopId(Long shopId) throws Exception {
+		return groupMapper.getByShopId(shopId);
+	}
+
+	@Override
+	public Integer delete(Long id) throws Exception {
+		List<Broker> list = brokerMapper.getBrokerByGroupId(id);
+		if (list.size()>0) throw new BizException(FastJsonUtil.getResponseJson("2000", "小组成员未清空")); 
+		return groupMapper.deleteByPrimaryKey(id);
 	}
 	
 }

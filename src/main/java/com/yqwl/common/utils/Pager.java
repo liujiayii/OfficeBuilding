@@ -1,5 +1,6 @@
 package com.yqwl.common.utils;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,8 +9,8 @@ import java.util.regex.Pattern;
  * 分页信息
  */
 public class Pager {
-	private int pageSize = 10;// 默认每页的行数
-	private int pageNum = 1; // 默认当前页
+	private Integer pageSize;// 默认每页的行数
+	private Integer pageNum; // 默认当前页
     private String sort; //排序字段名字
     private String order; //排序规则
     private String token; //登录令牌
@@ -98,4 +99,12 @@ public class Pager {
         }
         return builder.toString();
     }
+	@Override
+	public String toString() {
+		return "Pager [pageSize=" + pageSize + ", pageNum=" + pageNum + ", sort=" + sort + ", order=" + order
+				+ ", token=" + token + ", filter=" + filter + ", search=" + search + ", params="
+				+ Arrays.toString(params) + "]";
+	}
+    
+    
 }

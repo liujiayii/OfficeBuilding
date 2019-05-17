@@ -14,7 +14,6 @@ import com.yqwl.Vo.BuildingVo;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.Pager;
-import com.yqwl.pojo.Region;
 import com.yqwl.service.BuildingService;
 
 @Controller

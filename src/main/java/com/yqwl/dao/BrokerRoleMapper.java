@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.BrokerRole;
 
 public interface BrokerRoleMapper {
@@ -52,4 +54,6 @@ public interface BrokerRoleMapper {
     int updateByPrimaryKey(BrokerRole record);
 
 	int delByBrokerId(Long brokerId);
+
+	List<BrokerRole> listByRoleId(Long id);
 }

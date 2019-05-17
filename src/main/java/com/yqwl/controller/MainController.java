@@ -65,7 +65,15 @@ public class MainController {
 			return FastJsonUtil.getResponseJson(code, msg, e);
 		}
 	}
-
+	/**
+	 * 
+	 * @Title: homePageNew
+	 * @description 首页显示房源
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年4月29日 上午9:17:03
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/homePageNew", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String homePageNew() {
@@ -87,15 +95,23 @@ public class MainController {
 			return FastJsonUtil.getResponseJson(code, msg, e);
 		}
 	}
-
+	/**
+	 * 
+	 * @Title: homePageCity
+	 * @description 首页选择城市
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年4月29日 上午9:17:25
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/homePageCity", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String homePageCity() {
 		int code = 0;
 		String msg = null;
 		try {
-			Existing result = homePageRecommendedService.homePageCity();
-			if (result != null) {
+			List<Existing> result = homePageRecommendedService.homePageCity();
+			if (result.size() != 0) {
 				msg = "查询成功";
 				return FastJsonUtil.getResponseJson(code, msg, result);
 			}
@@ -109,7 +125,22 @@ public class MainController {
 			return FastJsonUtil.getResponseJson(code, msg, e);
 		}
 	}
-
+	/**
+	 * 
+	 * @Title: MapSelectBuilding
+	 * @description 地图找房
+	 * @param cityId
+	 * @param regionId
+	 * @param startSpace
+	 * @param endSpace
+	 * @param startMoney
+	 * @param endMoney
+	 * @param fitment
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年4月29日 上午9:17:43
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/MapSelectBuilding", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String MapSelectBuilding(@RequestParam(value = "cityId") Integer cityId,

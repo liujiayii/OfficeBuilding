@@ -2,6 +2,8 @@ package com.yqwl.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.Vo.EntrustseeVo;
 import com.yqwl.pojo.Entrustsee;
 
@@ -38,13 +40,122 @@ public interface EntrustseeMapper {
 	 */
 	int updateByPrimaryKey(Entrustsee record);
 	/**
-	 * 修改预约看房状�??
+	 * @Title: updateType
+	 * @description 修改预约看房状态
+	 * @param @param seetype
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月10日
 	 */
 	int updateType(Entrustsee record);
 	/**
-	 * 后台查询�?有预约看�?
+	 * @Title: updateBoerk
+	 * @description 抢单成功
+	 * @param @param broker_id
+	 * @param @param id
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	int updateBoerk(@Param("broker_id")Long broker_id,@Param("id")Long id);
+	/**
+	 * @Title: selectAllEN
+	 * @description 后台查询所有预约看房
+	 * @param @param record
+	 * @param @param page
+	 * @param @param limit
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年4月10日
 	 */
 	List<EntrustseeVo> selectAllEN(EntrustseeVo record);
-
+	
 	Integer getByHousesNewIdCount(Long id);
+	/**
+	 * @Title: listAll
+	 * @description 查询所有预约
+	 * @param @return    
+	 * @return List<Entrustsee>    
+	 * @author likai
+	 * @createDate 2019年4月24日
+	 */
+	List<Entrustsee> listAll();
+	/**
+	 *
+	 * @Title: listByCityId
+	 * @description 通过条件查询预约部分数据type=1
+	 * @param @param cityId
+	 * @param @param page
+	 * @param @param limit
+	 * @param @return    
+	 * @return List<EntrustseeVo>    
+	 * @author likai
+	 * @createDate 2019年4月24日
+	 */
+	List<Entrustsee> listByCityId(@Param("cityId")Long cityId,@Param("page") Integer page,@Param("limit") Integer limit);
+	/**
+	 *
+	 * @Title: listByCityIdAndBuilding
+	 * @description 通过条件查询预约部分数据type=2
+	 * @param @param cityId
+	 * @param @param page
+	 * @param @param count
+	 * @param @return    
+	 * @return List<EntrustseeVo>    
+	 * @author likai
+	 * @createDate 2019年4月24日
+	 */
+	List<Entrustsee> listByCityIdAndBuilding(@Param("cityId")Long cityId,@Param("page") Integer page,@Param("limit") Integer limit);
+	/**
+	 *
+	 * @Title: listByCityIdCount
+	 * @description 通过条件查询预约部分数据type=1数据条数
+	 * @param @param cityId
+	 * @param @param page
+	 * @param @param limit
+	 * @param @return    
+	 * @return int    
+	 * @author likai
+	 * @createDate 2019年4月24日
+	 */
+	int listByCityIdCount(@Param("cityId")Long cityId,@Param("page") Integer page,@Param("limit") Integer limit);
+	/**
+	 *
+	 * @Title: listByCityIdAndBuildingCount
+	 * @description 通过条件查询预约部分数据type=2数据条数
+	 * @param @param cityId
+	 * @param @param page
+	 * @param @param limit
+	 * @param @return    
+	 * @return int    
+	 * @author likai
+	 * @createDate 2019年4月24日
+	 */
+	int listByCityIdAndBuildingCount(@Param("cityId")Long cityId,@Param("page") Integer page,@Param("limit") Integer limit);
+	/**
+	 *
+	 * @Title: selectBroker
+	 * @description 查询经纪人预约数据
+	 * @param @param broker_id    
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	List<EntrustseeVo> selectBroker(@Param("broker_id")Long broker_id,@Param("page") Integer page,@Param("limit") Integer limit);
+	/**
+	 *
+	 * @Title: selectCounts
+	 * @description 查询数据条数
+	 * @param @param broker_id    
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年4月24日
+	 */
+	Integer selectCounts(@Param("broker_id")Long broker_id);
+	List<Entrustsee> listEntrustseeByHomeId(Long homeId, int type);
+	int delByHousesId(Long homeId);
 }

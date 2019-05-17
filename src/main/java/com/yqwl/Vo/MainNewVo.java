@@ -5,6 +5,8 @@ import java.util.List;
 import com.yqwl.pojo.Journalism;
 
 public class MainNewVo extends Journalism{
+	/**  字段的含义 */
+	private static final long serialVersionUID = -8665905357615037155L;
 	private List<Journalism> industry;
 	private List<Journalism> strategy;
 	public List<Journalism> getIndustry() {

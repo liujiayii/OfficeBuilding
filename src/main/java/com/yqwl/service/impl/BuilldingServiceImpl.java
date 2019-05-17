@@ -1,36 +1,37 @@
 package com.yqwl.service.impl;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import com.yqwl.Vo.BuildingListVo;
-
 import com.yqwl.Vo.BuildingVo;
 import com.yqwl.Vo.MapBuildingVo;
 import com.yqwl.common.utils.MapUtil;
 import com.yqwl.common.utils.NumberUtil;
 import com.yqwl.common.utils.Pager;
 import com.yqwl.common.utils.StringUtils;
+import com.yqwl.common.utils.UpdateFiles;
+import com.yqwl.dao.AttentionMapper;
 import com.yqwl.dao.BrokerMapper;
 import com.yqwl.dao.BuildingMapper;
 import com.yqwl.dao.EntrustseeMapper;
+import com.yqwl.dao.HomePageRecommendedMapper;
 import com.yqwl.dao.HousesNewMapper;
 import com.yqwl.dao.PhotoMapper;
+import com.yqwl.pojo.Attention;
 import com.yqwl.pojo.Broker;
 import com.yqwl.pojo.Building;
+import com.yqwl.pojo.HomePageRecommended;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Photo;
-import com.yqwl.pojo.Region;
 import com.yqwl.service.BuildingService;
 
 @Service("buildingService")
@@ -46,6 +47,10 @@ public class BuilldingServiceImpl implements BuildingService {
 	private BrokerMapper brokerMapper;
 	@Autowired
 	private EntrustseeMapper entrustseeMapper;
+	@Autowired
+	private AttentionMapper attentionMapper;
+	@Autowired
+	private HomePageRecommendedMapper homePageRecommendedMapper;
 	/**
 	 * 楼盘条件搜索 (分页)
 	 */
@@ -119,9 +124,20 @@ public class BuilldingServiceImpl implements BuildingService {
 		return buildingMapper.listByHouseCount(cityId);
 	}
 
-
+	/**
+	 *
+	 * @Title: selectBuil
+	 * @description 通过id查询信息
+	 *
+	 * @param @param id
+	 * @param @return    
+	 * @return BuildingListVo    
+	 *
+	 * @author linhongyu
+	 * @createDate 2019年4月15日
+	 */
 	@Override
-	public BuildingListVo selectBuil(long id) {
+	public BuildingListVo selectBuil(Long id) throws Exception{
 		return buildingMapper.selectBuil(id);
 	}
 	/**
@@ -155,6 +171,141 @@ public class BuilldingServiceImpl implements BuildingService {
 			mapBuildingVo.setHousesNews(housesNews);
 		}
 		return buildingVos;
+	}
+	/**
+	 * @Title: insertSelective
+	 * @description 新增一条商厦信息
+	 * @param @param building
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年4月25日
+	 */
+	@Override
+	public int insertSelective(Building record) throws Exception {
+		return buildingMapper.insertSelective(record);
+	}
+	/**
+	 * @Title: updateByPrimaryKeySelective
+	 * @description 修改一条商厦信息
+	 * @param @param building
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年4月25日
+	 */
+	@Override
+	public int updateByPrimaryKeySelective(Building record) throws Exception {
+		int num=buildingMapper.updateByPrimaryKeySelective(record);
+		long id=record.getId();
+		if(num!=0){
+			List<Photo> photos=photoMapper.selectPhoto(id);
+			if(photos.size()>0){
+				for(int i=0;i<photos.size();i++){
+					String urls=photos.get(i).getPhoto();
+					UpdateFiles.deleatFile(urls);
+					Long ids=photos.get(i).getId();
+					photoMapper.deleteByPrimaryKey(ids);
+				}
+			}
+		}
+		return num;
+	}
+	/**
+	 * @Title: selectByPrimaryKey
+	 * @description 通过id查询商厦详情
+	 * @param @param building
+	 * @param @return    
+	 * @return Building    
+	 * @author linhongyu
+	 * @createDate 2019年4月25日
+	 */
+	@Override
+	public Map<String, Object> selectByPrimaryKey(Long id) throws Exception{
+		Building building = buildingMapper.selectByPrimaryKey(id);
+		List<Photo> photos = photoMapper.selectPhoto(id);
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", building);
+		map.put("photos", photos);
+		return map;
+	}
+	/**
+	 * @Title: selectBuilding
+	 * @description 通过城市查询商厦信息
+	 * @param @param building
+	 * @param @return    
+	 * @return List<BuildingListVo>    
+	 * @author linhongyu
+	 * @createDate 2019年4月25日
+	 */
+	@Override
+	public List<BuildingListVo> selectBuilding(BuildingListVo building) throws Exception {
+		return buildingMapper.selectBuilding(building);
+	}
+	/**
+	 * @Title: selectBuilding
+	 * @description 通过城市查询商厦信息条数
+	 * @param @param building
+	 * @param @return    
+	 * @return List<BuildingListVo>    
+	 * @author linhongyu
+	 * @createDate 2019年4月25日
+	 */
+	@Override
+	public Integer selectContBuil(BuildingListVo building) throws Exception {
+		return buildingMapper.selectContBuil(building);
+	}
+	/**
+	 * @Title: deleteByPrimaryKey
+	 * @description 删除一条商厦信息
+	 * @param @param id
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
+	@Override
+	public int deleteByPrimaryKey(Long id) throws Exception {
+		int num=0;
+		Long buildingId=id;
+		List<HousesNew> housesNews=housesNewMapper.selectHousesNew(buildingId);
+		if(housesNews.size()!=0){
+			num=-101;
+			return num;  //该商厦下有关联房源
+		}else {
+			Long houses_new_id=id;
+			List<Attention> attentions=attentionMapper.selectAtten(houses_new_id);
+			if(attentions.size()!=0){
+				num=-102;
+				return num;  //该商厦有人关注
+			}else {
+				Long building_id=id;
+				HomePageRecommended s=homePageRecommendedMapper.selectRecommended(building_id);	
+				if(s!=null){
+					num=-103;
+					return num;  //该商厦首页推荐
+				}
+			}
+		}
+		Building building=buildingMapper.selectByPrimaryKey(id);
+		String url=building.getMansion_picture();
+		UpdateFiles.deleatFile(url);
+		num=buildingMapper.deleteByPrimaryKey(id);
+		if(num==1){
+			List<Photo> photos=photoMapper.selectPhoto(id);
+			for(int i=0;i<photos.size();i++){
+				String urls=photos.get(i).getPhoto();
+				UpdateFiles.deleatFile(urls);
+				Long ids=photos.get(i).getId();
+				photoMapper.deleteByPrimaryKey(ids);
+			}
+		}
+		return num;
+	}
+	@Override
+	public List<Building> listAllByCityId(Long cityId) throws Exception {
+		return buildingMapper.listAllByCityId(cityId);
 	}
 
 }

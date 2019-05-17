@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yqwl.dao.PictureMapper;
 import com.yqwl.pojo.Picture;
@@ -19,16 +20,16 @@ import com.yqwl.service.PictureService;
  * @createDate 2019年4月10日
  */
 @Service("pictureService")
+@Transactional(rollbackFor = { Exception.class })
 public class PictureServiceImpl implements PictureService{
 
 	@Resource
 	private PictureMapper pictureMapper;
-	/* (non-Javadoc)
-	 * @see com.yqwl.service.PictureService#selectPic(long)
+	/**
+	 * 查询图片信息
 	 */
 	@Override
-	public List<Picture> selectPic(long id) {
-		// TODO Auto-generated method stub
+	public List<Picture> selectPic(Long id) throws Exception{
 		return pictureMapper.selectPic(id);
 	}
 	

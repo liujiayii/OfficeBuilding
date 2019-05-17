@@ -2,9 +2,6 @@ package com.yqwl.controller.back;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.http.impl.bootstrap.HttpServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;

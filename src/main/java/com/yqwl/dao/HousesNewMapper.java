@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.yqwl.Vo.HousesNewVo;
 import com.yqwl.pojo.HousesNew;
-import com.yqwl.pojo.Region;
 
 public interface HousesNewMapper {
 
@@ -52,9 +51,24 @@ public interface HousesNewMapper {
 
 	List<HousesNew> listHousesNewByCondition(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
 			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment);
-	/*查询可能喜欢的房源信�?**/
+	/*查询可能喜欢的房源信�??**/
 	List<HousesNewVo> selectLike(HousesNewVo record);
 
 	List<HousesNew> listHousesNewByBuildingId(Long buildingId);
+	/**
+	 * @Title: selectHousesNew
+	 * @description 查询该商厦下的房源
+	 * @param @param buildingId
+	 * @param @return    
+	 * @return List<HousesNew>    
+	 * @author linhongyu
+	 * @createDate 2019年4月30日
+	 */
+	List<HousesNew> selectHousesNew(Long buildingId);
+
+	List<HousesNew> ListBackHousesNew(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
+			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("shopId") Long shopId);
+
+	List<HousesNew> listByShopId(Long id);
 
 }

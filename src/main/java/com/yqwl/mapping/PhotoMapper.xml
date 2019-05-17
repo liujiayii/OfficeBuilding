@@ -104,4 +104,15 @@
     from `t_photo`
     where `building_id` = #{buildingId}
   </select>
+  <!-- 查询图片 -->
+   <select id="selectPhoto" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		SELECT
+		p.id,
+		p.photo
+		FROM
+		t_photo p
+		WHERE
+		p.building_id=#{id}
+	</select>
 </mapper>

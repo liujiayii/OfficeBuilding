@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
 import com.yqwl.pojo.Broker;
-import com.yqwl.pojo.Function;
 import com.yqwl.pojo.Role;
 
 public class BrokerVo extends Broker {

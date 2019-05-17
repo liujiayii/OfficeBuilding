@@ -1,7 +1,6 @@
 package com.yqwl.dao;
 import java.util.List;
 import com.yqwl.Vo.JournalismVo;
-import com.yqwl.Vo.MainNewVo;
 import com.yqwl.pojo.Journalism;
 public interface JournalismMapper {
     /**
@@ -51,7 +50,7 @@ public interface JournalismMapper {
 	List<Journalism> listBytype(int type);
     /***
      * @Title: selectJour
-     * @description 查询所有新闻
+     * @description 通过分类查询所有新闻
      * @param @param record
      * @param @return    
      * @return List<JournalismVo>    
@@ -71,4 +70,34 @@ public interface JournalismMapper {
      * @createDate 2019年4月14日
      */
     Journalism selectNext(Journalism record);
-}
+    /**
+     * @Title: selectAllAome
+     * @description 后台查询新闻信息并分页
+     * @param @param records
+     * @param @return    
+     * @return List<JournalismVo>    
+     * @author linhongyu
+     * @createDate 2019年4月23日
+     */
+    List<JournalismVo> selectAllAome(JournalismVo records);
+	  /**
+	   * @Title: selectCountJour
+	   * @description 后台查询新闻信息条数
+	   * @param @param records
+	   * @param @return    
+	   * @return Integer    
+	   * @author linhongyu
+	   * @createDate 2019年4月28日
+	   */
+    Integer selectCountJour(JournalismVo records);
+    /**
+     * @Title: updateJourna
+     * @description 修改新闻资讯表数据
+     * @param @param record
+     * @param @return    
+     * @return int    
+     * @author linhongyu
+     * @createDate 2019年4月28日
+     */
+    int updateJourna(Journalism record);
+ }

@@ -21,5 +21,10 @@ public class RegionServiceImpl implements RegionService {
 		return regionMapper.listRegionByPid(pid);
 	}
 
+	@Override
+	public Region getRegionByid(Integer id) throws Exception {
+		return regionMapper.selectByPrimaryKey(id);
+	}
+
 	
 }

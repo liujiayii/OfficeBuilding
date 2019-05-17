@@ -10,9 +10,7 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.LifecycleRule;
 import com.aliyun.oss.model.LifecycleRule.RuleStatus;
 import com.aliyun.oss.model.SetBucketLifecycleRequest;
@@ -25,12 +23,12 @@ import com.aliyun.oss.model.SetBucketLifecycleRequest;
  */
 public class UpdateFile {
 
-	private static final String endpoint = "http://oss-cn-beijing.aliyuncs.com";
+	private static final String endpoint = "https://oss-cn-beijing.aliyuncs.com";
 	private static final String accessKeyId = "LTAIvnDBZYK3DLbL";
 	private static final String accessKeySecret = "MI2LRjW5RQqolPzUBdkjSaRDDPOLpG";
 	private static final String bucketName = "system-im";
-	private static final String picLocation = "data/attachments/";
-	private static  String Key = "key";
+	private static final String picLocation = "shop/";
+	private static String Key = "key";
 	private static final String ruleId0 = "rule0";
 	private static final String matchPrefix0 = "A0/";
 
@@ -84,7 +82,7 @@ public class UpdateFile {
 			// // 返回路径文件格式
 			// map.put("Path", url.toString());
 			// map.put("suffix", fileType);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -112,29 +110,22 @@ public class UpdateFile {
 	 * @param @return
 	 * @param @throws
 	 *            Exception
-	 * 
-	 * @return Map<String,String>
-	 *
-	 * 
 	 * @author lishaozhang
 	 * @createDate 2018年11月22日
 	 */
-	public static Map<String, Object> deleatFile(String url) throws Exception {
-		Map<String, Object> map = new HashMap<>();
+	public static boolean deleatFile(String url) throws Exception {
 		try {
 			OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-			url = url.replace("https://" + bucketName + ".oss-cn-zhangjiakou.aliyuncs.com/", "");
+			url = url.replaceFirst("https://" + bucketName + ".oss-cn-beijing.aliyuncs.com/", "");
 			String substring = url.substring(url.indexOf("?Expires"));
 			String key = url.replace(substring, "");
+			key = key.substring(key.indexOf("shop"));
 			ossClient.deleteObject(bucketName, key);
-			map.put("code", 0);
-			map.put("msg", "删除成功");
+			ossClient.shutdown();
 		} catch (Exception e) {
-			map.put("code", 1);
-			map.put("msg", "删除失败");
-			e.printStackTrace();
+			return false;
 		}
-		return map;
+		return true;
 	}
 
 }

@@ -133,4 +133,11 @@
       `total_floor` = #{total_floor,jdbcType=INTEGER}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="getPlotBuildByConditions" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `t_plot_build`
+    where `building_id` = #{buildingId}
+  </select>
 </mapper>

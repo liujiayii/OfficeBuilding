@@ -104,4 +104,11 @@
    	<include refid="Base_Column_List" />
     from `t_group`
   </select>
+  
+  <select id="getByShopId" resultMap="BaseResultMap">
+    select 
+   	<include refid="Base_Column_List" />
+    from `t_group`
+    where `shop_id` = #{shopId}
+  </select>
 </mapper>

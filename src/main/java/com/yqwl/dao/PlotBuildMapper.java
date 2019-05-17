@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.PlotBuild;
 
 public interface PlotBuildMapper {
@@ -39,4 +41,6 @@ public interface PlotBuildMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(PlotBuild record);
+
+	List<PlotBuild> getPlotBuildByConditions(Long buildingId);
 }

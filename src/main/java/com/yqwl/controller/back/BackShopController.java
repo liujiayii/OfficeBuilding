@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.yqwl.Vo.BrokerVo;
+import com.yqwl.Vo.ShopVo;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.Pager;
@@ -26,7 +25,6 @@ import com.yqwl.service.ShopService;
 @Scope("prototype")
 @RequestMapping("backShop")
 public class BackShopController extends BaseController {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private ShopService shopService;
@@ -125,9 +123,9 @@ public class BackShopController extends BaseController {
 			if (brokerVo!=null) {
 				int count = shopService.updateByPrimaryKeySelective(record);
 				if(count != 0){
-					return FastJsonUtil.getResponseJson(0, "新增成功", null);
+					return FastJsonUtil.getResponseJson(0, "修改成功", null);
 				}else {
-					return FastJsonUtil.getResponseJson(-1, "新增失败", null);
+					return FastJsonUtil.getResponseJson(-1, "修改失败", null);
 				}
 			}
 			return FastJsonUtil.getResponseJson("-2", "未登录");
@@ -165,10 +163,37 @@ public class BackShopController extends BaseController {
 		}
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String delete(HttpSession session,Long id) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				Integer result = shopService.delete(id);
+				if (result != 0) {
+					msg = "删除成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "删除失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
+	
+	
 	/**
 	 * 
 	 * @Title: listAll
-	 * @description 查询所有店铺
+	 * @description 分页查询所有店铺
 	 * @param session
 	 * @return
 	 * String
@@ -182,7 +207,7 @@ public class BackShopController extends BaseController {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo!=null) {
-				PageInfo<Shop> shop = shopService.seleceShopList(pager);
+				PageInfo<ShopVo> shop = shopService.seleceShopList(pager);
 				if(shop.getList().size() != 0){
 			 		return FastJsonUtil.getResponseJson(0, "查询成功", shop);
 			 	}else {

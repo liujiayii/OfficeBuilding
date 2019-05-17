@@ -185,9 +185,40 @@
 	JOIN t_region AS r ON s.region_id = r.area_id
 	WHERE g.id = #{group_id}
   </select>
+  <!-- 查询所有经纪人信息   -->
   <select id="listAll" resultMap="BaseResultMap">
 	select 
     <include refid="Base_Column_List" />
     from `t_broker`
   </select>
+  
+  <select id="getBrokerByShopId" parameterType="java.lang.Long" resultType="java.lang.Long">
+	SELECT
+		g.id
+	FROM
+		t_group AS g
+	JOIN t_shop AS s ON g.shop_id = s.id
+	JOIN t_broker AS b ON g.id = b.group_id
+	WHERE
+		b.id = #{id}
+  </select>
+  
+  <select id="listByCondition" resultMap="BaseResultMap">
+	SELECT
+		*
+	FROM
+		`t_broker`
+	WHERE
+		(ISNULL(#{condition}) or `real_name` like concat('%',#{condition},'%')) or (ISNULL(#{condition}) or `phonemunber` like concat('%',#{condition},'%'))
+  </select>
+  
+  <select id="getBrokerByGroupId" resultMap="BaseResultMap">
+	SELECT
+		 <include refid="Base_Column_List" />
+	FROM
+		`t_broker`
+	WHERE `group_id` = #{id}
+  </select>  
+  
+  
 </mapper>

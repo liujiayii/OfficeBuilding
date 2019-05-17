@@ -12,16 +12,11 @@ import com.yqwl.common.utils.Pager;
 import com.yqwl.service.HousesNewService;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.service.PictureService;
-
 import javax.annotation.Resource;
-
 import com.github.pagehelper.PageInfo;
-import com.yqwl.Vo.BuildingVo;
 import com.yqwl.Vo.HousesNewVo;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Picture;
-import com.yqwl.pojo.Region;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +62,7 @@ public class HousesNewController {
 		 	if(hous!=null){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", map);
 		 	}else {
-		 		return FastJsonUtil.getResponseJson(1, "查询失败", null);
+		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,7 +91,7 @@ public class HousesNewController {
 		 	if(hou.size()>0){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", hou);
 		 	}else {
-		 		return FastJsonUtil.getResponseJson(1, "查询失败", null);
+		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

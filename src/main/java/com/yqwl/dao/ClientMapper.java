@@ -1,9 +1,9 @@
 package com.yqwl.dao;
 
-import java.math.BigInteger;
-
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import com.yqwl.Vo.ClientVo;
 import com.yqwl.pojo.Client;
-
 public interface ClientMapper {
 
 	/**
@@ -41,6 +41,34 @@ public interface ClientMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(Client record);
-	
+	/**
+	 * @Title: seleceFindId
+	 * @description 通过手机号查询
+	 * @param @param phones
+	 * @param @return    
+	 * @return Client    
+	 * @author linhongyu
+	 * @createDate 2019年4月29日
+	 */
 	Client seleceFindId(Long phones);
+	/**
+	 * @Title: selectClient
+	 * @description 查询客户列表并分页
+	 * @param @param page
+	 * @param @param limit
+	 * @param @return    
+	 * @return List<Client>    
+	 * @author linhongyu
+	 * @createDate 2019年5月5日
+	 */
+	List<ClientVo> selectClient(@Param("page") Integer page,@Param("limit") Integer limit);
+	/**
+	 * @Title: selectCount
+	 * @description 查询客户列表条数
+	 * @param @return    
+	 * @return Integer    
+	 * @author linhongyu
+	 * @createDate 2019年5月5日
+	 */
+	Integer selectCount();
 }

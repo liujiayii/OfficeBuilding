@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.Existing;
 
 public interface ExistingMapper {
@@ -51,5 +53,5 @@ public interface ExistingMapper {
      */
     int updateByPrimaryKey(Existing record);
 
-	Existing homePageCity();
+	List<Existing> homePageCity();
 }

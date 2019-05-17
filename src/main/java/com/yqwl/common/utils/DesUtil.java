@@ -172,7 +172,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 /**
  * @author zhaokaiqiang

@@ -83,7 +83,7 @@
 		`state_time` = #{state_time,jdbcType=TIMESTAMP}
 		where `id` = #{id,jdbcType=BIGINT}
 	</update>
-
+	<!-- 通过手机号查询 -->
 	<select id="seleceFindId" parameterType="java.lang.Long"
 		resultMap="BaseResultMap">
 		SELECT
@@ -93,5 +93,24 @@
 		t_client c
 		WHERE
 		c.phones=#{phones}
+	</select>
+	<!-- 查询所有用户并分页 -->
+	<select id="selectClient"  parameterType="com.yqwl.Vo.ClientVo"
+		resultType="com.yqwl.pojo.Client">
+		SELECT
+		c.id,
+		c.phones,
+		c.state_time
+		FROM
+		t_client AS c
+		limit
+		#{page},#{limit}
+	</select>
+	<!-- 查询用户数据条数 -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(c.id) count
+		FROM
+		t_client AS c
 	</select>
 </mapper>

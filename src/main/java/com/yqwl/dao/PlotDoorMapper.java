@@ -1,5 +1,8 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
+import com.yqwl.pojo.PlotBuild;
 import com.yqwl.pojo.PlotDoor;
 
 public interface PlotDoorMapper {
@@ -39,4 +42,8 @@ public interface PlotDoorMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(PlotDoor record);
+
+	List<PlotDoor> getPlotDoorByConditions(Long buildId);
+
+	int deleteByBuildId(Long id);
 }
