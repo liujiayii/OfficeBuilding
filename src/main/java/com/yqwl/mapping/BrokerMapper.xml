@@ -194,7 +194,7 @@
   
   <select id="getBrokerByShopId" parameterType="java.lang.Long" resultType="java.lang.Long">
 	SELECT
-		g.id
+		s.id
 	FROM
 		t_group AS g
 	JOIN t_shop AS s ON g.shop_id = s.id

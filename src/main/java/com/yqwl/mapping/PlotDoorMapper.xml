@@ -128,9 +128,18 @@
     from `t_plot_door`
     where `build_id` = #{buildId}
   </select>
-  
+  <select id="getPlotDoorByFloor" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `t_plot_door`
+    where `build_id` = #{buildId} and `floor` = #{floor}
+  </select>
   <delete id="deleteByBuildId" parameterType="java.lang.Long">
     delete from `t_plot_door`
     where `build_id` = #{id}
+  </delete>
+  <delete id="deletePlotDoorByFloor">
+    delete from `t_plot_door`
+    where `build_id` = #{buildId} and `floor` = #{floor}
   </delete>
 </mapper>

@@ -72,8 +72,6 @@ public class HousesNewServiceImpl implements HousesNewService {
 	private HomePageRecommendedMapper homePageRecommendedMapper;
 	@Autowired
 	private AttentionMapper attentionMapper;
-	@Autowired
-	private GroupMapper groupMapper;
 	@Override
 	public HousesNewVo selectByFindID(long id) throws Exception {
 		/*
@@ -107,10 +105,17 @@ public class HousesNewServiceImpl implements HousesNewService {
 			endMoney = BigDecimal.valueOf(endMoney1);
 		}
 		Integer fitment = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("fitment")));
+		// 经纪人id
+		Integer brokerId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("brokerId")));
+		// 业主电话/业主姓名
+		String phoneOrName = StringUtils.getFirstString(conditions.get("phoneOrName"));
+		Integer buildingId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("buildingId")));
+		
+		
 		// 分页
 		PageHelper.startPage(pager);
 		List<HousesNew> list = housesNewMapper.listHousesNewByCondition(cityId, regionId, startSpace, endSpace,
-				startMoney, endMoney, fitment);
+				startMoney, endMoney, fitment, brokerId, phoneOrName,buildingId);
 		return new PageInfo<HousesNew>(list);
 	}
 
@@ -350,6 +355,43 @@ public class HousesNewServiceImpl implements HousesNewService {
 	@Override
 	public PlotBuild getPlotBuildById(Long id) throws Exception {
 		return plotBuildMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public int insertDoor(Long build_id, Integer flooors, Integer startDoor, Integer endDoor,Integer... span) throws Exception {
+		int flag = startDoor;
+		int count = 0;
+		for (int i = 1; i <= flooors; i++) {
+			for (Integer integer : span) {
+				//判断是否有跃层
+				if (i == integer) {
+					continue;
+				}
+			}
+			for (; startDoor <= endDoor; startDoor++) {
+				PlotDoor plotDoor = new PlotDoor();
+				plotDoor.setBuild_id(build_id);
+				plotDoor.setFloor(i);
+				plotDoor.setStatus(0);
+				if (startDoor<10) {
+					plotDoor.setDoor_num(i+"0"+startDoor);
+				}else {
+					plotDoor.setDoor_num(i+""+startDoor);
+				}
+				count += plotDoorMapper.insertSelective(plotDoor);
+			}
+			startDoor = flag;
+		}
+		return count;
+	}
+
+	@Override
+	public int deletePlotDoorByFloor(Long buildId,Integer floor) throws Exception {
+		List<PlotDoor> list = plotDoorMapper.getPlotDoorByFloor(buildId,floor);
+		for (PlotDoor plotDoor : list) {
+			if (plotDoor.getStatus() != 0) throw new BizException(FastJsonUtil.getResponseJson(2000, "待租或已组房源不能删除", null));
+		}
+		return plotDoorMapper.deletePlotDoorByFloor(buildId,floor);
 	}
 
 }

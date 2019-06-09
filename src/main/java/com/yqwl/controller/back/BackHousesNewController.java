@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
@@ -373,6 +374,45 @@ public class BackHousesNewController extends BaseController{
 	}
 	/**
 	 * 
+	 * @Title: insertDoor
+	 * @description 批量增加门牌号
+	 * @param session
+	 * @param build_id
+	 * @param flooors
+	 * @param startDoor
+	 * @param endDoor
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年5月9日 下午2:33:39
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/insertDoor", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String insertDoor(HttpSession session,Long build_id,Integer flooors,Integer startDoor,Integer endDoor,@RequestParam(required = false,value = "span")Integer... span) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				int result = housesNewService.insertDoor(build_id,flooors,startDoor,endDoor,span);
+				if (result != 0) {
+					msg = "新增成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "新增失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
+	/**
+	 * 
 	 * @Title: insertPlotBuild
 	 * @description 新增座栋
 	 * @param session
@@ -499,6 +539,44 @@ public class BackHousesNewController extends BaseController{
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo != null) {
 				int result = housesNewService.deletePlotDoor(id);
+				if (result != 0) {
+					msg = "删除成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "删除失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @Title: deletePlotDoorByFloor
+	 * @description 删除座栋某个楼层的所有门牌号
+	 * @param session
+	 * @param buildId
+	 * @param floor
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年6月4日 上午10:49:29
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/deletePlotDoorByFloor", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String deletePlotDoorByFloor(HttpSession session,Long buildId,Integer floor) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				int result = housesNewService.deletePlotDoorByFloor(buildId,floor);
 				if (result != 0) {
 					msg = "删除成功";
 					return FastJsonUtil.getResponseJson(code, msg, result);

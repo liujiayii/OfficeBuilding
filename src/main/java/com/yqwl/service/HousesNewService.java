@@ -63,4 +63,8 @@ public interface HousesNewService {
 
 	public PlotBuild getPlotBuildById(Long id) throws Exception;
 
+	public int insertDoor(Long build_id, Integer flooors, Integer startDoor, Integer endDoor, Integer... span) throws Exception;
+
+	public int deletePlotDoorByFloor(Long id,Integer floor) throws Exception;
+
 }

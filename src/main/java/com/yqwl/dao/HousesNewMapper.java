@@ -50,19 +50,19 @@ public interface HousesNewMapper {
 	public HousesNewVo selectByFindID(long id);
 
 	List<HousesNew> listHousesNewByCondition(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
-			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment);
-	/*查询可能喜欢的房源信�??**/
+			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("brokerId") Integer brokerId,@Param("phoneOrName") String phoneOrName,@Param("buildingId")Integer buildingId);
+	/*查询可能喜欢的房源信�???**/
 	List<HousesNewVo> selectLike(HousesNewVo record);
 
 	List<HousesNew> listHousesNewByBuildingId(Long buildingId);
 	/**
 	 * @Title: selectHousesNew
-	 * @description 查询该商厦下的房源
+	 * @description 查询该商厦下的房�?
 	 * @param @param buildingId
 	 * @param @return    
 	 * @return List<HousesNew>    
 	 * @author linhongyu
-	 * @createDate 2019年4月30日
+	 * @createDate 2019�?4�?30�?
 	 */
 	List<HousesNew> selectHousesNew(Long buildingId);
 

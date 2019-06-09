@@ -2,6 +2,8 @@ package com.yqwl.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.pojo.PlotBuild;
 import com.yqwl.pojo.PlotDoor;
 
@@ -46,4 +48,8 @@ public interface PlotDoorMapper {
 	List<PlotDoor> getPlotDoorByConditions(Long buildId);
 
 	int deleteByBuildId(Long id);
+
+	List<PlotDoor> getPlotDoorByFloor(@Param("buildId")Long buildId, @Param("floor")Integer floor);
+
+	int deletePlotDoorByFloor(@Param("buildId")Long buildId, @Param("floor")Integer floor);
 }
