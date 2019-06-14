@@ -50,25 +50,35 @@ public interface HousesNewMapper {
 	public HousesNewVo selectByFindID(long id);
 
 	List<HousesNew> listHousesNewByCondition(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
-			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("brokerId") Integer brokerId,@Param("phoneOrName") String phoneOrName,@Param("buildingId")Integer buildingId);
-	/*查询可能喜欢的房源信�???**/
+			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("brokerId") Integer brokerId,@Param("phone") String phone,@Param("ownerName") String ownerName, @Param("buildingId") Integer buildingId);
+	/*查询可能喜欢的房源信�?????**/
 	List<HousesNewVo> selectLike(HousesNewVo record);
 
 	List<HousesNew> listHousesNewByBuildingId(Long buildingId);
 	/**
 	 * @Title: selectHousesNew
-	 * @description 查询该商厦下的房�?
+	 * @description 查询该商厦下的房�???
 	 * @param @param buildingId
 	 * @param @return    
 	 * @return List<HousesNew>    
 	 * @author linhongyu
-	 * @createDate 2019�?4�?30�?
+	 * @createDate 2019�?4�?30�?
 	 */
 	List<HousesNew> selectHousesNew(Long buildingId);
 
 	List<HousesNew> ListBackHousesNew(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
-			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("shopId") Long shopId);
+			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("shopId") Long shopId,@Param("brokerId") Integer brokerId,@Param("phone") String phoneOrName,@Param("ownerName") String ownerName,@Param("buildingId") Integer buildingId);
 
 	List<HousesNew> listByShopId(Long id);
+	/**
+	 * @Title: updateSelective
+	 * @description 修改房源状�?�活�?盘修�?
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019�?6�?12�?
+	 */
+	int updateSelective(HousesNew record);
 
 }

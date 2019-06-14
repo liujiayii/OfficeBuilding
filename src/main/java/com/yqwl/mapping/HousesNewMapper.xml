@@ -18,14 +18,17 @@
     <result column="money" jdbcType="DECIMAL" property="money" />
     <result column="money_unit" jdbcType="INTEGER" property="money_unit" />
     <result column="rent_time" jdbcType="INTEGER" property="rent_time" />
+    <result column="maintain_time" jdbcType="TIMESTAMP" property="maintain_time" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="begin_time" />
     <result column="times" jdbcType="TIMESTAMP" property="times" />
     <result column="fitment" jdbcType="INTEGER" property="fitment" />
     <result column="types" jdbcType="INTEGER" property="types" />
-    <result column="entering_broker_id" jdbcType="INTEGER" property="entering_broker_id" />
+    <result column="entering_broker_id" jdbcType="BIGINT" property="entering_broker_id" />
     <result column="home_name" jdbcType="VARCHAR" property="home_name" />
-    <result column="home_number" jdbcType="INTEGER" property="home_number" />
-    <result column="solid_broker_id" jdbcType="INTEGER" property="solid_broker_id" />
-    <result column="maintain_broker_id" jdbcType="INTEGER" property="maintain_broker_id" />
+    <result column="home_number" jdbcType="VARCHAR" property="home_number" />
+    <result column="solid_broker_id" jdbcType="BIGINT" property="solid_broker_id" />
+    <result column="maintain_broker_id" jdbcType="BIGINT" property="maintain_broker_id" />
+    <result column="key_broker_id" jdbcType="BIGINT" property="key_broker_id" />
     <result column="whether" jdbcType="INTEGER" property="whether" />
     <result column="door_id" jdbcType="BIGINT" property="door_id" />
     <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
@@ -37,8 +40,9 @@
     -->
     `id`, `houes_number`, `building_id`, `work_name`, `house_picture`, `office_space`, 
     `location_number`, `house_type`, `location`, `money`, `money_unit`, `rent_time`, 
-    `times`, `fitment`, `types`, `entering_broker_id`, `home_name`, `home_number`, `solid_broker_id`, 
-    `maintain_broker_id`, `whether`, `door_id`, `shop_id`
+    `maintain_time`, `begin_time`, `times`, `fitment`, `types`, `entering_broker_id`, 
+    `home_name`, `home_number`, `solid_broker_id`, `maintain_broker_id`, `key_broker_id`, 
+    `whether`, `door_id`, `shop_id`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -69,18 +73,20 @@
     insert into `t_houses_new` (`houes_number`, `building_id`, `work_name`, 
       `house_picture`, `office_space`, `location_number`, 
       `house_type`, `location`, `money`, 
-      `money_unit`, `rent_time`, `times`, 
-      `fitment`, `types`, `entering_broker_id`, 
-      `home_name`, `home_number`, `solid_broker_id`, 
-      `maintain_broker_id`, `whether`, `door_id`, 
+      `money_unit`, `rent_time`, `maintain_time`, 
+      `begin_time`, `times`, `fitment`, 
+      `types`, `entering_broker_id`, `home_name`, 
+      `home_number`, `solid_broker_id`, `maintain_broker_id`, 
+      `key_broker_id`, `whether`, `door_id`, 
       `shop_id`)
     values (#{houes_number,jdbcType=VARCHAR}, #{building_id,jdbcType=BIGINT}, #{work_name,jdbcType=VARCHAR}, 
       #{house_picture,jdbcType=VARCHAR}, #{office_space,jdbcType=INTEGER}, #{location_number,jdbcType=INTEGER}, 
       #{house_type,jdbcType=VARCHAR}, #{location,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, 
-      #{money_unit,jdbcType=INTEGER}, #{rent_time,jdbcType=INTEGER}, #{times,jdbcType=TIMESTAMP}, 
-      #{fitment,jdbcType=INTEGER}, #{types,jdbcType=INTEGER}, #{entering_broker_id,jdbcType=INTEGER}, 
-      #{home_name,jdbcType=VARCHAR}, #{home_number,jdbcType=INTEGER}, #{solid_broker_id,jdbcType=INTEGER}, 
-      #{maintain_broker_id,jdbcType=INTEGER}, #{whether,jdbcType=INTEGER}, #{door_id,jdbcType=BIGINT}, 
+      #{money_unit,jdbcType=INTEGER}, #{rent_time,jdbcType=INTEGER}, #{maintain_time,jdbcType=TIMESTAMP}, 
+      #{begin_time,jdbcType=TIMESTAMP}, #{times,jdbcType=TIMESTAMP}, #{fitment,jdbcType=INTEGER}, 
+      #{types,jdbcType=INTEGER}, #{entering_broker_id,jdbcType=BIGINT}, #{home_name,jdbcType=VARCHAR}, 
+      #{home_number,jdbcType=VARCHAR}, #{solid_broker_id,jdbcType=BIGINT}, #{maintain_broker_id,jdbcType=BIGINT}, 
+      #{key_broker_id,jdbcType=BIGINT}, #{whether,jdbcType=INTEGER}, #{door_id,jdbcType=BIGINT}, 
       #{shop_id,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.yqwl.pojo.HousesNew">
@@ -126,6 +132,12 @@
       <if test="rent_time != null">
         `rent_time`,
       </if>
+      <if test="maintain_time != null">
+        `maintain_time`,
+      </if>
+      <if test="begin_time != null">
+        `begin_time`,
+      </if>
       <if test="times != null">
         `times`,
       </if>
@@ -149,6 +161,9 @@
       </if>
       <if test="maintain_broker_id != null">
         `maintain_broker_id`,
+      </if>
+      <if test="key_broker_id != null">
+        `key_broker_id`,
       </if>
       <if test="whether != null">
         `whether`,
@@ -194,6 +209,12 @@
       <if test="rent_time != null">
         #{rent_time,jdbcType=INTEGER},
       </if>
+      <if test="maintain_time != null">
+        #{maintain_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="begin_time != null">
+        #{begin_time,jdbcType=TIMESTAMP},
+      </if>
       <if test="times != null">
         #{times,jdbcType=TIMESTAMP},
       </if>
@@ -204,19 +225,22 @@
         #{types,jdbcType=INTEGER},
       </if>
       <if test="entering_broker_id != null">
-        #{entering_broker_id,jdbcType=INTEGER},
+        #{entering_broker_id,jdbcType=BIGINT},
       </if>
       <if test="home_name != null">
         #{home_name,jdbcType=VARCHAR},
       </if>
       <if test="home_number != null">
-        #{home_number,jdbcType=INTEGER},
+        #{home_number,jdbcType=VARCHAR},
       </if>
       <if test="solid_broker_id != null">
-        #{solid_broker_id,jdbcType=INTEGER},
+        #{solid_broker_id,jdbcType=BIGINT},
       </if>
       <if test="maintain_broker_id != null">
-        #{maintain_broker_id,jdbcType=INTEGER},
+        #{maintain_broker_id,jdbcType=BIGINT},
+      </if>
+      <if test="key_broker_id != null">
+        #{key_broker_id,jdbcType=BIGINT},
       </if>
       <if test="whether != null">
         #{whether,jdbcType=INTEGER},
@@ -269,6 +293,12 @@
       <if test="rent_time != null">
         `rent_time` = #{rent_time,jdbcType=INTEGER},
       </if>
+      <if test="maintain_time != null">
+        `maintain_time` = #{maintain_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="begin_time != null">
+        `begin_time` = #{begin_time,jdbcType=TIMESTAMP},
+      </if>
       <if test="times != null">
         `times` = #{times,jdbcType=TIMESTAMP},
       </if>
@@ -279,19 +309,22 @@
         `types` = #{types,jdbcType=INTEGER},
       </if>
       <if test="entering_broker_id != null">
-        `entering_broker_id` = #{entering_broker_id,jdbcType=INTEGER},
+        `entering_broker_id` = #{entering_broker_id,jdbcType=BIGINT},
       </if>
       <if test="home_name != null">
         `home_name` = #{home_name,jdbcType=VARCHAR},
       </if>
       <if test="home_number != null">
-        `home_number` = #{home_number,jdbcType=INTEGER},
+        `home_number` = #{home_number,jdbcType=VARCHAR},
       </if>
       <if test="solid_broker_id != null">
-        `solid_broker_id` = #{solid_broker_id,jdbcType=INTEGER},
+        `solid_broker_id` = #{solid_broker_id,jdbcType=BIGINT},
       </if>
       <if test="maintain_broker_id != null">
-        `maintain_broker_id` = #{maintain_broker_id,jdbcType=INTEGER},
+        `maintain_broker_id` = #{maintain_broker_id,jdbcType=BIGINT},
+      </if>
+      <if test="key_broker_id != null">
+        `key_broker_id` = #{key_broker_id,jdbcType=BIGINT},
       </if>
       <if test="whether != null">
         `whether` = #{whether,jdbcType=INTEGER},
@@ -322,14 +355,17 @@
       `money` = #{money,jdbcType=DECIMAL},
       `money_unit` = #{money_unit,jdbcType=INTEGER},
       `rent_time` = #{rent_time,jdbcType=INTEGER},
+      `maintain_time` = #{maintain_time,jdbcType=TIMESTAMP},
+      `begin_time` = #{begin_time,jdbcType=TIMESTAMP},
       `times` = #{times,jdbcType=TIMESTAMP},
       `fitment` = #{fitment,jdbcType=INTEGER},
       `types` = #{types,jdbcType=INTEGER},
-      `entering_broker_id` = #{entering_broker_id,jdbcType=INTEGER},
+      `entering_broker_id` = #{entering_broker_id,jdbcType=BIGINT},
       `home_name` = #{home_name,jdbcType=VARCHAR},
-      `home_number` = #{home_number,jdbcType=INTEGER},
-      `solid_broker_id` = #{solid_broker_id,jdbcType=INTEGER},
-      `maintain_broker_id` = #{maintain_broker_id,jdbcType=INTEGER},
+      `home_number` = #{home_number,jdbcType=VARCHAR},
+      `solid_broker_id` = #{solid_broker_id,jdbcType=BIGINT},
+      `maintain_broker_id` = #{maintain_broker_id,jdbcType=BIGINT},
+      `key_broker_id` = #{key_broker_id,jdbcType=BIGINT},
       `whether` = #{whether,jdbcType=INTEGER},
       `door_id` = #{door_id,jdbcType=BIGINT},
       `shop_id` = #{shop_id,jdbcType=BIGINT}
@@ -428,7 +464,7 @@
   		 h.*
 	FROM
 		t_building AS b
-	JOIN t_houses_new AS h ON b.id = h.building_id
+	JOIN t_houses_new AS h ON b.id = h.building_id 
 	WHERE
 		b.region_city_id = #{cityId}
 	AND (ISNULL(#{regionId})
@@ -452,11 +488,11 @@
 		</if>
 	) 
 	</if>
-	AND ((ISNULL(#{fitment})) OR h.fitment = #{fitment})
-	AND ((ISNULL(#{brokerId})) OR h.entering_broker_id = #{brokerId})
-	AND (((ISNULL(#{phoneOrName})) OR h.home_name = #{phoneOrName})
-	OR ((ISNULL(#{phoneOrName})) OR h.home_number = #{phoneOrName}))
-	AND ((ISNULL(#{buildingId})) OR h.building_id = #{buildingId})
+	AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
+	AND (ISNULL(#{brokerId}) OR h.entering_broker_id = #{brokerId})
+	AND (ISNULL(#{phone}) OR h.home_number = #{phone})
+	AND (ISNULL(#{ownerName}) OR h.home_name = #{ownerName})
+	AND (ISNULL(#{buildingId}) OR h.building_id = #{buildingId})
 	AND h.whether = 1
   </select>
 	
@@ -482,7 +518,7 @@
   		 h.*
 	FROM
 		t_building AS b
-	JOIN t_houses_new AS h ON b.id = h.building_id
+	JOIN t_houses_new AS h ON b.id = h.building_id 
 	WHERE
 		b.region_city_id = #{cityId}
 	AND (ISNULL(#{regionId})
@@ -505,10 +541,13 @@
 		h.money <![CDATA[<=]]> #{endMoney}
 		</if>
 	) 
-	</if>
-	AND ((ISNULL(#{fitment})) OR h.fitment = #{fitment})
-	AND h.whether = 1
+	</if> 
+	AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
 	AND h.shop_id = #{shopId}
+	AND (ISNULL(#{brokerId}) OR h.entering_broker_id = #{brokerId})
+	AND (ISNULL(#{phone}) OR h.home_number = #{phone})
+	AND (ISNULL(#{ownerName}) OR h.home_name = #{ownerName})
+	AND (ISNULL(#{buildingId}) OR h.building_id = #{buildingId})
   </select>
   <select id="listByShopId" resultMap="BaseResultMap">
     select 
@@ -516,5 +555,27 @@
     from `t_houses_new`
     where `shop_id` = #{id}
   </select>
-  
+  <!-- 修改房源状态活开盘修改 -->
+  <update id="updateSelective" parameterType="com.yqwl.pojo.HousesNew">
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+    -->
+    update `t_houses_new`
+    <set>
+      <if test="money != null">
+        `money` = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="money_unit != null">
+        `money_unit` = #{money_unit,jdbcType=INTEGER},
+      </if>
+      <if test="whether != null">
+        `whether` = #{whether,jdbcType=INTEGER},
+      </if>
+      <if test="begin_time != null">
+        `begin_time` = #{begin_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

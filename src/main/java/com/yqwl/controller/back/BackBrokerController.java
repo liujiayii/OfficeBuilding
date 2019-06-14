@@ -1,6 +1,9 @@
 package com.yqwl.controller.back;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,9 +21,13 @@ import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.Pager;
 import com.yqwl.common.web.BaseController;
+import com.yqwl.dao.BrokerMapper;
+import com.yqwl.dao.GroupMapper;
 import com.yqwl.pojo.Broker;
+import com.yqwl.pojo.Group;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.service.BrokerService;
+import com.yqwl.service.GroupService;
 
 @Controller
 @Scope("prototype")
@@ -28,6 +35,10 @@ import com.yqwl.service.BrokerService;
 public class BackBrokerController extends BaseController{
 	@Autowired
 	private BrokerService brokerService;
+	@Autowired
+	private BrokerMapper brokerMapper;
+	@Autowired
+	private GroupMapper groupMapper;
 	/**
 	 * 
 	 * @Title: insertBroker
@@ -209,4 +220,55 @@ public class BackBrokerController extends BaseController{
 			return dealException(code, msg, e);
 		}
 	}
+	/**
+	 * 
+	 *
+	 * @Title: selectShopBorker
+	 * @description 查询一个门店的经纪人信息
+	 * @param @param session
+	 * @param @param id
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年6月11日
+	 */
+	@SuppressWarnings("unused")
+	@ResponseBody
+	@RequestMapping(value = "/selectShopBorker", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String selectShopBorker(HttpSession session,Long id) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo !=null) {
+				List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+				Broker result = brokerService.selectByPrimaryKey(id);
+				Group group=groupMapper.selectByPrimaryKey(result.getGroup_id());
+				List<Group> groups=groupMapper.getByShopId(group.getShop_id());
+				for (Group group2 : groups) {
+					List<Broker> brokers=brokerMapper.getBrokerByGroupId(group2.getId());
+					for (Broker broker : brokers) {
+						Map<String, Object> param = new LinkedHashMap<String, Object>();
+						param.put("id", broker.getId());
+						param.put("real_name", broker.getReal_name());
+						list.add(param);
+					}
+				}
+				if (list != null) {
+					msg = "查询成功";
+					return FastJsonUtil.getResponseJson(code, msg, list);
+				}
+				code = -1;
+				msg = "查询失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
+	
 }

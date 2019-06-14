@@ -1,15 +1,12 @@
 package com.yqwl.service.impl;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yqwl.Vo.BackHousesVo;
@@ -27,14 +24,12 @@ import com.yqwl.dao.AttentionMapper;
 import com.yqwl.dao.BrokerMapper;
 import com.yqwl.dao.BuildingMapper;
 import com.yqwl.dao.EntrustseeMapper;
-import com.yqwl.dao.GroupMapper;
 import com.yqwl.dao.HomePageRecommendedMapper;
 import com.yqwl.dao.HousesNewMapper;
 import com.yqwl.dao.PictureMapper;
 import com.yqwl.dao.PlotBuildMapper;
 import com.yqwl.dao.PlotDoorMapper;
 import com.yqwl.dao.ShopMapper;
-import com.yqwl.pojo.Entrustsee;
 import com.yqwl.pojo.HomePageRecommended;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Picture;
@@ -89,7 +84,8 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 */
 	@Override
 	public PageInfo<HousesNew> listHousesNewByCondition(Pager pager) throws Exception {
-		System.out.println(pager.getFilter());
+		System.out.println("2.所有房源实现类："+pager.getFilter());
+		
 		// 获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
@@ -107,15 +103,17 @@ public class HousesNewServiceImpl implements HousesNewService {
 		Integer fitment = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("fitment")));
 		// 经纪人id
 		Integer brokerId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("brokerId")));
-		// 业主电话/业主姓名
-		String phoneOrName = StringUtils.getFirstString(conditions.get("phoneOrName"));
+		// 业主电话
+		String phone = StringUtils.getFirstString(conditions.get("phone"));
+		String ownerName = StringUtils.getFirstString(conditions.get("ownerName"));
 		Integer buildingId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("buildingId")));
-		
+		System.out.println(cityId+","+regionId+","+startSpace+","+endSpace+","+startMoney+","+endMoney+","+fitment+","+brokerId+","+phone+","+buildingId);
 		
 		// 分页
 		PageHelper.startPage(pager);
 		List<HousesNew> list = housesNewMapper.listHousesNewByCondition(cityId, regionId, startSpace, endSpace,
-				startMoney, endMoney, fitment, brokerId, phoneOrName,buildingId);
+				startMoney, endMoney, fitment, brokerId, phone, ownerName,buildingId);
+		System.out.println("3.查询列表"+list);
 		return new PageInfo<HousesNew>(list);
 	}
 
@@ -156,6 +154,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 	public int insertSelective(HousesNew record, Long brokerId, String... urls) {
 		PlotDoor plotDoor = new PlotDoor();
 		plotDoor.setId(record.getDoor_id());
+		System.out.println(record.getDoor_id());
 		plotDoor.setStatus(1);
 		plotDoorMapper.updateByPrimaryKeySelective(plotDoor);
 		record.setHoues_number(DateUtil.getCurrentTimestamp().toString());
@@ -297,10 +296,18 @@ public class HousesNewServiceImpl implements HousesNewService {
 		}
 		Integer fitment = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("fitment")));
 		Long shopId = brokerMapper.getBrokerByShopId(id);
+		
+		// 经纪人id
+		Integer brokerId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("brokerId")));
+		// 业主电话
+		String phone = StringUtils.getFirstString(conditions.get("phone"));
+		// 业主姓名
+		String ownerName = StringUtils.getFirstString(conditions.get("ownerName"));
+		Integer buildingId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("buildingId")));
 		// 分页
 		PageHelper.startPage(pager);
 		List<HousesNew> list = housesNewMapper.ListBackHousesNew(cityId, regionId, startSpace, endSpace,
-				startMoney, endMoney, fitment,shopId);
+				startMoney, endMoney, fitment, shopId, brokerId, phone, ownerName,buildingId);
 		return new PageInfo<HousesNew>(list);
 	}
 
@@ -358,15 +365,12 @@ public class HousesNewServiceImpl implements HousesNewService {
 	}
 
 	@Override
-	public int insertDoor(Long build_id, Integer flooors, Integer startDoor, Integer endDoor,Integer... span) throws Exception {
+	public int insertDoor(Long build_id, Integer flooors, Integer startDoor, Integer endDoor,List<Integer> span) throws Exception {
 		int flag = startDoor;
 		int count = 0;
 		for (int i = 1; i <= flooors; i++) {
-			for (Integer integer : span) {
-				//判断是否有跃层
-				if (i == integer) {
-					continue;
-				}
+			if (span.contains(i)) {
+				continue;
 			}
 			for (; startDoor <= endDoor; startDoor++) {
 				PlotDoor plotDoor = new PlotDoor();
@@ -392,6 +396,20 @@ public class HousesNewServiceImpl implements HousesNewService {
 			if (plotDoor.getStatus() != 0) throw new BizException(FastJsonUtil.getResponseJson(2000, "待租或已组房源不能删除", null));
 		}
 		return plotDoorMapper.deletePlotDoorByFloor(buildId,floor);
+	}
+
+	/**
+	 * @Title: updateSelective
+	 * @description 修改房源状态活开盘修改
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年6月12日
+	 */
+	@Override
+	public int updateSelective(HousesNew record) {
+		return housesNewMapper.updateSelective(record);
 	}
 
 }

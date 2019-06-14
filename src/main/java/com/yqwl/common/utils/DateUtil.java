@@ -51,6 +51,9 @@ public class DateUtil {
      * @return
      */
     public static Date stringToDate(String dateString) {
+    	if(dateString == null || dateString.trim().length() == 0){
+    		return null;
+    	}
         return stringToDate(dateString, DATE_FORMAT, LENIENTDATE);
     }
     

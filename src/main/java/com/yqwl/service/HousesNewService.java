@@ -19,7 +19,7 @@ import com.yqwl.pojo.PlotDoor;
  * @createDate 2019年4月9日
  */
 public interface HousesNewService {
-
+	/* 通过id查询房源详细数据 **/
 	public HousesNewVo selectByFindID(long id) throws Exception;
 
 	public PageInfo<HousesNew> listHousesNewByCondition(Pager pager) throws Exception;
@@ -63,8 +63,18 @@ public interface HousesNewService {
 
 	public PlotBuild getPlotBuildById(Long id) throws Exception;
 
-	public int insertDoor(Long build_id, Integer flooors, Integer startDoor, Integer endDoor, Integer... span) throws Exception;
+	public int insertDoor(Long build_id, Integer flooors, Integer startDoor, Integer endDoor, List<Integer> span) throws Exception;
 
 	public int deletePlotDoorByFloor(Long id,Integer floor) throws Exception;
+	/**
+	 * @Title: updateSelective
+	 * @description 修改房源状态活开盘修改
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年6月12日
+	 */
+	int updateSelective(HousesNew record);
 
 }
