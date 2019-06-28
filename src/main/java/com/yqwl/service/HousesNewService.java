@@ -1,10 +1,16 @@
 package com.yqwl.service;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.github.pagehelper.PageInfo;
 import com.yqwl.Vo.BackHousesVo;
 import com.yqwl.Vo.HousesNewVo;
+import com.yqwl.Vo.HousesVo;
 import com.yqwl.common.utils.Pager;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.PlotBuild;
@@ -51,7 +57,7 @@ public interface HousesNewService {
 
 	public int deletePlotBuild(Long id) throws Exception;
 
-	public PageInfo<HousesNew> ListBackHousesNew(Pager pager, Long id) throws Exception;
+	public PageInfo<HousesVo> ListBackHousesNew(Pager pager, Long id);
 
 	public int delHome(Long homeId) throws Exception;
 
@@ -75,6 +81,60 @@ public interface HousesNewService {
 	 * @author linhongyu
 	 * @createDate 2019年6月12日
 	 */
-	int updateSelective(HousesNew record);
+	int updateSelective(HousesNew record) throws Exception;
+
+	/**
+	 * 
+	 * @Title: getDecisionAnalysis
+	 *
+	 * @description 添加决策分析(根据条件查询相关经纪人房源状况)
+	 *
+	 * @param @param shopId
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @return 
+	 * 
+	 * @return List<Map<String,Object>>    
+	 *
+	 * @author yaozijun
+	 *
+	 * @createDate 2019年6月14日
+	 */
+	public List<Map<String, Object>> getDecisionAnalysis(Long shopId,Date startTime,Date endTime) throws Exception;
+	/**
+	 * @Title: selectPaireds
+	 * @description 查询用户需求和房源匹配
+	 * @param @param demand_acreage
+	 * @param @param demand_money
+	 * @param @return    
+	 * @return List<HousesNewVo>    
+	 * @author linhongyu
+	 * @createDate 2019年6月18日
+	 */
+	List<HousesNewVo> selectPaireds(int demand_acreage,int demand_money,int region_id,Long building_id,Integer page,Integer limit) throws Exception;
+
+	/**
+	 *
+	 * @Title: selectGoufing
+	 * @description 查询该房源所有经纪人信息
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return HousesNew    
+	 * @author linhongyu
+	 * @createDate 2019年6月20日
+	 */
+	Map<String, Object> selectGoufing(Long id) throws Exception;
+
+	/**
+	 *
+	 * @Title: updateByPrimaryKey
+	 * @description 修改房源各个经纪人
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年6月20日
+	 */
+	public int updateByPrimaryKey(HousesNew record);
 
 }

@@ -163,6 +163,37 @@ public class BackShopController extends BaseController {
 		}
 	}
 	
+	/**
+	 * 
+	 * @Title: listByCity
+	 * @description  根据城市查询店铺
+	 * @param session
+	 * @param cityId
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年6月18日 下午2:35:29
+	 */
+	@RequestMapping(value = "listByCity", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String listByCity(HttpSession session,Integer cityId){
+		try {
+			/** 判断是否登录 */
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo!=null) {
+				List<Shop> shop = shopService.listByCity(cityId);
+				if(shop.size() != 0){
+			 		return FastJsonUtil.getResponseJson(0, "查询成功", shop);
+			 	}else {
+			 		return FastJsonUtil.getResponseJson(1, "查询失败", null);
+				}
+			}
+			return FastJsonUtil.getResponseJson("-2", "未登录");
+		} catch (Exception e) {
+			return dealException(-200, "系统异常", e);
+		}
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String delete(HttpSession session,Long id) {

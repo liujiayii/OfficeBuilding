@@ -1,17 +1,29 @@
 package com.yqwl.service.impl;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yqwl.Vo.BackHousesVo;
+import com.yqwl.Vo.HousesNewAnalysisVo;
 import com.yqwl.Vo.HousesNewVo;
+import com.yqwl.Vo.HousesVo;
 import com.yqwl.common.utils.BeanUtil;
+import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.DateUtil;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.MapUtil;
@@ -23,18 +35,27 @@ import com.yqwl.common.web.BizException;
 import com.yqwl.dao.AttentionMapper;
 import com.yqwl.dao.BrokerMapper;
 import com.yqwl.dao.BuildingMapper;
+import com.yqwl.dao.DivideIntoMapper;
 import com.yqwl.dao.EntrustseeMapper;
+import com.yqwl.dao.GroupMapper;
 import com.yqwl.dao.HomePageRecommendedMapper;
 import com.yqwl.dao.HousesNewMapper;
 import com.yqwl.dao.PictureMapper;
 import com.yqwl.dao.PlotBuildMapper;
 import com.yqwl.dao.PlotDoorMapper;
 import com.yqwl.dao.ShopMapper;
+import com.yqwl.dao.UserMapper;
+import com.yqwl.pojo.Broker;
+import com.yqwl.pojo.Delegation;
+import com.yqwl.pojo.DivideInto;
+import com.yqwl.pojo.Entrustsee;
+import com.yqwl.pojo.Group;
 import com.yqwl.pojo.HomePageRecommended;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Picture;
 import com.yqwl.pojo.PlotBuild;
 import com.yqwl.pojo.PlotDoor;
+import com.yqwl.pojo.User;
 import com.yqwl.service.HousesNewService;
 
 /**
@@ -67,6 +88,14 @@ public class HousesNewServiceImpl implements HousesNewService {
 	private HomePageRecommendedMapper homePageRecommendedMapper;
 	@Autowired
 	private AttentionMapper attentionMapper;
+	@Autowired
+	private GroupMapper groupMapper;
+	@Autowired
+	private UserMapper userMapper;
+	@Autowired
+	private DivideIntoMapper divideIntoMapper;
+	
+	
 	@Override
 	public HousesNewVo selectByFindID(long id) throws Exception {
 		/*
@@ -279,7 +308,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 	}
 
 	@Override
-	public PageInfo<HousesNew> ListBackHousesNew(Pager pager,Long id) throws Exception {
+	public PageInfo<HousesVo> ListBackHousesNew(Pager pager,Long id) {
 		// 获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
@@ -306,9 +335,10 @@ public class HousesNewServiceImpl implements HousesNewService {
 		Integer buildingId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("buildingId")));
 		// 分页
 		PageHelper.startPage(pager);
-		List<HousesNew> list = housesNewMapper.ListBackHousesNew(cityId, regionId, startSpace, endSpace,
+		List<HousesVo> list = housesNewMapper.ListBackHousesNew(cityId, regionId, startSpace, endSpace,
 				startMoney, endMoney, fitment, shopId, brokerId, phone, ownerName,buildingId);
-		return new PageInfo<HousesNew>(list);
+		System.err.println("list"+list);
+		return new PageInfo<HousesVo>(list);
 	}
 
 	@Override
@@ -333,6 +363,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 		BackHousesVo backHousesVo = new BackHousesVo();
 		HousesNew housesNew = housesNewMapper.selectByPrimaryKey(id);
 		PlotDoor plotDoor = plotDoorMapper.selectByPrimaryKey(housesNew.getDoor_id());
+		System.out.println("plotDoor"+plotDoor);
 		PlotBuild plotBuild = plotBuildMapper.selectByPrimaryKey(plotDoor.getBuild_id());
 		BeanUtil.copyProperties(backHousesVo,housesNew);
 		System.out.println(housesNew);
@@ -398,6 +429,45 @@ public class HousesNewServiceImpl implements HousesNewService {
 		return plotDoorMapper.deletePlotDoorByFloor(buildId,floor);
 	}
 
+	/** 添加决策分析(根据条件查询相关经纪人房源状况) */
+	@Override
+	public List<Map<String, Object>> getDecisionAnalysis(Long shopId,Date startTime,Date endTime) {
+		List<Map<String, Object>>list = new ArrayList<Map<String,Object>>();
+		/** 查询该店铺下所有小组 */
+		List<Group> groupList = groupMapper.getByShopId(shopId);
+		/** 循环遍历每个小组下的经纪人 */
+		for (Group group : groupList) {
+			Map<String, Object> map1 = new HashMap<>();
+			List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
+			List<Broker> brokerList = brokerMapper.getBrokerByGroupId(group.getId());
+			/** 计算每个小组下的成员对应不同房源状态的数量 */
+			for (Broker broker : brokerList) {
+				Map<String, Object> map2 = new HashMap<>();
+				HousesNewAnalysisVo  housesNewAnalysisVo = new HousesNewAnalysisVo();
+				housesNewAnalysisVo.setNormal(housesNewMapper.getCountByWhether(broker.getId(),1,startTime,endTime));
+				housesNewAnalysisVo.setPostpone(housesNewMapper.getCountByWhether(broker.getId(),2,startTime,endTime));
+				housesNewAnalysisVo.setElse_sell(housesNewMapper.getCountByWhether(broker.getId(),3,startTime,endTime));
+				housesNewAnalysisVo.setElse_rent(housesNewMapper.getCountByWhether(broker.getId(),4,startTime,endTime));
+				housesNewAnalysisVo.setUnknown(housesNewMapper.getCountByWhether(broker.getId(),5,startTime,endTime));
+				housesNewAnalysisVo.setRevoke(housesNewMapper.getCountByWhether(broker.getId(),6,startTime,endTime));
+				housesNewAnalysisVo.setOneself_rent(housesNewMapper.getCountByWhether(broker.getId(),7,startTime,endTime));
+				housesNewAnalysisVo.setOneself_sell(housesNewMapper.getCountByWhether(broker.getId(),8,startTime,endTime));
+				housesNewAnalysisVo.setBe_confirmed(housesNewMapper.getCountByWhether(broker.getId(),9,startTime,endTime));
+				housesNewAnalysisVo.setRecall(housesNewMapper.getCountByWhether(broker.getId(),10,startTime,endTime));
+				
+				map2.put("name", broker.getReal_name());
+				map2.put("housesNewAnalysisVo", housesNewAnalysisVo);
+				
+				list2.add(map2);
+			}
+			map1.put("groupName", group.getName());
+			map1.put("list", list2);
+			list.add(map1);
+		}
+		
+		return list;
+	}
+
 	/**
 	 * @Title: updateSelective
 	 * @description 修改房源状态活开盘修改
@@ -408,8 +478,107 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 * @createDate 2019年6月12日
 	 */
 	@Override
-	public int updateSelective(HousesNew record) {
+	public int updateSelective(HousesNew record) throws Exception{
 		return housesNewMapper.updateSelective(record);
 	}
+	/**
+	 * @Title: selectPaireds
+	 * @description 查询用户需求和房源匹配
+	 * @param @param demand_acreage
+	 * @param @param demand_money
+	 * @param @return    
+	 * @return List<HousesNewVo>    
+	 * @author linhongyu
+	 * @createDate 2019年6月18日
+	 */
+	@Override
+	public List<HousesNewVo> selectPaireds(int demand_acreage,int demand_money,int region_id,Long building_id,Integer page,Integer limit) throws Exception{
+		List<HousesNewVo> list= housesNewMapper.selectPaired(demand_acreage*0.8, 1.2*demand_acreage,demand_money*0.8, demand_money*1.2, region_id, building_id,page,limit);
+		return list;
+	}
+	/**
+	 *
+	 * @Title: selectGoufing
+	 * @description 查询该房源所有经纪人信息
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return HousesNew    
+	 * @author linhongyu
+	 * @createDate 2019年6月20日
+	 */
+	@Override
+	public Map<String, Object> selectGoufing(Long id) throws Exception{
+		Map<String, Object> map = new HashMap<>();
+		HousesNew housesNew=housesNewMapper.selectByPrimaryKey(id);
+		if(housesNew.getEntering_broker_id()!=null){
+			Broker broker=brokerMapper.selectByPrimaryKey(housesNew.getEntering_broker_id());
+			String Lname=broker.getReal_name();
+			map.put("Lname", Lname);//录入经纪人姓名
+		}
+		if(housesNew.getMaintain_broker_id()!=null){
+			Broker brokers=brokerMapper.selectByPrimaryKey(housesNew.getMaintain_broker_id());
+			String Wname=brokers.getReal_name();
+			map.put("Wname", Wname);//维护经纪人姓名
+		}
+		if(housesNew.getOpen_broker_id()!=null){
+			Broker brokert=brokerMapper.selectByPrimaryKey(housesNew.getOpen_broker_id());
+			String Kname=brokert.getReal_name();
+			map.put("Kname", Kname);//开盘经纪人姓名
+		}
+		if(housesNew.getKey_broker_id()!=null){
+			Broker brokerk=brokerMapper.selectByPrimaryKey(housesNew.getKey_broker_id());
+			String Nname=brokerk.getReal_name();
+			map.put("Nname", Nname);//拿钥匙经纪人姓名
+		}
+		if(housesNew.getSolid_broker_id()!=null){
+			Broker brokerT=brokerMapper.selectByPrimaryKey(housesNew.getSolid_broker_id());
+			String Tname=brokerT.getReal_name();
+			map.put("Tname", Tname);//实勘图片经纪人姓名
+		}
+		BigDecimal mon=housesNew.getMoney();
+		Integer unit=housesNew.getMoney_unit();
+		DivideInto divideInto=divideIntoMapper.selectStatus();
+		BigDecimal money = null;
+		if(unit==1){
+			money=mon;
+		}else if (unit==2) {
+			money=mon.multiply(new BigDecimal(housesNew.getOffice_space())).multiply(new BigDecimal(30));
+		}else if (unit==3) {
+			money=mon.divide(new BigDecimal(6));
+		}else if (unit==4) {
+			money=mon.multiply(new BigDecimal(housesNew.getOffice_space()));
+		}else if (unit==5) {
+			money=mon.multiply(new BigDecimal(housesNew.getOffice_space())).multiply(new BigDecimal(30));
+		}else if (unit==6) {
+			money=mon.multiply(new BigDecimal(10000));
+		}
+		BigDecimal Lone=money.multiply(new BigDecimal(divideInto.getEnter_per())).divide(new BigDecimal(100));//录入经纪人分红
+		BigDecimal Ktwo=money.multiply(new BigDecimal(divideInto.getOpen_quot_per())).divide(new BigDecimal(100));//开盘经纪人分红
+		BigDecimal Wthere=money.multiply(new BigDecimal(divideInto.getVindicate_per())).divide(new BigDecimal(100));//维护经纪人分红
+		BigDecimal Tfist=money.multiply(new BigDecimal(divideInto.getSend_photo_per())).divide(new BigDecimal(100));//实勘图片经纪人分红
+		BigDecimal Yfrive=money.multiply(new BigDecimal(divideInto.getTake_key_per())).divide(new BigDecimal(100));//拿钥匙经纪人分红
+		map.put("housesNew", housesNew);
+		map.put("Lone", Lone);
+		map.put("Ktwo", Ktwo);
+		map.put("Wthere", Wthere);
+		map.put("Tfist", Tfist);
+		map.put("Nfrive", Yfrive);
+		return map;
+	}
 
+	/**
+	 *
+	 * @Title: updateByPrimaryKey
+	 * @description 修改房源各个经纪人
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年6月20日
+	 */
+	@Override
+	public int updateByPrimaryKey(HousesNew record) {
+		return housesNewMapper.updateByPrimaryKey(record);
+	}
+	
 }

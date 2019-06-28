@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.Owner;
 
 public interface OwnerMapper {
@@ -50,4 +52,6 @@ public interface OwnerMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Owner record);
+    
+    List<Owner> selectHome(Long id);
 }

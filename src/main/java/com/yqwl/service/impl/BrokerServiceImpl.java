@@ -178,6 +178,10 @@ public class BrokerServiceImpl implements BrokerService{
 		List<Broker> list = brokerMapper.listByCondition(condition);
 		return new PageInfo<Broker>(list);
 	}
+	@Override
+	public List<Broker> getByGroupId(Long groupId) throws Exception {
+		return brokerMapper.getBrokerByGroupId(groupId);
+	}
 	
 
 }

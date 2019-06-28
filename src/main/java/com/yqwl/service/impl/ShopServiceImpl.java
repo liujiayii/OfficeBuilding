@@ -93,4 +93,9 @@ public class ShopServiceImpl implements ShopService {
 		return shopMapper.deleteByPrimaryKey(id);
 	}
 
+	@Override
+	public List<Shop> listByCity(Integer cityId) throws Exception {
+		return shopMapper.listByCity(cityId);
+	}
+
 }

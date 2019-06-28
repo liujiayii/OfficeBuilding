@@ -46,13 +46,15 @@ public class FollowUpController {
 	@ResponseBody
 	public String insertSelective(FollowUp record,HttpSession session){
 		try {
-			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			/*BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if(brokerVo==null){
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
-			}
+			}*/
+			record.setRemind_time(new Date());
 			int nun=followUpService.insertSelective(record);
+			Long id=record.getId();
 		 	if(nun!=0){
-		 		return FastJsonUtil.getResponseJson(0, "添加成功", null);
+		 		return FastJsonUtil.getResponseJson(0, "添加成功", id);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "添加失败", null);
 			}
@@ -150,6 +152,35 @@ public class FollowUpController {
 			}
 			List<FollowUpVo> followUp=followUpService.selectHomeId(home_id);
 		 	if(followUp.size()>0){
+		 		return FastJsonUtil.getResponseJson(0, "查询成功", followUp);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
+	/**
+	 * @Title: selectThis
+	 * @description 通过id查询跟进信息
+	 * @param @param id
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年6月26日
+	 */
+	@RequestMapping(value = "selectThis", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectThis(Long id,HttpSession session){
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			FollowUp followUp=followUpService.selectByPrimaryKey(id);
+		 	if(followUp!=null){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", followUp);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);

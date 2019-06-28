@@ -217,7 +217,7 @@
 		 <include refid="Base_Column_List" />
 	FROM
 		`t_broker`
-	WHERE `group_id` = #{id}
+	WHERE `group_id` = #{groupId}
   </select>  
   
   

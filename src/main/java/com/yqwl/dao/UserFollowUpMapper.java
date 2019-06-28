@@ -43,4 +43,6 @@ public interface UserFollowUpMapper {
 	int updateByPrimaryKey(UserFollowUp record);
 
 	List<UserFollowUp> listByUserId(Long id);
+
+	UserFollowUp getByUserIdOrNew(Long userId);
 }

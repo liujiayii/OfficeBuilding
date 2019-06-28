@@ -47,4 +47,6 @@ public interface BrokerService {
 	BackBrokerVo getById(Long id) throws Exception;
 
 	PageInfo<Broker> ListBackBroker(Pager pager) throws Exception;
+
+	List<Broker> getByGroupId(Long groupId) throws Exception;
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.yqwl.Vo.InformVo;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.pojo.Inform;
@@ -39,11 +41,13 @@ public class InformController {
 	@ResponseBody
 	public String selectByInform(Long broker_id){
 		try {
-			List<Inform> inform=informService.selectByInform(broker_id);
-		 	if(inform.size()<0){
-		 		return FastJsonUtil.getResponseJson(0, "无撤单通知", null);
+
+			List<InformVo> inform=informService.selectByInform(broker_id);
+		 	if(inform.size()!=0){
+		 		return FastJsonUtil.getResponseJson(0, "撤单通知", inform);
+
 		 	}else {
-		 		return FastJsonUtil.getResponseJson(-1, "撤单通知", inform);
+		 		return FastJsonUtil.getResponseJson(-1, "无撤单通知", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

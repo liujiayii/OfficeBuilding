@@ -57,4 +57,6 @@ public interface ShopMapper {
 	List<ShopVo> listAllPage();
 	
 	List<Shop> listAll();
+
+	List<Shop> listByCity(Integer cityId);
 }

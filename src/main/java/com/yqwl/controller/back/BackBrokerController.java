@@ -220,6 +220,34 @@ public class BackBrokerController extends BaseController{
 			return dealException(code, msg, e);
 		}
 	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getByGroupId", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String getByGroupId(HttpSession session,Long groupId) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				List<Broker> result = brokerService.getByGroupId(groupId);
+				if (result.size() != 0) {
+					msg = "查询成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "查询失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
 	/**
 	 * 
 	 *

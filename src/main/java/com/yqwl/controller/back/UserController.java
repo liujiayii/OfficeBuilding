@@ -1,6 +1,8 @@
 package com.yqwl.controller.back;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -42,7 +44,7 @@ public class UserController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
-	public String insert(HttpSession session,User user,List<String> phone) {
+	public String insert(HttpSession session,User user,String... phone) {
 		int code = 0;
 		String msg = null;
 		try {
@@ -65,6 +67,7 @@ public class UserController extends BaseController {
 			return dealException(code, msg, e);
 		}
 	}
+	
 	/**
 	 * 
 	 * @Title: updateUserPhone
@@ -102,6 +105,43 @@ public class UserController extends BaseController {
 		}
 	}
 	
+	/**
+	 * 
+	 * @Title: insertUserPhone
+	 * @description 添加用户手机号
+	 *
+	 * @param session
+	 * @param userPhone
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年6月18日 上午10:46:51
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/insertUserPhone", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String insertUserPhone(HttpSession session,UserPhone userPhone) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				Integer result = userService.insertUserPhone(userPhone);
+				if (result != 0) {
+					msg = "修改成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "修改失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
 	/**
 	 * 
 	 * @Title: update
@@ -174,6 +214,33 @@ public class UserController extends BaseController {
 			return dealException(code, msg, e);
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/findAll", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String findAll(HttpSession session) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				List<User> result = userService.findAll();
+				if (result != null) {
+					msg = "查询成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "查询失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
+	
 	/**
 	 * 
 	 * @Title: listAll
@@ -232,6 +299,66 @@ public class UserController extends BaseController {
 			code = -200;
 			msg = "系统异常";
 			return dealException(code, msg, e);
+		}
+	}
+	
+	/**
+	 * @Title: selectListShop
+	 * @description 通过区县id查询分店id
+	 * @param @param region_id
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年6月13日
+	 */
+	@RequestMapping(value = "selectListShop", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectListShop(Long region_id,HttpSession session){
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			List<User> num = userService.selectListShop(region_id);
+		 	if(num.size()>0){
+		 		return FastJsonUtil.getResponseJson(0, "查询成功", null);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
+	/**
+	 * @Title: selectAllSome
+	 * @description 查询客源
+	 * @param @param shopId
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @return    
+	 * @return List<Map<String,Object>>    
+	 * @author linhongyu
+	 * @createDate 2019年6月17日
+	 */
+	@RequestMapping(value = "selectAllSome", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectAllSome(Long shopId,Date startTime, Date endTime,HttpSession session){
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			List<Map<String, Object>> num = userService.selectAllSome(shopId, endTime, endTime);
+		 	if(num.size()!=0){
+		 		return FastJsonUtil.getResponseJson(0, "查询成功", num);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
 		}
 	}
 	

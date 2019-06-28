@@ -129,4 +129,12 @@
     from `t_user_follow_up`
     where `user_id` = #{id}
   </select>
+  <select id="getByUserIdOrNew" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `t_user_follow_up`
+    where `user_id` = #{userId}
+    ORDER BY time DESC
+	LIMIT 1
+  </select>
 </mapper>

@@ -9,14 +9,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.stereotype.Controller;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.Pager;
+import com.yqwl.service.GroupService;
 import com.yqwl.service.HousesNewService;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.service.PictureService;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
 import com.github.pagehelper.PageInfo;
+import com.yqwl.Vo.BrokerVo;
 import com.yqwl.Vo.HousesNewVo;
+import com.yqwl.pojo.Delegation;
+import com.yqwl.pojo.Group;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Picture;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +47,9 @@ public class HousesNewController {
 
  	@Resource
  	private PictureService pictureService;
+ 	
+ 	@Resource
+ 	private GroupService groupService;
  	
 	/**
 	 * @Title: selectByFindID
@@ -162,6 +174,66 @@ public class HousesNewController {
 			msg = "系统异常";
 			logger.error(e.getMessage(), e);
 			return FastJsonUtil.getResponseJson(code, msg, e);
+		}
+	}
+	/**
+	 * @Title: selectGoufing
+	 * @description 查询经纪人数据加分成
+	 * @param @param id
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年6月20日
+	 */
+	@RequestMapping(value = "selectGoufing", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectGoufing(Long id,HttpSession session){
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			Map<String, Object> map=housesNewService.selectGoufing(id);
+		 	if(map.size()!=0){
+		 		return FastJsonUtil.getResponseJson(0, "查询成功", map);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "无数据", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
+	/***
+	 * 
+	 *
+	 * @Title: updateBroker
+	 * @description 修改经纪人信息
+	 * @param @param record
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年6月20日
+	 */
+	@RequestMapping(value = "updateBroker", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String updateBroker(HousesNew record,HttpSession session){
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			int nun=housesNewService.updateByPrimaryKey(record);
+		 	if(nun!=0){
+		 		return FastJsonUtil.getResponseJson(0, "修改成功", null);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "修改失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
 		}
 	}
 }

@@ -62,6 +62,6 @@ public interface BrokerMapper {
 
 	List<Broker> listByCondition(String condition);
 
-	List<Broker> getBrokerByGroupId(Long id);
+	List<Broker> getBrokerByGroupId(Long groupId);
 
 }

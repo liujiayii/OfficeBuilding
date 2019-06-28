@@ -76,4 +76,6 @@ public interface BuildingService {
 	int deleteByPrimaryKey(Long id) throws Exception;
 
 	List<Building> listAllByCityId(Long cityId) throws Exception;
+
+	List<Building> listAllByRegionId(Long regionId) throws Exception;
 }

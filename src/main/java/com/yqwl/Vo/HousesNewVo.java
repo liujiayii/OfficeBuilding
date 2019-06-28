@@ -208,9 +208,9 @@ public class HousesNewVo implements Serializable{
 	 */
 	private String latitude;
 	/** 页数 */
-	private int page;
+	private int page=0;
 	/** 分页条数 */
-	private int limit;
+	private int limit=5;
 	
 	public String getHouse_picture() {
 		return house_picture;

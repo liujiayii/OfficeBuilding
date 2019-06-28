@@ -30,18 +30,21 @@ public class DivideIntoController  extends BaseController{
 	
 	@Resource
 	private DivideIntoService divideIntoService;
+	
 	/**列表显示*/
 	@RequestMapping(value = "selectDivideIntoList",method = RequestMethod.GET,produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
 	public String selectDivideIntoList(Pager pager,HttpSession session){
-		System.out.println("分成分页："+pager);
 		try {
 			int code = 0;
 			String msg = null;
 			/** 判断是否登录 */
+			System.out.println("2");
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo!=null) {
+				System.out.println("3");
 				PageInfo<DivideInto> result = divideIntoService.divideIntoByCondition(pager);
+				System.out.println("4"+result);
 				if (result.getTotal() != 0) {
 					msg = "查询成功";
 					return FastJsonUtil.getResponseJson(code, msg, result);

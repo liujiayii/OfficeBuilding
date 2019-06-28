@@ -2,6 +2,7 @@ package com.yqwl.service;
 
 import java.util.List;
 
+import com.yqwl.Vo.InformVo;
 import com.yqwl.pojo.Inform;
 
 /**
@@ -22,5 +23,5 @@ public interface InformService {
 	 * @author linhongyu
 	 * @createDate 2019年6月10日
 	 */
-	List<Inform> selectByInform(Long broker_id);
+	List<InformVo> selectByInform(Long broker_id);
 }

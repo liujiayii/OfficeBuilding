@@ -2,11 +2,13 @@ package com.yqwl.dao;
 
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.yqwl.Vo.HousesNewVo;
+import com.yqwl.Vo.HousesVo;
 import com.yqwl.pojo.HousesNew;
 
 public interface HousesNewMapper {
@@ -51,34 +53,48 @@ public interface HousesNewMapper {
 
 	List<HousesNew> listHousesNewByCondition(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
 			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("brokerId") Integer brokerId,@Param("phone") String phone,@Param("ownerName") String ownerName, @Param("buildingId") Integer buildingId);
-	/*查询可能喜欢的房源信�?????**/
+	/*查询可能喜欢的房源信�??????**/
 	List<HousesNewVo> selectLike(HousesNewVo record);
 
 	List<HousesNew> listHousesNewByBuildingId(Long buildingId);
 	/**
 	 * @Title: selectHousesNew
-	 * @description 查询该商厦下的房�???
+	 * @description 查询该商厦下的房�????
 	 * @param @param buildingId
 	 * @param @return    
 	 * @return List<HousesNew>    
 	 * @author linhongyu
-	 * @createDate 2019�?4�?30�?
+	 * @createDate 2019�??4�??30�??
 	 */
 	List<HousesNew> selectHousesNew(Long buildingId);
 
-	List<HousesNew> ListBackHousesNew(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
+	List<HousesVo> ListBackHousesNew(@Param("cityId")Integer cityId , @Param("regionId")Integer regionId,@Param("startSpace") Integer startSpace,@Param("endSpace") Integer endSpace,@Param("startMoney") BigDecimal startMoney,
 			@Param("endMoney")BigDecimal endMoney,@Param("fitment") Integer fitment,@Param("shopId") Long shopId,@Param("brokerId") Integer brokerId,@Param("phone") String phoneOrName,@Param("ownerName") String ownerName,@Param("buildingId") Integer buildingId);
 
 	List<HousesNew> listByShopId(Long id);
 	/**
 	 * @Title: updateSelective
-	 * @description 修改房源状�?�活�?盘修�?
+	 * @description 修改房源状�?�活�??盘修�??
 	 * @param @param record
 	 * @param @return    
 	 * @return int    
 	 * @author linhongyu
-	 * @createDate 2019�?6�?12�?
+	 * @createDate 2019�??6�??12�??
 	 */
 	int updateSelective(HousesNew record);
 
+	/** 通过经纪人ID和whether查询不同房源状�?�的数量 */
+	int getCountByWhether(@Param("id")Long id, @Param("whether")int whether, @Param("startTime")Date startTime, @Param("endTime")Date endTime);
+	/**
+	 * @Title: selectPaired
+	 * @description 通过面积或者金额查询数据
+	 * @param @param office_space
+	 * @param @param money
+	 * @param @return    
+	 * @return List<HousesNewVo>    
+	 * @author linhongyu
+	 * @createDate 2019年6月17日
+	 */
+	List<HousesNewVo> selectPaired(@Param("area")double area , @Param("ratio")double ratio ,@Param("money")double money ,@Param("moneys")double moneys,@Param("region_id")int region_id,@Param("building_id")Long building_id,@Param("page")Integer page,@Param("limit")Integer limit);
+	
 }

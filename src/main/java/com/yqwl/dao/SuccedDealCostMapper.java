@@ -1,5 +1,8 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
+
 import com.yqwl.pojo.SuccedDealCost;
 
 public interface SuccedDealCostMapper {
@@ -39,4 +42,7 @@ public interface SuccedDealCostMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(SuccedDealCost record);
+
+	List<SuccedDealCost> listBySucceedId(Long succeedId);
+
 }

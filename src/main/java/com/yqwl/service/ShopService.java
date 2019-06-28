@@ -23,4 +23,6 @@ public interface ShopService {
 	public List<Shop> listAll() throws Exception;
 
 	public Integer delete(Long id) throws Exception;
+
+	public List<Shop> listByCity(Integer cityId) throws Exception;
 }

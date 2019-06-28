@@ -307,5 +307,9 @@ public class BuilldingServiceImpl implements BuildingService {
 	public List<Building> listAllByCityId(Long cityId) throws Exception {
 		return buildingMapper.listAllByCityId(cityId);
 	}
+	@Override
+	public List<Building> listAllByRegionId(Long regionId) throws Exception {
+		return buildingMapper.listAllByRegionId(regionId);
+	}
 
 }

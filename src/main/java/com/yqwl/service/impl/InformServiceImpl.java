@@ -3,6 +3,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.yqwl.Vo.InformVo;
 import com.yqwl.dao.InformMapper;
 import com.yqwl.pojo.Inform;
 import com.yqwl.service.InformService;
@@ -31,7 +33,7 @@ public class InformServiceImpl implements InformService{
 	 * @createDate 2019年6月10日
 	 */
 	@Override
-	public List<Inform> selectByInform(Long broker_id) {
+	public List<InformVo> selectByInform(Long broker_id) {
 		return informMapper.selectByInform(broker_id);
 	}
 

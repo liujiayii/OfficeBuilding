@@ -108,4 +108,20 @@
   	<include refid="Base_Column_List" />
     from `t_shop`
   </select>
+  
+  
+  <select id="listByCity" resultMap="BaseResultMap">
+    SELECT
+	s.*
+	FROM
+	`t_shop` AS s
+	JOIN (
+	SELECT
+		*
+	FROM
+		t_region
+	WHERE
+		pid = #{cityId}
+	) AS t1 ON s.region_id = t1.area_id
+  </select>
 </mapper>

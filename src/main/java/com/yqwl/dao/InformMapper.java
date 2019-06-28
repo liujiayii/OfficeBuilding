@@ -2,6 +2,7 @@ package com.yqwl.dao;
 
 import java.util.List;
 
+import com.yqwl.Vo.InformVo;
 import com.yqwl.pojo.Inform;
 
 public interface InformMapper {
@@ -61,7 +62,7 @@ public interface InformMapper {
      * @author linhongyu
      * @createDate 2019年6月10日
      */
-    List<Inform> selectByInform(Long broker_id); 
+    List<InformVo> selectByInform(Long broker_id); 
     /**
      * @Title: selectByIds
      * @description 通过经纪人id和房源id查询数据

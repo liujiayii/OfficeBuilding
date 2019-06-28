@@ -32,6 +32,7 @@
     <result column="whether" jdbcType="INTEGER" property="whether" />
     <result column="door_id" jdbcType="BIGINT" property="door_id" />
     <result column="shop_id" jdbcType="BIGINT" property="shop_id" />
+    <result column="open_broker_id" jdbcType="BIGINT" property="open_broker_id" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -42,7 +43,7 @@
     `location_number`, `house_type`, `location`, `money`, `money_unit`, `rent_time`, 
     `maintain_time`, `begin_time`, `times`, `fitment`, `types`, `entering_broker_id`, 
     `home_name`, `home_number`, `solid_broker_id`, `maintain_broker_id`, `key_broker_id`, 
-    `whether`, `door_id`, `shop_id`
+    `whether`, `door_id`, `shop_id`, `open_broker_id`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -78,7 +79,7 @@
       `types`, `entering_broker_id`, `home_name`, 
       `home_number`, `solid_broker_id`, `maintain_broker_id`, 
       `key_broker_id`, `whether`, `door_id`, 
-      `shop_id`)
+      `shop_id`, `open_broker_id`)
     values (#{houes_number,jdbcType=VARCHAR}, #{building_id,jdbcType=BIGINT}, #{work_name,jdbcType=VARCHAR}, 
       #{house_picture,jdbcType=VARCHAR}, #{office_space,jdbcType=INTEGER}, #{location_number,jdbcType=INTEGER}, 
       #{house_type,jdbcType=VARCHAR}, #{location,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, 
@@ -87,7 +88,7 @@
       #{types,jdbcType=INTEGER}, #{entering_broker_id,jdbcType=BIGINT}, #{home_name,jdbcType=VARCHAR}, 
       #{home_number,jdbcType=VARCHAR}, #{solid_broker_id,jdbcType=BIGINT}, #{maintain_broker_id,jdbcType=BIGINT}, 
       #{key_broker_id,jdbcType=BIGINT}, #{whether,jdbcType=INTEGER}, #{door_id,jdbcType=BIGINT}, 
-      #{shop_id,jdbcType=BIGINT})
+      #{shop_id,jdbcType=BIGINT}, #{open_broker_id,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.yqwl.pojo.HousesNew">
     <!--
@@ -174,6 +175,9 @@
       <if test="shop_id != null">
         `shop_id`,
       </if>
+      <if test="open_broker_id != null">
+        `open_broker_id`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="houes_number != null">
@@ -250,6 +254,9 @@
       </if>
       <if test="shop_id != null">
         #{shop_id,jdbcType=BIGINT},
+      </if>
+      <if test="open_broker_id != null">
+        #{open_broker_id,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -335,6 +342,9 @@
       <if test="shop_id != null">
         `shop_id` = #{shop_id,jdbcType=BIGINT},
       </if>
+      <if test="open_broker_id != null">
+        `open_broker_id` = #{open_broker_id,jdbcType=BIGINT},
+      </if>
     </set>
     where `id` = #{id,jdbcType=BIGINT}
   </update>
@@ -368,7 +378,8 @@
       `key_broker_id` = #{key_broker_id,jdbcType=BIGINT},
       `whether` = #{whether,jdbcType=INTEGER},
       `door_id` = #{door_id,jdbcType=BIGINT},
-      `shop_id` = #{shop_id,jdbcType=BIGINT}
+      `shop_id` = #{shop_id,jdbcType=BIGINT},
+      `open_broker_id` = #{open_broker_id,jdbcType=BIGINT}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
   <resultMap id="QuerySceneTypeVo" type="com.yqwl.Vo.HousesNewVo">
@@ -436,6 +447,47 @@
 		AND
 		hn.id=#{id}
 	</select>
+	<!-- 客户需求与房源匹配 -->
+	<select id="selectPaired" parameterType="com.yqwl.Vo.HousesNewVo" resultMap="QuerySceneTypeVo">
+		SELECT
+		hn.id as id,
+		hn.building_id as building_id,
+		hn.work_name as work_name,
+		hn.office_space as office_space,
+		hn.location_number as location_number,
+		hn.house_type as house_type,
+		hn.location as location,
+		hn.money as money,
+		hn.money_unit as money_unit,
+		hn.fitment as fitment,
+		b.mansion_name as mansion_name,
+		b.region_id as region_id,
+		b.region_name as region_name,
+		b.district as district,
+		b.floor as floor
+		FROM
+		t_houses_new hn,t_building b
+		<where>
+		b.id=hn.building_id
+		<if test="area != null and ratio != null and area != 0 and ratio != 0">
+		AND (`office_space` <![CDATA[>=]]>
+				#{area} AND `office_space` <![CDATA[<=]]>
+				#{ratio})
+		</if>
+		<if test="money != null and moneys != null and money != 0 and moneys != 0">
+		AND (`money` <![CDATA[>=]]>
+				#{money} AND `money` <![CDATA[<=]]>
+				#{moneys})
+		</if>
+		<if test="region_id != null and region_id != 0">
+		AND b.region_id = #{region_id}
+		</if>
+		<if test="building_id != null and building_id != 0">
+		AND hn.building_id = #{building_id}
+		</if>
+		</where>
+		LIMIT #{page},#{limit}
+	</select>
 	<select id="selectLike" parameterType="com.yqwl.Vo.HousesNewVo" resultMap="QuerySceneTypeVo">
 		SELECT
 		hn.id as id,
@@ -490,8 +542,8 @@
 	</if>
 	AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
 	AND (ISNULL(#{brokerId}) OR h.entering_broker_id = #{brokerId})
-	AND (ISNULL(#{phone}) OR h.home_number = #{phone})
-	AND (ISNULL(#{ownerName}) OR h.home_name = #{ownerName})
+	<!-- AND (ISNULL(#{phone}) OR h.home_number = #{phone})
+	AND (ISNULL(#{ownerName}) OR h.home_name = #{ownerName}) -->
 	AND (ISNULL(#{buildingId}) OR h.building_id = #{buildingId})
 	AND h.whether = 1
   </select>
@@ -513,13 +565,18 @@
     order by `money` ASC
   </select>
   
-  <select id="ListBackHousesNew" resultMap="BaseResultMap">
+  <select id="ListBackHousesNew" resultType="com.yqwl.Vo.HousesVo">
   	SELECT 
-  		 h.*
+  		 h.*,
+		 br.real_name,
+		 br.phonemunber
 	FROM
 		t_building AS b
-	JOIN t_houses_new AS h ON b.id = h.building_id 
+	JOIN t_houses_new AS h ON b.id = h.building_id,
+		t_broker AS br
 	WHERE
+		h.entering_broker_id = br.id
+	AND
 		b.region_city_id = #{cityId}
 	AND (ISNULL(#{regionId})
 	OR b.region_id = #{regionId})
@@ -545,8 +602,8 @@
 	AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
 	AND h.shop_id = #{shopId}
 	AND (ISNULL(#{brokerId}) OR h.entering_broker_id = #{brokerId})
-	AND (ISNULL(#{phone}) OR h.home_number = #{phone})
-	AND (ISNULL(#{ownerName}) OR h.home_name = #{ownerName})
+	<!-- AND (ISNULL(#{phone}) OR h.home_number = #{phone})
+	AND (ISNULL(#{ownerName}) OR h.home_name = #{ownerName}) -->
 	AND (ISNULL(#{buildingId}) OR h.building_id = #{buildingId})
   </select>
   <select id="listByShopId" resultMap="BaseResultMap">
@@ -555,25 +612,29 @@
     from `t_houses_new`
     where `shop_id` = #{id}
   </select>
+  <!-- 添加决策分析(根据条件查询相关经纪人房源状况) -->
+  <select id="getCountByWhether" resultType="java.lang.Integer">
+    select 
+    COUNT(1)
+    from `t_houses_new`
+    where `entering_broker_id` = #{id} AND `whether` = #{whether} <if test="startTime != null and endTime != null">
+		 AND (`times` <![CDATA[>=]]> #{startTime} AND `times` <![CDATA[<=]]> #{endTime})
+		</if>
+		
+  </select>
+  
   <!-- 修改房源状态活开盘修改 -->
   <update id="updateSelective" parameterType="com.yqwl.pojo.HousesNew">
-    <!--
-      WARNING - @mbggenerated
-      This element is automatically generated by MyBatis Generator, do not modify.
-    -->
     update `t_houses_new`
     <set>
-      <if test="money != null">
-        `money` = #{money,jdbcType=DECIMAL},
-      </if>
-      <if test="money_unit != null">
-        `money_unit` = #{money_unit,jdbcType=INTEGER},
+      <if test="begin_time != null">
+        `begin_time` = #{begin_time,jdbcType=TIMESTAMP},
       </if>
       <if test="whether != null">
         `whether` = #{whether,jdbcType=INTEGER},
       </if>
-      <if test="begin_time != null">
-        `begin_time` = #{begin_time,jdbcType=TIMESTAMP},
+      <if test="open_broker_id != null">
+        `open_broker_id` = #{open_broker_id,jdbcType=BIGINT},
       </if>
     </set>
     where `id` = #{id,jdbcType=BIGINT}

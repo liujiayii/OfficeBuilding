@@ -1,7 +1,10 @@
 package com.yqwl.controller.back;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.yqwl.pojo.Owner;
 import com.github.pagehelper.PageInfo;
 import com.yqwl.Vo.BackHousesVo;
 import com.yqwl.Vo.BrokerVo;
 import com.yqwl.Vo.FeedbackVo;
 import com.yqwl.Vo.HousesNewVo;
+import com.yqwl.Vo.HousesVo;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.Pager;
 import com.yqwl.common.web.BaseController;
 import com.yqwl.dao.InformMapper;
+import com.yqwl.dao.OwnerMapper;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Inform;
 import com.yqwl.pojo.Picture;
@@ -52,7 +59,8 @@ public class BackHousesNewController extends BaseController {
 	private FeedbackService feedbackService;
 	@Autowired
 	private InformMapper informMapper;
-
+	@Autowired
+	private OwnerMapper ownerMapper;
 	/**
 	 * 
 	 * @Title: selectBackHousesNewList
@@ -114,7 +122,7 @@ public class BackHousesNewController extends BaseController {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo != null) {
-				PageInfo<HousesNew> result = housesNewService.ListBackHousesNew(pager, brokerVo.getId());
+				PageInfo<HousesVo> result = housesNewService.ListBackHousesNew(pager, brokerVo.getId());
 				if (result.getTotal() != 0) {
 					msg = "查询成功";
 					return FastJsonUtil.getResponseJson(code, msg, result);
@@ -148,10 +156,14 @@ public class BackHousesNewController extends BaseController {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo != null) {
+				Map<String, Object> map = new HashMap<>();
 				BackHousesVo result = housesNewService.getById(id);
-				if (result != null) {
+				List<Owner> own=ownerMapper.selectHome(id);
+				map.put("result", result);
+				map.put("own", own);
+				if (map.size()!=0) {
 					msg = "查询成功";
-					return FastJsonUtil.getResponseJson(code, msg, result);
+					return FastJsonUtil.getResponseJson(code, msg, map);
 				}
 				code = -1;
 				msg = "查询失败";
@@ -803,6 +815,86 @@ public class BackHousesNewController extends BaseController {
 			return FastJsonUtil.getResponseJson("-2", "未登录");
 		} catch (Exception e) {
 			return dealException(-200, "系统异常", e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @Title: getDecisionAnalysis
+	 *
+	 * @description 添加决策分析(根据条件查询相关经纪人房源状况)
+	 *
+	 * @param @param shopId
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @return 
+	 * 
+	 * @return String    
+	 *
+	 * @author yaozijun
+	 *
+	 * @createDate 2019年6月14日
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getDecisionAnalysis", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String getDecisionAnalysis (Long shopId,Date startTime,Date endTime){
+		int code = 0;
+		String msg = null;
+		try {
+			List<Map<String, Object>> list = housesNewService.getDecisionAnalysis(shopId,startTime,endTime);
+			if (list.size() != 0) {
+				msg = "查询成功";
+				
+				return FastJsonUtil.getResponseJson(code, msg, list);
+			}
+			code = -1;
+			msg = "查询失败";
+			
+			return FastJsonUtil.getResponseJson(code, msg, null);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			logger.error(e.getMessage(), e);
+			
+			return FastJsonUtil.getResponseJson(code, msg, e);
+		}
+	}
+	/**
+	 * @Title: selectPaireds
+	 * @description 查询房源是否有匹配房源
+	 * @param @param demand_acreage
+	 * @param @param demand_money
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年6月18日
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/selectPaireds", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String selectPaireds (int demand_acreage,int demand_money,int region_id,Long building_id, Integer page,Integer limit,HttpSession session){
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			List<HousesNewVo> list = housesNewService.selectPaireds(demand_acreage,demand_money,region_id,building_id,page,limit);
+			if (list.size() != 0) {
+				msg = "查询成功";
+				
+				return FastJsonUtil.getResponseJson(code, msg, list);
+			}
+			code = -1;
+			msg = "没有符合的房源";
+			
+			return FastJsonUtil.getResponseJson(code, msg, null);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			logger.error(e.getMessage(), e);
+			
+			return FastJsonUtil.getResponseJson(code, msg, e);
 		}
 	}
 }

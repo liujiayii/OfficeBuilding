@@ -98,4 +98,12 @@
       `phone` = #{phone,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
+  
+  
+  <select id="listByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from `t_user_phone`
+    where `user_id` = #{userId}
+  </select>
 </mapper>

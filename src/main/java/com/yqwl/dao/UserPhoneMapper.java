@@ -1,5 +1,7 @@
 package com.yqwl.dao;
 
+import java.util.List;
+
 import com.yqwl.pojo.UserPhone;
 
 public interface UserPhoneMapper {
@@ -50,4 +52,6 @@ public interface UserPhoneMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(UserPhone record);
+
+	List<UserPhone> listByUserId(Long userId);
 }

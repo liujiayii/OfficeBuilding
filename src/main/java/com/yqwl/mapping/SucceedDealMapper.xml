@@ -300,4 +300,58 @@
       `party_b_id_number` = #{party_b_id_number,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
+  <select id="listAll" resultType="com.yqwl.Vo.SucceedDealVo">
+  	SELECT
+		sd.*,
+		tb.region_name AS region_name,
+		tb.mansion_name AS mansion_name,
+		b.real_name
+	FROM
+		`t_succeed_deal` AS sd,
+		t_broker AS b,
+		t_group AS g,
+		t_shop AS s,
+		t_houses_new AS hn,
+		t_building AS tb
+	WHERE
+		sd.broker_id = b.id
+	AND b.group_id = g.id
+	AND g.shop_id = s.id
+	AND sd.house_id = hn.id
+	AND hn.building_id = tb.id
+	AND (ISNULL(#{shopId}) OR s.id = #{shopId})
+	AND (ISNULL(#{groupId}) OR g.id = #{groupId})
+	AND (ISNULL(#{brokerId}) OR b.id = #{brokerId})
+	AND ((ISNULL(#{startTime}) OR sd.succeed_time <![CDATA[>=]]> #{startTime}) AND (ISNULL(#{endTime}) OR sd.succeed_time <![CDATA[<=]]> #{endTime}))
+	AND (ISNULL(#{pack}) OR sd.pack_no LIKE CONCAT("%",#{pack},"%"))
+  </select>
+  <!-- 添加决策分析(根据条件查询相关经纪人成交单数) -->
+  <select id="selectByPrimaryCount" resultType="java.lang.Integer">
+		select
+		COUNT(1)
+		from `t_succeed_deal`
+		<where>
+			`broker_id` = #{id} 
+			<if test="startTime != null and endTime != null">
+				AND (`succeed_time` <![CDATA[>=]]>
+				#{startTime} AND `succeed_time` <![CDATA[<=]]>
+				#{endTime})
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加决策分析(根据条件查询相关经纪人成交金额) -->
+  <select id="selectByPrimarySum" resultType="java.lang.Integer">
+		select
+		IFNULL(SUM(brokerage),0)
+		from `t_succeed_deal`
+		<where>
+			`broker_id` = #{id} 
+			<if test="startTime != null and endTime != null">
+				AND (`succeed_time` <![CDATA[>=]]>
+				#{startTime} AND `succeed_time` <![CDATA[<=]]>
+				#{endTime})
+			</if>
+		</where>
+	</select>
 </mapper>

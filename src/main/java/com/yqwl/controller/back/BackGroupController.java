@@ -161,7 +161,7 @@ public class BackGroupController extends BaseController {
 			return dealException(code, msg, e);
 		}
 	}
-	
+	 
 	/**
 	 * 
 	 * @Title: getByShopId

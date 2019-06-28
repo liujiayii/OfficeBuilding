@@ -43,4 +43,15 @@ public interface DivideIntoMapper {
 	int updateByPrimaryKey(DivideInto record);
 
 	List<DivideInto> listDivideIntoByCondition();
+
+	/**
+	 *
+	 * @Title: selectStatus
+	 * @description 查询分成配置
+	 * @param     
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年6月20日
+	 */
+	DivideInto selectStatus();
 }
