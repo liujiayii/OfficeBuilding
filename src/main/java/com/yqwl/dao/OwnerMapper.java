@@ -52,6 +52,15 @@ public interface OwnerMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Owner record);
-    
+    /**
+     * 
+     * @Title: selectHome
+     * @description 通过房源ID查询业主电话
+     * @param @param id
+     * @param @return    
+     * @return List<Owner>    
+     * @author linhongyu
+     * @createDate 2019年7月5日
+     */
     List<Owner> selectHome(Long id);
 }

@@ -48,7 +48,7 @@ public interface UserMapper {
 	 * @param @return    
 	 * @return List<User>    
 	 * @author linhongyu
-	 * @createDate 2019ï¿½?6ï¿½?13ï¿½?
+	 * @createDate 2019ï¿??6ï¿??13ï¿??
 	 */
 	List<User> selectListShop(Long region_id);
 	/**
@@ -61,7 +61,7 @@ public interface UserMapper {
 	 * @param @return    
 	 * @return int    
 	 * @author linhongyu
-	 * @createDate 2019ï¿½?6ï¿½?17ï¿½?
+	 * @createDate 2019ï¿??6ï¿??17ï¿??
 	 */
 	int selectAllSome(@Param("id")Long id, @Param("category")int category, @Param("startTime")Date startTime, @Param("endTime")Date endTime);
 	

@@ -1,6 +1,8 @@
 package com.yqwl.service.impl;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -131,18 +133,29 @@ public class HousesNewServiceImpl implements HousesNewService {
 		}
 		Integer fitment = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("fitment")));
 		// 经纪人id
-		Integer brokerId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("brokerId")));
+		Long brokerId = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("brokerId")));
+		Long broker_id = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("broker_id")));
+		System.out.println(brokerId);
 		// 业主电话
-		String phone = StringUtils.getFirstString(conditions.get("phone"));
-		String ownerName = StringUtils.getFirstString(conditions.get("ownerName"));
-		Integer buildingId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("buildingId")));
-		System.out.println(cityId+","+regionId+","+startSpace+","+endSpace+","+startMoney+","+endMoney+","+fitment+","+brokerId+","+phone+","+buildingId);
+		String homes_number = StringUtils.getFirstString(conditions.get("home_number"));
+		String home_number=null;
+		if(!(homes_number.equals("null") || homes_number.equals("")) ){
+			home_number = homes_number;
+		}
+		String homes_name = new String(StringUtils.getFirstString(conditions.get("home_name")).trim().getBytes("ISO-8859-1"), "UTF-8");
+		String home_name=null;
+		if(!(homes_name.equals("null") || homes_name.equals(""))){
+			home_name = homes_name;
+		}
+		Long buildingId = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("buildingId")));
 		
+		Integer  whether = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("whether")));
+
 		// 分页
 		PageHelper.startPage(pager);
 		List<HousesNew> list = housesNewMapper.listHousesNewByCondition(cityId, regionId, startSpace, endSpace,
-				startMoney, endMoney, fitment, brokerId, phone, ownerName,buildingId);
-		System.out.println("3.查询列表"+list);
+				startMoney, endMoney, fitment, brokerId,buildingId,home_number,home_name, whether,broker_id);
+		
 		return new PageInfo<HousesNew>(list);
 	}
 
@@ -188,6 +201,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 		plotDoorMapper.updateByPrimaryKeySelective(plotDoor);
 		record.setHoues_number(DateUtil.getCurrentTimestamp().toString());
 		record.setTimes(new Date());
+		record.setBegin_time(new Date());
 		Integer count = housesNewMapper.insertSelective(record);
 		/** 判断(房源表)插入成功后向(房源图片储存表)插入图片 */
 		if (count != 0&&urls != null&&urls.length>0) {
@@ -308,7 +322,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 	}
 
 	@Override
-	public PageInfo<HousesVo> ListBackHousesNew(Pager pager,Long id) {
+	public PageInfo<HousesVo> ListBackHousesNew(Pager pager,Long id) throws Exception {
 		// 获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
@@ -325,19 +339,27 @@ public class HousesNewServiceImpl implements HousesNewService {
 		}
 		Integer fitment = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("fitment")));
 		Long shopId = brokerMapper.getBrokerByShopId(id);
-		
-		// 经纪人id
-		Integer brokerId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("brokerId")));
+		Long broker_id = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("broker_id")));
+		Long brokerId = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("brokerId")));
 		// 业主电话
-		String phone = StringUtils.getFirstString(conditions.get("phone"));
-		// 业主姓名
-		String ownerName = StringUtils.getFirstString(conditions.get("ownerName"));
-		Integer buildingId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("buildingId")));
+		String homes_number = StringUtils.getFirstString(conditions.get("home_number"));
+		String home_number=null;
+		if(!(homes_number.equals("null") || homes_number.equals("")) ){
+			home_number = homes_number;
+		}
+		String homes_name = new String(StringUtils.getFirstString(conditions.get("home_name")).trim().getBytes("ISO-8859-1"), "UTF-8");
+		String home_name=null;
+		if(!(homes_name.equals("null") || homes_name.equals(""))){
+			home_name = homes_name;
+		}
+		Long buildingId = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("buildingId")));
+		
+		Integer whether = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("whether")));
+		System.out.println(whether);
 		// 分页
 		PageHelper.startPage(pager);
 		List<HousesVo> list = housesNewMapper.ListBackHousesNew(cityId, regionId, startSpace, endSpace,
-				startMoney, endMoney, fitment, shopId, brokerId, phone, ownerName,buildingId);
-		System.err.println("list"+list);
+				startMoney, endMoney, fitment, shopId, brokerId, home_number, home_name, buildingId,whether,broker_id);
 		return new PageInfo<HousesVo>(list);
 	}
 
@@ -510,34 +532,57 @@ public class HousesNewServiceImpl implements HousesNewService {
 	public Map<String, Object> selectGoufing(Long id) throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		HousesNew housesNew=housesNewMapper.selectByPrimaryKey(id);
+		Integer wher=housesNew.getWhether();
 		if(housesNew.getEntering_broker_id()!=null){
 			Broker broker=brokerMapper.selectByPrimaryKey(housesNew.getEntering_broker_id());
-			String Lname=broker.getReal_name();
-			map.put("Lname", Lname);//录入经纪人姓名
+			if(broker!=null){
+				String Lname=broker.getReal_name();
+				map.put("Lname", Lname);//录入经纪人姓名
+			}else {
+				map.put("Lname", null);
+			}
 		}
 		if(housesNew.getMaintain_broker_id()!=null){
 			Broker brokers=brokerMapper.selectByPrimaryKey(housesNew.getMaintain_broker_id());
-			String Wname=brokers.getReal_name();
-			map.put("Wname", Wname);//维护经纪人姓名
+			if (brokers!=null) {
+				String Wname=brokers.getReal_name();
+				map.put("Wname", Wname);//维护经纪人姓名
+			} else {
+				map.put("Wname", null);
+			}
 		}
 		if(housesNew.getOpen_broker_id()!=null){
 			Broker brokert=brokerMapper.selectByPrimaryKey(housesNew.getOpen_broker_id());
-			String Kname=brokert.getReal_name();
-			map.put("Kname", Kname);//开盘经纪人姓名
+			if (brokert!=null) {
+				String Kname=brokert.getReal_name();
+				map.put("Kname", Kname);//开盘经纪人姓名
+			} else {
+				map.put("Kname", null);
+			}
 		}
 		if(housesNew.getKey_broker_id()!=null){
 			Broker brokerk=brokerMapper.selectByPrimaryKey(housesNew.getKey_broker_id());
-			String Nname=brokerk.getReal_name();
-			map.put("Nname", Nname);//拿钥匙经纪人姓名
+			if (brokerk!=null) {
+				String Nname=brokerk.getReal_name();
+				map.put("Nname", Nname);//拿钥匙经纪人姓名
+			} else {
+				map.put("Nname", null);
+			}
+			
 		}
 		if(housesNew.getSolid_broker_id()!=null){
 			Broker brokerT=brokerMapper.selectByPrimaryKey(housesNew.getSolid_broker_id());
-			String Tname=brokerT.getReal_name();
-			map.put("Tname", Tname);//实勘图片经纪人姓名
+			if (brokerT!=null) {
+				String Tname=brokerT.getReal_name();
+				map.put("Tname", Tname);//实勘图片经纪人姓名
+			} else {
+				map.put("Tname", null);
+			}
 		}
 		BigDecimal mon=housesNew.getMoney();
 		Integer unit=housesNew.getMoney_unit();
 		DivideInto divideInto=divideIntoMapper.selectStatus();
+		System.out.println(divideInto+"divideInto");
 		BigDecimal money = null;
 		if(unit==1){
 			money=mon;
@@ -557,7 +602,14 @@ public class HousesNewServiceImpl implements HousesNewService {
 		BigDecimal Wthere=money.multiply(new BigDecimal(divideInto.getVindicate_per())).divide(new BigDecimal(100));//维护经纪人分红
 		BigDecimal Tfist=money.multiply(new BigDecimal(divideInto.getSend_photo_per())).divide(new BigDecimal(100));//实勘图片经纪人分红
 		BigDecimal Yfrive=money.multiply(new BigDecimal(divideInto.getTake_key_per())).divide(new BigDecimal(100));//拿钥匙经纪人分红
-		map.put("housesNew", housesNew);
+		if(wher==1){
+			map.put("wher", "正常");
+		}else if (wher==3) {
+			map.put("wher", "成交");
+		}else if (wher==6) {
+			map.put("wher", " 撤单");
+		}
+		map.put("wher", "失效");
 		map.put("Lone", Lone);
 		map.put("Ktwo", Ktwo);
 		map.put("Wthere", Wthere);

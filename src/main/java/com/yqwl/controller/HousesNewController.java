@@ -236,4 +236,5 @@ public class HousesNewController {
 			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
 		}
 	}
+	
 }

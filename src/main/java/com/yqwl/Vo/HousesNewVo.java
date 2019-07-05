@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.yqwl.pojo.Building;
+import com.yqwl.pojo.HousesNew;
+
 /**
  *
  * @ClassName: HousesNewVo
@@ -12,7 +15,7 @@ import java.util.Date;
  * @author 姓名全拼
  * @createDate 2019年4月9日
  */
-public class HousesNewVo implements Serializable{
+public class HousesNewVo extends HousesNew implements Serializable{
 	/**  字段的含义 */
 	private static final long serialVersionUID = 1L;
 	/**
@@ -326,20 +329,11 @@ public class HousesNewVo implements Serializable{
 	public void setTypes(Integer types) {
 		this.types = types;
 	}
-	public Integer getEntering_broker_id() {
-		return entering_broker_id;
-	}
 	public void setEntering_broker_id(Integer entering_broker_id) {
 		this.entering_broker_id = entering_broker_id;
 	}
-	public Integer getSolid_broker_id() {
-		return solid_broker_id;
-	}
 	public void setSolid_broker_id(Integer solid_broker_id) {
 		this.solid_broker_id = solid_broker_id;
-	}
-	public Integer getMaintain_broker_id() {
-		return maintain_broker_id;
 	}
 	public void setMaintain_broker_id(Integer maintain_broker_id) {
 		this.maintain_broker_id = maintain_broker_id;

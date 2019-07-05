@@ -96,7 +96,7 @@ public class BuilldingServiceImpl implements BuildingService {
 	public PageInfo<BuildingVo> listByBuilding(Pager pager) throws Exception {
 		//获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
-		String condition = StringUtils.getFirstString(conditions.get("record"));
+		String condition = new String(StringUtils.getFirstString(conditions.get("record")).trim().getBytes("ISO-8859-1"), "UTF-8");
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId"))); 
 		//分页
 		PageHelper.startPage(pager);
@@ -310,6 +310,10 @@ public class BuilldingServiceImpl implements BuildingService {
 	@Override
 	public List<Building> listAllByRegionId(Long regionId) throws Exception {
 		return buildingMapper.listAllByRegionId(regionId);
+	}
+	@Override
+	public List<Building> listBybuildingByCity(Integer cityId) throws Exception {
+		return buildingMapper.listBybuildingByCity(cityId);
 	}
 
 }

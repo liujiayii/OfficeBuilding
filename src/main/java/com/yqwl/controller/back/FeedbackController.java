@@ -79,7 +79,7 @@ public class FeedbackController {
 		 	if(feedbacks.size()>0){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", feedbacks);
 		 	}else {
-		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+		 		return FastJsonUtil.getResponseJson(-1, "无带看房源", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -151,6 +151,43 @@ public class BackBrokerController extends BaseController{
 	
 	/**
 	 * 
+	 * @Title: listAll
+	 * @description 根据状态查询所有经纪人
+	 * @param session
+	 * @param status
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年7月4日 下午5:07:36
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/listAllByStatus", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String listAll(HttpSession session,Integer status,Integer cityId) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				List<Broker> result = brokerService.listAllByStatus(status,cityId);
+				if (result.size() != 0) {
+					msg = "查询成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "查询失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
+	
+	/**
+	 * 
 	 * @Title: ListBackBroker
 	 * @description 分页查询所有经纪人
 	 * @param pager

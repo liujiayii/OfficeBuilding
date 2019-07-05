@@ -189,6 +189,39 @@ public class BuildingControllers extends BaseController {
 		}
 	}
 
+	
+	
+	/**
+	 * 
+	 * @Title: listBybuildingByCity
+	 * @description 根据城市查询所有楼盘
+	 * @param cityId
+	 * @param session
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年7月4日 下午5:17:46
+	 */
+	@RequestMapping(value = "listBybuildingByCity", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String listBybuildingByCity(Integer cityId,HttpSession session) {
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo == null) {
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			List<Building> buildings = buildingService.listBybuildingByCity(cityId);
+			if (buildings.size() > 0) {
+				return FastJsonUtil.getResponseJson(0, "查询成功", buildings);
+			} else {
+				return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return dealException(-200, "系统异常", e);
+		}
+	}
+	
 	/**
 	 * @Title: deleteByPrimaryKey
 	 * @description 删除一条商厦信息

@@ -360,5 +360,6 @@
   	<include refid="Base_Column_List" />
   	from t_divide_into
   	where `status` = 1
+  	LIMIT 1
   </select>
 </mapper>

@@ -33,8 +33,24 @@ public class InformServiceImpl implements InformService{
 	 * @createDate 2019年6月10日
 	 */
 	@Override
-	public List<InformVo> selectByInform(Long broker_id) {
+	public List<InformVo> selectByInform(Long broker_id) throws Exception{
 		return informMapper.selectByInform(broker_id);
+	}
+
+	/**
+     * @Title: deleteKey
+     * @description 取消撤单
+     * @param @param broker_id
+     * @param @param home_id
+     * @param @return    
+     * @return int    
+     * @author linhongyu
+     * @createDate 2019年7月4日
+     */
+	@Override
+	public int deleteInform(Long broker_id, Long home_id) throws Exception{
+		int num = informMapper.deleteKey(broker_id, home_id);
+		return num;
 	}
 
 }

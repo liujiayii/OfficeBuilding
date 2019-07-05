@@ -78,4 +78,6 @@ public interface BuildingService {
 	List<Building> listAllByCityId(Long cityId) throws Exception;
 
 	List<Building> listAllByRegionId(Long regionId) throws Exception;
+
+	List<Building> listBybuildingByCity(Integer cityId) throws Exception;
 }

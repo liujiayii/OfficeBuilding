@@ -1,4 +1,5 @@
 package com.yqwl.controller.back;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -116,7 +117,7 @@ public class BackHousesNewController extends BaseController {
 	@ResponseBody
 	public String ListBackHousesNew(Pager pager, HttpSession session) {
 		try {
-			System.out.println(pager);
+			System.out.println("本地房源："+pager);
 			int code = 0;
 			String msg = null;
 			/** 判断是否登录 */
@@ -779,29 +780,38 @@ public class BackHousesNewController extends BaseController {
 	 */
 	@RequestMapping(value = "selectLabel", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String selectLabel(@SuppressWarnings("rawtypes") List id, HttpSession session) {
+	public String selectLabel(Long[] id, HttpSession session) {
 		try {
 			/** 判断是否登录 */
+			
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
-			if (brokerVo != null) {
+			if (brokerVo == null) {
+				return FastJsonUtil.getResponseJson("-2", "未登录");
+				}
 				Date date = new Date();
 				List<ArrayList<String>> lists = new ArrayList<ArrayList<String>>();
-				for (Object object : id) {
+				for (Long bigInteger : id) {
 					ArrayList<String> list = new ArrayList<String>();
-					HousesNewVo date1 = housesNewService.selectByFindID((long) object);
-					List<Picture> pictures = pictureService.selectPic((long) object);
-					List<FeedbackVo> feedbacks = feedbackService.selectListKey((long) object);
-					Inform inform = informMapper.selectTypeSix((long) object);
-					if (date == date1.getTimes()) {
-						list.add("新");
+					HousesNewVo date1 = housesNewService.selectByFindID(bigInteger);
+					List<Picture> pictures = pictureService.selectPic(bigInteger);
+					List<FeedbackVo> feedbacks = feedbackService.selectListKey(bigInteger);
+					List<Inform> inform = informMapper.selectTypeSix(bigInteger);
+					if(date1!=null){
+						if (date == date1.getBegin_time()) {
+							list.add("新");
+						}
 					}
-					if (pictures.size() > 0) {
-						list.add("图");
+					if(pictures!=null){
+						if (pictures.size() > 0) {
+							list.add("图");
+						}
 					}
-					if (feedbacks.size() > 0) {
-						list.add("带");
+					if(feedbacks!=null){
+						if (feedbacks.size() > 0) {
+							list.add("带");
+						}
 					}
-					if (inform != null) {
+					if (inform.size() > 0) {
 						list.add("撤");
 					}
 					lists.add(list);
@@ -811,8 +821,6 @@ public class BackHousesNewController extends BaseController {
 				} else {
 					return FastJsonUtil.getResponseJson(-1, "查询失败", null);
 				}
-			}
-			return FastJsonUtil.getResponseJson("-2", "未登录");
 		} catch (Exception e) {
 			return dealException(-200, "系统异常", e);
 		}
@@ -887,6 +895,45 @@ public class BackHousesNewController extends BaseController {
 			}
 			code = -1;
 			msg = "没有符合的房源";
+			
+			return FastJsonUtil.getResponseJson(code, msg, null);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			logger.error(e.getMessage(), e);
+			
+			return FastJsonUtil.getResponseJson(code, msg, e);
+		}
+	}
+	/**
+	 * @Title: insertNumber
+	 * @description 添加一条业主电话
+	 * @param @param record
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年7月5日
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/insertNumber", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String insertNumber (Owner record,HttpSession session){
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			record.setTime(new Date());
+			int num = ownerMapper.insertSelective(record);
+			if (num != 0) {
+				msg = "添加成功";
+				
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			code = -1;
+			msg = "添加失败";
 			
 			return FastJsonUtil.getResponseJson(code, msg, null);
 		} catch (Exception e) {

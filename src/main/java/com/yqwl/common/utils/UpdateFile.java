@@ -32,6 +32,18 @@ public class UpdateFile {
 	private static final String ruleId0 = "rule0";
 	private static final String matchPrefix0 = "A0/";
 
+	/**
+	private static final String endpoint = "http://oss-cn-zhangjiakou.aliyuncs.com";
+	private static final String accessKeyId = "TkY9uJmnNDl06WPM";
+	private static final String accessKeySecret = "Sl2g3FBetdkbUiXLT5gvFYcmHiu7nT";
+	private static final String bucketName = "ouyedichan";
+	private static final String picLocation = "dataImg";
+	private static String Key = "key";
+	private static final String ruleId0 = "rule0";
+	private static final String matchPrefix0 = "A0/";
+	 */
+	
+	
 	public UpdateFile() {
 		super();
 	}

@@ -2,6 +2,8 @@ package com.yqwl.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.Vo.InformVo;
 import com.yqwl.pojo.Inform;
 
@@ -83,5 +85,16 @@ public interface InformMapper {
      * @author linhongyu
      * @createDate 2019年6月13日
      */
-    Inform selectTypeSix(Long home_id);
+    List<Inform> selectTypeSix(Long home_id);
+    /**
+     * @Title: deleteKey
+     * @description 取消撤单
+     * @param @param broker_id
+     * @param @param home_id
+     * @param @return    
+     * @return int    
+     * @author linhongyu
+     * @createDate 2019年7月4日
+     */
+    int deleteKey(@Param("broker_id")Long broker_id,@Param("home_id")Long home_id);
 }

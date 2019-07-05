@@ -182,6 +182,10 @@ public class BrokerServiceImpl implements BrokerService{
 	public List<Broker> getByGroupId(Long groupId) throws Exception {
 		return brokerMapper.getBrokerByGroupId(groupId);
 	}
+	@Override
+	public List<Broker> listAllByStatus(Integer status,Integer cityId) throws Exception {
+		return brokerMapper.listAllByStatus(status,cityId);
+	}
 	
 
 }

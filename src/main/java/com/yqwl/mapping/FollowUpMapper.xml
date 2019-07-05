@@ -205,5 +205,6 @@
 		f.broker_id=b.id
 		AND f.home_id=#{home_id,jdbcType=BIGINT}
 		AND type=1
+		ORDER BY f.remind_time DESC
 	</select>
 </mapper>

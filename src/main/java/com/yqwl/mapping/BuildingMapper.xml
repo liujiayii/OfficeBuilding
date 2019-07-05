@@ -29,6 +29,7 @@
     <result column="latitude" jdbcType="VARCHAR" property="latitude" />
     <result column="activate_time" jdbcType="INTEGER" property="activate_time" />
     <result column="times" jdbcType="DATE" property="times" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -38,7 +39,7 @@
     `id`, `mansion_name`, `mansion_picture`, `region_sh_id`, `region_shname`, `region_city_id`, 
     `region_cityname`, `region_id`, `region_name`, `district`, `proportion`, `floor`, 
     `traffic_condition`, `property_fee`, `parking_fee`, `conditioners_fee`, `intro`, 
-    `circum`, `broker_id`, `longitude`, `latitude`, `activate_time`, `times`
+    `circum`, `broker_id`, `longitude`, `latitude`, `activate_time`, `times`, `status`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -73,7 +74,7 @@
       `property_fee`, `parking_fee`, `conditioners_fee`, 
       `intro`, `circum`, `broker_id`, 
       `longitude`, `latitude`, `activate_time`, 
-      `times`)
+      `times`, `status`)
     values (#{mansion_name,jdbcType=VARCHAR}, #{mansion_picture,jdbcType=VARCHAR}, #{region_sh_id,jdbcType=INTEGER}, 
       #{region_shname,jdbcType=VARCHAR}, #{region_city_id,jdbcType=INTEGER}, #{region_cityname,jdbcType=VARCHAR}, 
       #{region_id,jdbcType=INTEGER}, #{region_name,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
@@ -81,7 +82,7 @@
       #{property_fee,jdbcType=DECIMAL}, #{parking_fee,jdbcType=DECIMAL}, #{conditioners_fee,jdbcType=DECIMAL}, 
       #{intro,jdbcType=VARCHAR}, #{circum,jdbcType=VARCHAR}, #{broker_id,jdbcType=BIGINT}, 
       #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{activate_time,jdbcType=INTEGER}, 
-      #{times,jdbcType=DATE})
+      #{times,jdbcType=DATE}, #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yqwl.pojo.Building">
     <!--
@@ -159,6 +160,9 @@
       <if test="times != null">
         `times`,
       </if>
+      <if test="status != null">
+        `status`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mansion_name != null">
@@ -226,6 +230,9 @@
       </if>
       <if test="times != null">
         #{times,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -302,6 +309,9 @@
       <if test="times != null">
         `times` = #{times,jdbcType=DATE},
       </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where `id` = #{id,jdbcType=BIGINT}
   </update>
@@ -332,7 +342,8 @@
       `longitude` = #{longitude,jdbcType=VARCHAR},
       `latitude` = #{latitude,jdbcType=VARCHAR},
       `activate_time` = #{activate_time,jdbcType=INTEGER},
-      `times` = #{times,jdbcType=DATE}
+      `times` = #{times,jdbcType=DATE},
+      `status` = #{status,jdbcType=INTEGER}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
 	<select id="listBuildingByCondition" resultType="com.yqwl.Vo.BuildingVo">
@@ -371,7 +382,7 @@
 	</select>
 	<select id="listByBuilding" resultType="com.yqwl.Vo.BuildingVo">
 		SELECT
-		h.*
+		b.*
 		FROM
 		t_building AS b
 		JOIN t_houses_new AS h ON b.id = h.building_id
@@ -393,6 +404,18 @@
 		OR b.district LIKE CONCAT('%', #{condition},
 		'%')
 		)
+		OR (
+		ISNULL(#{condition})
+		OR b.region_cityname LIKE CONCAT('%', #{condition},
+		'%')
+		)
+		OR (
+		ISNULL(#{condition})
+		OR h.work_name LIKE CONCAT('%', #{condition},
+		'%')
+		)
+		AND b.`status` = 0
+		
 	</select>
 	<select id="listByHouseCount" resultType="java.lang.Integer">
 		SELECT
@@ -450,7 +473,7 @@
 			)
 		</if>
 		AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
-		AND h.whether = 1
+		AND b.status = 0
 		GROUP BY b.id
 	</select>
 
@@ -520,12 +543,19 @@
 		`region_city_id` = #{cityId}
 	</select>
 	
-	
 	<select id="listAllByRegionId" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from `t_building`
 		WHERE
 		`region_id` = #{regionId}
+	</select>
+	
+	<select id="listBybuildingByCity" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `t_building`
+		WHERE
+		`region_city_id` = #{cityId}
 	</select>
 </mapper>

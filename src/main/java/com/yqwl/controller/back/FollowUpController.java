@@ -46,10 +46,10 @@ public class FollowUpController {
 	@ResponseBody
 	public String insertSelective(FollowUp record,HttpSession session){
 		try {
-			/*BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if(brokerVo==null){
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
-			}*/
+			}
 			record.setRemind_time(new Date());
 			int nun=followUpService.insertSelective(record);
 			Long id=record.getId();

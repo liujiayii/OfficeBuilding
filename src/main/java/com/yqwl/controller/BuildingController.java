@@ -70,7 +70,7 @@ public class BuildingController {
 	 * @createDate 2019年4月13日 下午1:47:40
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/listByBuilding", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@RequestMapping(value = "/listByBuilding", method = RequestMethod.GET, produces = Constants.HTML_PRODUCE_TYPE)
 	public String listByBuilding(Pager pager) {
 		int code = 0;
 		String msg = null;

@@ -143,4 +143,11 @@
 		where `home_id` = #{home_id,jdbcType=BIGINT}
 		and `type` = 1
 	</select>
+	
+	<delete id="deleteKey" parameterType="com.yqwl.pojo.Inform">
+		delete from `t_inform`
+		where home_id = #{home_id,jdbcType=BIGINT}
+		AND broker_id = #{broker_id,jdbcType=BIGINT}
+		AND type=1
+	</delete>
 </mapper>

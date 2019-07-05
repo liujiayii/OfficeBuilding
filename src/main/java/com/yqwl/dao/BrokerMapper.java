@@ -64,4 +64,6 @@ public interface BrokerMapper {
 
 	List<Broker> getBrokerByGroupId(Long groupId);
 
+	List<Broker> listAllByStatus(@Param("status")Integer status,@Param("cityId")Integer cityId);
+
 }

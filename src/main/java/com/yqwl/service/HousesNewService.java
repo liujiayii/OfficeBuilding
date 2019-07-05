@@ -57,7 +57,7 @@ public interface HousesNewService {
 
 	public int deletePlotBuild(Long id) throws Exception;
 
-	public PageInfo<HousesVo> ListBackHousesNew(Pager pager, Long id);
+	public PageInfo<HousesVo> ListBackHousesNew(Pager pager, Long id) throws Exception;
 
 	public int delHome(Long homeId) throws Exception;
 
@@ -136,5 +136,4 @@ public interface HousesNewService {
 	 * @createDate 2019年6月20日
 	 */
 	public int updateByPrimaryKey(HousesNew record);
-
 }
