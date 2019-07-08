@@ -19,10 +19,12 @@ import com.yqwl.Vo.SucceedDealVo;
 import com.yqwl.Vo.SucceedDealVo1;
 import com.yqwl.common.utils.BeanUtil;
 import com.yqwl.common.utils.DateUtil;
+import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.common.utils.MapUtil;
 import com.yqwl.common.utils.NumberUtil;
 import com.yqwl.common.utils.Pager;
 import com.yqwl.common.utils.StringUtils;
+import com.yqwl.common.web.BizException;
 import com.yqwl.dao.BrokerMapper;
 import com.yqwl.dao.DivideIntoMapper;
 import com.yqwl.dao.GroupMapper;
@@ -136,7 +138,10 @@ public class SucceedDealServiceImpl implements SucceedDealService {
 		HousesNew housesNew = housesNewMapper.selectByPrimaryKey(succeedDealVo.getHouse_id());
 		User user = userMapper.selectByPrimaryKey(succeedDealVo.getParty_b_user_id());
 		UserFollowUp userFollowUp = userFollowUpMapper.getByUserIdOrNew(succeedDealVo.getParty_b_user_id());
-		DivideInto divideInto = DivideIntoMapper.listDivideIntoByCondition().get(0);
+		DivideInto divideInto = DivideIntoMapper.listDivideIntoByCondition(1);
+		if (divideInto == null) {
+			throw new BizException(FastJsonUtil.getResponseJson(-1, "未设置分成配置", null));
+		}
 		succeedDealVo.setUserPhones(userPhoneMapper.listByUserId(succeedDealVo.getParty_b_user_id()));
 		List<SuccedDealCost> succedDealCosts = succedDealCostMapper.listBySucceedId(succeedDealVo.getId());
 		succeedDealVo.setSuccedDealCosts(succedDealCosts);

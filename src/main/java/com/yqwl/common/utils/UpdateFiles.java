@@ -21,14 +21,14 @@ import com.aliyun.oss.model.SetBucketLifecycleRequest;
  */
 public class UpdateFiles {
 
-	private static String endpoint = "https://oss-cn-beijing.aliyuncs.com";
-	private static String accessKeyId = "LTAIvnDBZYK3DLbL";
-	private static String accessKeySecret = "MI2LRjW5RQqolPzUBdkjSaRDDPOLpG";
-	private static String bucketName = "system-im";
-	private static String picLocation = "shop/";
+	private static final String endpoint = "http://oss-cn-zhangjiakou.aliyuncs.com";
+	private static final String accessKeyId = "TkY9uJmnNDl06WPM";
+	private static final String accessKeySecret = "Sl2g3FBetdkbUiXLT5gvFYcmHiu7nT";
+	private static final String bucketName = "ouyedichan";
+	private static final String picLocation = "dataImg";
 	private static String Key = "key";
-	private static String ruleId0 = "rule0";
-	private static String matchPrefix0 = "A0/";
+	private static final String ruleId0 = "rule0";
+	private static final String matchPrefix0 = "A0/";
 
 	public UpdateFiles() {
 		super();

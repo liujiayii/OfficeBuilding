@@ -15,7 +15,7 @@ import com.yqwl.pojo.DivideInto;
  */
 public interface DivideIntoService {
 
-	PageInfo<DivideInto> divideIntoByCondition(Pager pager) throws Exception;
+	PageInfo<DivideInto> listALL(Pager pager) throws Exception;
 
 	Integer insertDivideInto(DivideInto divideInto) throws Exception;
 

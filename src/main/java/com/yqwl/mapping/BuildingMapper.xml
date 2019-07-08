@@ -492,7 +492,8 @@
 		b.activate_time,
 		b.intro,
 		b.circum,
-		k.real_name
+		k.real_name,
+		b.status
 		FROM
 		t_building b,t_broker k
 		<where>
@@ -510,6 +511,7 @@
 			AND	b.mansion_name LIKE '%${mansion_name}%'
 		</if>
 		</where> 
+		ORDER BY b.id DESC
 		LIMIT #{page},#{limit}
 		<!-- b.region_city_id=#{region_city_id} -->
 	</select>

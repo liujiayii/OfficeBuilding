@@ -42,6 +42,7 @@ import com.yqwl.dao.EntrustseeMapper;
 import com.yqwl.dao.GroupMapper;
 import com.yqwl.dao.HomePageRecommendedMapper;
 import com.yqwl.dao.HousesNewMapper;
+import com.yqwl.dao.OwnerMapper;
 import com.yqwl.dao.PictureMapper;
 import com.yqwl.dao.PlotBuildMapper;
 import com.yqwl.dao.PlotDoorMapper;
@@ -54,6 +55,7 @@ import com.yqwl.pojo.Entrustsee;
 import com.yqwl.pojo.Group;
 import com.yqwl.pojo.HomePageRecommended;
 import com.yqwl.pojo.HousesNew;
+import com.yqwl.pojo.Owner;
 import com.yqwl.pojo.Picture;
 import com.yqwl.pojo.PlotBuild;
 import com.yqwl.pojo.PlotDoor;
@@ -96,7 +98,8 @@ public class HousesNewServiceImpl implements HousesNewService {
 	private UserMapper userMapper;
 	@Autowired
 	private DivideIntoMapper divideIntoMapper;
-	
+	@Autowired
+	private OwnerMapper ownerMapper;
 	
 	@Override
 	public HousesNewVo selectByFindID(long id) throws Exception {
@@ -193,7 +196,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 * @createDate 2019年4月23日
 	 */
 	@Override
-	public int insertSelective(HousesNew record, Long brokerId, String... urls) {
+	public int insertSelective(HousesNew record, Long brokerId, String number ,String... urls) {
 		PlotDoor plotDoor = new PlotDoor();
 		plotDoor.setId(record.getDoor_id());
 		System.out.println(record.getDoor_id());
@@ -213,7 +216,11 @@ public class HousesNewServiceImpl implements HousesNewService {
 				pictureMapper.insertSelective(picture);
 			}
 		}
-
+		Owner owner = new Owner();
+		owner.setHome_id(record.getId());
+		owner.setNumber(number);
+		owner.setTime(new Date());
+		ownerMapper.insertSelective(owner);
 		return count;
 	}
 
@@ -385,10 +392,8 @@ public class HousesNewServiceImpl implements HousesNewService {
 		BackHousesVo backHousesVo = new BackHousesVo();
 		HousesNew housesNew = housesNewMapper.selectByPrimaryKey(id);
 		PlotDoor plotDoor = plotDoorMapper.selectByPrimaryKey(housesNew.getDoor_id());
-		System.out.println("plotDoor"+plotDoor);
 		PlotBuild plotBuild = plotBuildMapper.selectByPrimaryKey(plotDoor.getBuild_id());
 		BeanUtil.copyProperties(backHousesVo,housesNew);
-		System.out.println(housesNew);
 		backHousesVo.setBroker(brokerMapper.selectByPrimaryKey((long)housesNew.getEntering_broker_id()));
 		backHousesVo.setBuilding(buildingMapper.selectByPrimaryKey(housesNew.getBuilding_id()));
 		backHousesVo.setShop(shopMapper.selectByPrimaryKey(housesNew.getShop_id()));
@@ -532,7 +537,6 @@ public class HousesNewServiceImpl implements HousesNewService {
 	public Map<String, Object> selectGoufing(Long id) throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		HousesNew housesNew=housesNewMapper.selectByPrimaryKey(id);
-		Integer wher=housesNew.getWhether();
 		if(housesNew.getEntering_broker_id()!=null){
 			Broker broker=brokerMapper.selectByPrimaryKey(housesNew.getEntering_broker_id());
 			if(broker!=null){
@@ -602,11 +606,11 @@ public class HousesNewServiceImpl implements HousesNewService {
 		BigDecimal Wthere=money.multiply(new BigDecimal(divideInto.getVindicate_per())).divide(new BigDecimal(100));//维护经纪人分红
 		BigDecimal Tfist=money.multiply(new BigDecimal(divideInto.getSend_photo_per())).divide(new BigDecimal(100));//实勘图片经纪人分红
 		BigDecimal Yfrive=money.multiply(new BigDecimal(divideInto.getTake_key_per())).divide(new BigDecimal(100));//拿钥匙经纪人分红
-		if(wher==1){
+		if(housesNew.getWhether()==1){
 			map.put("wher", "正常");
-		}else if (wher==3) {
+		}else if (housesNew.getWhether()==3) {
 			map.put("wher", "成交");
-		}else if (wher==6) {
+		}else if (housesNew.getWhether()==6) {
 			map.put("wher", " 撤单");
 		}
 		map.put("wher", "失效");

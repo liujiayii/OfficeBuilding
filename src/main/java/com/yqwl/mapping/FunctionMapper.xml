@@ -124,7 +124,7 @@
   </update>
   <select id="getFunctionByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
-    	F.*
+    	f.*
 	FROM
 		t_func_role AS fr
 	JOIN t_function AS f ON fr.function_id = f.id

@@ -35,8 +35,9 @@ public interface HousesNewService {
 
 	public List<HousesNew> getMapById(Long buildingId) throws Exception;
 
-	/** 后台新增房源信息及图片信息 */
-	public int insertSelective(HousesNew record, Long brokerId, String... urls) throws Exception;
+	/** 后台新增房源信息及图片信息 
+	 * @param number */
+	public int insertSelective(HousesNew record, Long brokerId, String number, String... urls) throws Exception;
 
 	/** 后台修改房源信息及图片信息 */
 	public int updateByPrimaryKeySelective(HousesNew record, Long brokerId, String... urls) throws Exception;

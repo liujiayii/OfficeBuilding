@@ -42,7 +42,7 @@ public interface DivideIntoMapper {
 	 */
 	int updateByPrimaryKey(DivideInto record);
 
-	List<DivideInto> listDivideIntoByCondition();
+	DivideInto listDivideIntoByCondition(Integer status);
 
 	/**
 	 *
@@ -54,4 +54,6 @@ public interface DivideIntoMapper {
 	 * @createDate 2019年6月20日
 	 */
 	DivideInto selectStatus();
+
+	List<DivideInto> listAll();
 }

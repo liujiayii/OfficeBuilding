@@ -89,7 +89,7 @@
   </update>
     <select id="getBrokerByRole" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
-    	R.*
+    	r.*
 	FROM
 		t_broker_role AS br
 	JOIN t_broker AS b ON br.broker_id = b.id

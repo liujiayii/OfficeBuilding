@@ -353,6 +353,13 @@
   	select 
     <include refid="Base_Column_List" />
     from `t_divide_into`
+    where `status` = #{status}
+  </select>
+  
+  <select id="listAll" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from `t_divide_into`
   </select>
   <!-- 查询分成配置 -->
   <select id="selectStatus" resultMap="BaseResultMap">

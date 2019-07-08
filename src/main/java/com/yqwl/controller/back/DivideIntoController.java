@@ -43,7 +43,7 @@ public class DivideIntoController  extends BaseController{
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo!=null) {
 				System.out.println("3");
-				PageInfo<DivideInto> result = divideIntoService.divideIntoByCondition(pager);
+				PageInfo<DivideInto> result = divideIntoService.listALL(pager);
 				System.out.println("4"+result);
 				if (result.getTotal() != 0) {
 					msg = "查询成功";

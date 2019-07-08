@@ -81,7 +81,6 @@ public class BackHousesNewController extends BaseController {
 	@RequestMapping(value = "selectBackHousesNewList", method = RequestMethod.GET, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
 	public String selectBackHousesNewList(Pager pager, HttpSession session) {
-		System.out.println("1.查询所有房源：" + pager);
 		try {
 			int code = 0;
 			String msg = null;
@@ -117,7 +116,6 @@ public class BackHousesNewController extends BaseController {
 	@ResponseBody
 	public String ListBackHousesNew(Pager pager, HttpSession session) {
 		try {
-			System.out.println("本地房源："+pager);
 			int code = 0;
 			String msg = null;
 			/** 判断是否登录 */
@@ -198,12 +196,12 @@ public class BackHousesNewController extends BaseController {
 	 */
 	@RequestMapping(value = "insertSelective", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String insertSelective(HousesNew record, HttpSession session, String... urls) {
+	public String insertSelective(HousesNew record, HttpSession session,String number ,String... urls) {
 		try {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo != null) {
-				int count = housesNewService.insertSelective(record, brokerVo.getId(), urls);
+				int count = housesNewService.insertSelective(record, brokerVo.getId(),number ,urls);
 				if (count != 0) {
 					return FastJsonUtil.getResponseJson(0, "新增成功", null);
 				} else {
@@ -747,6 +745,7 @@ public class BackHousesNewController extends BaseController {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo != null) {
+				record.setBegin_time(new Date());
 				int count = housesNewService.updateSelective(record);
 				if (count != 0) {
 					if (record.getWhether() == 6) {
@@ -758,9 +757,9 @@ public class BackHousesNewController extends BaseController {
 							informMapper.updateByPrimaryKeySelective(inform);
 						}
 					}
-					return FastJsonUtil.getResponseJson(0, "修改成功", null);
+					return FastJsonUtil.getResponseJson(0, "开盘成功", null);
 				} else {
-					return FastJsonUtil.getResponseJson(-1, "修改失败", null);
+					return FastJsonUtil.getResponseJson(-1, "开盘失败", null);
 				}
 			}
 			return FastJsonUtil.getResponseJson("-2", "未登录");

@@ -1,5 +1,6 @@
 
 package com.yqwl.controller;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.chuanglan.demo.SmsSendDemo;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
-import com.yqwl.common.utils.JYSMSUtil;
+import com.yqwl.common.utils.SMSUtil;
 import com.yqwl.pojo.Entrustsee;
 import com.yqwl.service.EntrustseeService;
 
@@ -44,22 +47,30 @@ public class EntrustseeController {
 	@ResponseBody
 	public String getmasge(BigInteger phone_number,HttpSession session){
 		String regularp = "^((13[0-9])|(14[0-9])|(19[0-9])|(16[0-9])|(15[^4,\\D])|(17[0-9])|(18[0-9]))(\\d{8})$";
-		String phone = phone_number.toString();
-		if (!phone.matches(regularp)) {
+		String mobile = phone_number.toString();
+		if (!mobile.matches(regularp)) {
 			return FastJsonUtil.getResponseJson(-1, "手机号码错误", null, null);
 		}
+		System.out.println(phone_number+"123456789");
 			HashMap<String, String> map = new HashMap<>();
 			map.put("time", "5");
 			int a = (int) ((Math.random() * 9 + 1) * 100000);
 			map.put("code", a + "");
-			@SuppressWarnings("unused")
-			boolean sendMessage = JYSMSUtil.sendMessage(phone, "3537", map);
-		if(sendMessage=true){
-			session.setAttribute("validate", a);
-			return FastJsonUtil.getResponseJson(0, "发送成功", null, null);
-		}else {
-			return FastJsonUtil.getResponseJson(-2, "发送失败", null, null);
-		}
+			String s = Integer.toString(a);
+			//boolean sendMessage;
+			//boolean sendMessage = JYSMSUtil.sendMessage(phone, "3537", map);
+			//SMSUtil.sendSMS("N6493909", "nxzYdS87Ttb688", phone, s);
+			//String smsPassword="N6493909";
+			//String smsAccount="nxzYdS87Ttb688";
+			//SMSUtil.sendSMS(smsAccount, smsPassword, mobile,s);
+			try {
+				SmsSendDemo.send(mobile, s);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//String string=	HttpSenders.send("http://ip:port/msg/", "N6493909", "nxzYdS87Ttb688", phone, s, true, s, null);
+			return s;
 	}
 	/**
 	 * @Title: insert

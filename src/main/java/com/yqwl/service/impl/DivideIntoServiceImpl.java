@@ -22,12 +22,10 @@ public class DivideIntoServiceImpl implements DivideIntoService{
 	private DivideIntoMapper divideIntoMapper;
 
 	@Override
-	public PageInfo<DivideInto> divideIntoByCondition(Pager pager) throws Exception {
-		System.out.println("5"+pager);
+	public PageInfo<DivideInto> listALL(Pager pager) throws Exception {
 		// 分页
 		PageHelper.startPage(pager);
-		List<DivideInto> list = divideIntoMapper.listDivideIntoByCondition();
-		System.out.println("结果："+list);
+		List<DivideInto> list = divideIntoMapper.listAll();
 		return new PageInfo<DivideInto>(list);
 	}
 

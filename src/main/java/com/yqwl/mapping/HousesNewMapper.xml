@@ -574,7 +574,7 @@
 		AND (ISNULL(#{whether}) OR h.whether = #{whether})
 		AND (ISNULL(#{home_name}) OR h.home_name LIKE CONCAT('%', #{home_name},'%'))
 		ORDER BY
-		h.begin_time DESC
+		h.id DESC
 	</select>
 
 	<select id="ListBackHousesNew" resultType="com.yqwl.Vo.HousesVo">

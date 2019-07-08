@@ -22,7 +22,7 @@ import com.aliyun.oss.model.SetBucketLifecycleRequest;
  *
  */
 public class UpdateFile {
-
+/**
 	private static final String endpoint = "https://oss-cn-beijing.aliyuncs.com";
 	private static final String accessKeyId = "LTAIvnDBZYK3DLbL";
 	private static final String accessKeySecret = "MI2LRjW5RQqolPzUBdkjSaRDDPOLpG";
@@ -31,8 +31,8 @@ public class UpdateFile {
 	private static String Key = "key";
 	private static final String ruleId0 = "rule0";
 	private static final String matchPrefix0 = "A0/";
-
-	/**
+*/
+	
 	private static final String endpoint = "http://oss-cn-zhangjiakou.aliyuncs.com";
 	private static final String accessKeyId = "TkY9uJmnNDl06WPM";
 	private static final String accessKeySecret = "Sl2g3FBetdkbUiXLT5gvFYcmHiu7nT";
@@ -41,7 +41,7 @@ public class UpdateFile {
 	private static String Key = "key";
 	private static final String ruleId0 = "rule0";
 	private static final String matchPrefix0 = "A0/";
-	 */
+	 
 	
 	
 	public UpdateFile() {
