@@ -66,7 +66,7 @@ public interface BuildingMapper {
 	 * @param @return    
 	 * @return List<BuildingListVo>    
 	 * @author linhongyu
-	 * @createDate 2019ï¿??4ï¿??25ï¿??
+	 * @createDate 2019ï¿½??4ï¿½??25ï¿½??
 	 */
 	List<BuildingListVo> selectBuilding(BuildingListVo building);
 	/**
@@ -76,7 +76,7 @@ public interface BuildingMapper {
 	 * @param @return    
 	 * @return List<BuildingListVo>    
 	 * @author linhongyu
-	 * @createDate 2019ï¿??4ï¿??25ï¿??
+	 * @createDate 2019ï¿½??4ï¿½??25ï¿½??
 	 */
 	Integer selectContBuil(BuildingListVo building);
 
@@ -85,6 +85,8 @@ public interface BuildingMapper {
 	List<Building> listAllByRegionId(Long regionId);
 
 	List<Building> listBybuildingByCity(Integer cityId);
+
+	List<Building> listBybuildingByCity(@Param("cityId")Integer cityId, @Param("regionId")Integer regionId);
 	
 	
 }

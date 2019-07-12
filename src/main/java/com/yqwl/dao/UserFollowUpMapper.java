@@ -1,6 +1,9 @@
 package com.yqwl.dao;
 
+import java.util.Date;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.yqwl.pojo.UserFollowUp;
 
@@ -45,4 +48,16 @@ public interface UserFollowUpMapper {
 	List<UserFollowUp> listByUserId(Long id);
 
 	UserFollowUp getByUserIdOrNew(Long userId);
+	/**
+	 * @Title: selectUserFollowCount
+	 * @description 查询经纪人客源跟进条数
+	 * @param @param broker_id
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	int selectUserFollowCount(@Param("broker_id")Long broker_id,@Param("startTime")Date startTime,@Param("endTime")Date endTime);
 }

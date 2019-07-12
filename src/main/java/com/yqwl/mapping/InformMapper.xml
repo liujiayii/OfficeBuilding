@@ -134,7 +134,13 @@
 		where `broker_id` = #{broker_id,jdbcType=BIGINT}
 		and `home_id` = #{home_id,jdbcType=BIGINT}
 	</select>
-
+	<select id="selectTrue" resultMap="BaseResultMap" resultType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from `t_inform`
+		where `broker_id` = #{broker_id,jdbcType=BIGINT}
+		and `home_id` = #{home_id,jdbcType=BIGINT}
+	</select>
 	<select id="selectTypeSix" resultType="java.lang.Long"
 		resultMap="BaseResultMap">
 		select

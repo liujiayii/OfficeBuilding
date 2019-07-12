@@ -104,6 +104,7 @@
 		resultType="com.yqwl.Vo.CollectVo">
 		SELECT
 			c.id,
+			c.home_id,
 			h.work_name,
 			h.office_space,
 			h.location,

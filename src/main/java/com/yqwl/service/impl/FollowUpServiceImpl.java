@@ -1,13 +1,21 @@
 package com.yqwl.service.impl;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.yqwl.Vo.FollowUpVo;
+import com.yqwl.dao.BrokerMapper;
 import com.yqwl.dao.FollowUpMapper;
+import com.yqwl.dao.GroupMapper;
+import com.yqwl.dao.UserFollowUpMapper;
+import com.yqwl.pojo.Broker;
 import com.yqwl.pojo.FollowUp;
+import com.yqwl.pojo.Group;
 import com.yqwl.service.FollowUpService;
 
 /**
@@ -23,7 +31,12 @@ public class FollowUpServiceImpl implements FollowUpService{
 	
 	@Autowired
 	private FollowUpMapper followUpMapper;
-	
+	@Autowired
+	private GroupMapper groupMapper;
+	@Autowired
+	private BrokerMapper brokerMapper;
+	@Autowired
+	private UserFollowUpMapper userFollowUpMapper;
 	/**
 	 * @Title: insertSelective
 	 * @description 修改委托找房当前状态
@@ -93,6 +106,81 @@ public class FollowUpServiceImpl implements FollowUpService{
 	public List<FollowUpVo> selectHomeId(Long home_id) {
 		return followUpMapper.selectHomeId(home_id);
 	}
+
+	/**
+	 * @Title: selectByPrimaryCount
+	 * @description 查询房源跟进统计
+	 * @param @param shopId
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @return    
+	 * @return List<Map<String,Object>>    
+	 * @author linhongyu
+	 * @createDate 2019年7月10日
+	 */
+	@Override
+	public List<Map<String, Object>> selectByPrimaryCount(Long shopId, Date startTime, Date endTime) throws Exception{
+	List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+	/** 查询该店铺下所有小组 */
+	List<Group> groupList = groupMapper.getByShopId(shopId);
+	/** 循环遍历每个小组下的经纪人 */
+	for (Group group : groupList) {
+		Map<String, Object> map1 = new HashMap<>();
+		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+		List<Broker> brokerList = brokerMapper.getBrokerByGroupId(group.getId());
+		/** 计算每个小组下的成员对应房源跟进数量统计 */
+		for (Broker broker : brokerList) {
+			Map<String, Object> map2 = new HashMap<>();
+			Long broker_id=broker.getId();
+			int homenum= followUpMapper.selectFollowCount(broker_id,startTime,endTime);
+			map2.put("name", broker.getReal_name());
+			map2.put("homenum", homenum);
+			list2.add(map2);
+		}
+		map1.put("groupName", group.getName());
+		map1.put("list", list2);
+		list.add(map1);
+	}
+	return list;
+}
+
+	/**
+     * @Title: selectByUserCount
+     * @description 查询经纪人客源跟进统计
+     * @param @param shopId
+     * @param @param startTime
+     * @param @param endTime
+     * @param @return    
+     * @return List<Map<String,Object>>    
+     * @author linhongyu
+     * @createDate 2019年7月11日
+     */
+	@Override
+	public List<Map<String, Object>> selectByUserCount(Long shopId, Date startTime, Date endTime) throws Exception{
+	List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+	/** 查询该店铺下所有小组 */
+	List<Group> groupList = groupMapper.getByShopId(shopId);
+	/** 循环遍历每个小组下的经纪人 */
+	for (Group group : groupList) {
+		Map<String, Object> map1 = new HashMap<>();
+		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+		List<Broker> brokerList = brokerMapper.getBrokerByGroupId(group.getId());
+		/** 计算每个小组下的成员对应客源跟进数量统计 */
+		for (Broker broker : brokerList) {
+			Map<String, Object> map2 = new HashMap<>();
+			Long broker_id=broker.getId();
+			int usernum= userFollowUpMapper.selectUserFollowCount(broker_id, startTime, endTime);
+			map2.put("name", broker.getReal_name());
+			map2.put("usernum", usernum);
+			list2.add(map2);
+		}
+		map1.put("groupName", group.getName());
+		map1.put("list", list2);
+		list.add(map1);
+	}
+	return list;
+}
+
 	
 	
 }

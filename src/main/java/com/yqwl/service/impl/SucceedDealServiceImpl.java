@@ -100,7 +100,17 @@ public class SucceedDealServiceImpl implements SucceedDealService {
 		List<SucceedDealVo> list = succeedDealMapper.listAll(shopId, groupId, brokerId, startTime, endTime, pack);
 		return new PageInfo<SucceedDealVo>(list);
 	}
-
+	/**
+	 * @Title: selectByPrimaryCount
+	 * @description 查询成交
+	 * @param @param shopId
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @return    
+	 * @return List<Map<String,Object>>    
+	 * @author linhongyu
+	 * @createDate 2019年6月17日
+	 */
 	@Override
 	public List<Map<String, Object>> selectByPrimaryCount(Long shopId, Date startTime, Date endTime) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

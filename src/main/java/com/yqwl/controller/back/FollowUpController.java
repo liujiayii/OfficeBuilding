@@ -1,13 +1,16 @@
 package com.yqwl.controller.back;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.mail.search.DateTerm;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yqwl.Vo.BrokerVo;
@@ -181,6 +184,67 @@ public class FollowUpController {
 			}
 			FollowUp followUp=followUpService.selectByPrimaryKey(id);
 		 	if(followUp!=null){
+		 		return FastJsonUtil.getResponseJson(0, "查询成功", followUp);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
+	/**
+	 * @Title: selectNumberFollow
+	 * @description 查询房源跟进统计
+	 * @param @param shopId
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @return    
+	 * @return List<Map<String,Object>>    
+	 * @author linhongyu
+	 * @createDate 2019年7月10日
+	 */
+	@RequestMapping(value = "selectNumberFollow", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectNumberFollow(Long shopId, Date startTime, Date endTime,HttpSession session){
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			/*if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}*/
+			List<Map<String, Object>> followUp=followUpService.selectByPrimaryCount(shopId, startTime, endTime);
+		 	if(followUp.size()!=0){
+		 		return FastJsonUtil.getResponseJson(0, "查询成功", followUp);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
+	/**
+	 * @Title: selectUserFollowNum
+	 * @description 统计经纪人客源跟进统计
+	 * @param @param shopId
+	 * @param @param startTime
+	 * @param @param endTime
+	 * @param @param session
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	@RequestMapping(value = "selectUserFollowNum", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectUserFollowNum(Long shopId, Date startTime, Date endTime,HttpSession session){
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if(brokerVo==null){
+				return FastJsonUtil.getResponseJson(-2, "未登录", null);
+			}
+			List<Map<String, Object>> followUp=followUpService.selectByUserCount(shopId, startTime, endTime);
+		 	if(followUp.size()!=0){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", followUp);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);

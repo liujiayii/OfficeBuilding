@@ -75,4 +75,36 @@ public class AttentionServiceImpl implements AttentionService{
 		return attentionMapper.selectThird(records);
 	}
 
+	/**
+	 * @Title: selectInfor
+	 * @description 判断该该房源或商厦是否被收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return Attention    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	@Override
+	public Attention selectInfor(Long user_phone, Long houses_new_id, int type) throws Exception {
+		return attentionMapper.selectInfor(user_phone, houses_new_id, type);
+	}
+	/**
+	 * @Title: deletTnfor
+	 * @description 前台页面取消收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	@Override
+	public int deletTnfor(Long user_phone, Long houses_new_id, int type) {
+		return attentionMapper.deletTnfor(user_phone, houses_new_id, type);
+	}
+
 }

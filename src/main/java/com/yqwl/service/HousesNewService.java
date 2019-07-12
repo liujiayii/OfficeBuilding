@@ -137,4 +137,20 @@ public interface HousesNewService {
 	 * @createDate 2019年6月20日
 	 */
 	public int updateByPrimaryKey(HousesNew record);
+
+
+	public PageInfo<HousesNew> frontListHousesNewByCondition(Pager pager) throws Exception;
+
+	/**
+	 *
+	 * @Title: updateTypes
+	 * @description 修改上下架状态
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月9日
+	 */
+	public int updateTypes(HousesNew record) throws Exception;
+
 }

@@ -2,6 +2,8 @@ package com.yqwl.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.Vo.AttentionVo;
 import com.yqwl.pojo.Attention;
 
@@ -94,4 +96,28 @@ public interface AttentionMapper {
 	List<Attention> selectAtten(Long houses_new_id);
 
 	int delByHousesId(Long homeId);
+	/**
+	 * @Title: selectInfor
+	 * @description 查询该房源或商厦是否已收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return    
+	 * @return Attention    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	Attention selectInfor(@Param("user_phone")Long user_phone,@Param("houses_new_id")Long houses_new_id,@Param("type")int type);
+	/**
+	 * @Title: deletTnfor
+	 * @description 前台页面取消收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	int deletTnfor(@Param("user_phone")Long user_phone,@Param("houses_new_id")Long houses_new_id,@Param("type")int type);
 }

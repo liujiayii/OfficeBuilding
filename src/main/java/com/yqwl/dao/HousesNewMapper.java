@@ -127,4 +127,7 @@ public interface HousesNewMapper {
 			@Param("money") double money, @Param("moneys") double moneys, @Param("region_id") int region_id,
 			@Param("building_id") Long building_id, @Param("page") Integer page, @Param("limit") Integer limit);
 
+	List<HousesNew> frontListHousesNewByCondition(@Param("cityId")Integer cityId, @Param("regionId")Integer regionId, @Param("startSpace")Integer startSpace,
+			@Param("endSpace")Integer endSpace, @Param("startMoney")BigDecimal startMoney, @Param("endMoney")BigDecimal endMoney, @Param("fitment")Integer fitment);
+
 }

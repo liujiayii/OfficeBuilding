@@ -162,7 +162,6 @@
 		from `t_broker`
 		where `user_name` = #{userName}
 		and `password` = #{password}
-		and `state` = 1
 	</select>
 	<select id="getBrokerByCityId" parameterType="java.lang.Long"
 		resultType="java.lang.Long">
@@ -198,9 +197,12 @@
 		FROM
 		`t_broker`
 		WHERE
-		(ISNULL(#{condition}) or `real_name` like
+		((ISNULL(#{condition}) or `real_name` like
 		concat('%',#{condition},'%')) or (ISNULL(#{condition}) or
-		`phonemunber` like concat('%',#{condition},'%'))
+		`phonemunber` like concat('%',#{condition},'%')))
+		<if test="state != null and state != '' ">
+		and `state` = #{state}
+		</if>
 	</select>
 
 	<select id="getBrokerByGroupId" resultMap="BaseResultMap">

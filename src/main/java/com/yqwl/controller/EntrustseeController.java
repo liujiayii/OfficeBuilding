@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.chuanglan.demo.SmsSendDemo;
 import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
-import com.yqwl.common.utils.SMSUtil;
 import com.yqwl.pojo.Entrustsee;
 import com.yqwl.service.EntrustseeService;
 
@@ -51,25 +50,17 @@ public class EntrustseeController {
 		if (!mobile.matches(regularp)) {
 			return FastJsonUtil.getResponseJson(-1, "手机号码错误", null, null);
 		}
-		System.out.println(phone_number+"123456789");
 			HashMap<String, String> map = new HashMap<>();
 			map.put("time", "5");
 			int a = (int) ((Math.random() * 9 + 1) * 100000);
 			map.put("code", a + "");
 			String s = Integer.toString(a);
-			//boolean sendMessage;
-			//boolean sendMessage = JYSMSUtil.sendMessage(phone, "3537", map);
-			//SMSUtil.sendSMS("N6493909", "nxzYdS87Ttb688", phone, s);
-			//String smsPassword="N6493909";
-			//String smsAccount="nxzYdS87Ttb688";
-			//SMSUtil.sendSMS(smsAccount, smsPassword, mobile,s);
 			try {
 				SmsSendDemo.send(mobile, s);
+				session.setAttribute("validate", s);
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//String string=	HttpSenders.send("http://ip:port/msg/", "N6493909", "nxzYdS87Ttb688", phone, s, true, s, null);
 			return s;
 	}
 	/**
@@ -83,8 +74,8 @@ public class EntrustseeController {
 	 */
 	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String insert(Entrustsee record,Integer validate,HttpSession session){
-		Integer a=(Integer) session.getAttribute("validate");
+	public String insert(Entrustsee record,String validate,HttpSession session){
+		String a= (String) session.getAttribute("validate");
 		if(!a.equals(validate)){
 			return FastJsonUtil.getResponseJson(2, "验证码不正确，请从新发送", null);
 		}
@@ -94,6 +85,7 @@ public class EntrustseeController {
 		try {
 			record.setPleasetime(new Timestamp(df.parse(time).getTime()));
 			record.setSeetype(1);
+			record.setBroker_id(0L);
 			int nun=entrustseeService.insert(record);
 		 	if(nun!=0){
 		 		return FastJsonUtil.getResponseJson(0, "预约看房成功", null);

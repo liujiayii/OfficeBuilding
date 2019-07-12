@@ -97,4 +97,15 @@ public interface InformMapper {
      * @createDate 2019年7月4日
      */
     int deleteKey(@Param("broker_id")Long broker_id,@Param("home_id")Long home_id);
+    /**
+	 * @Title: selectTrue
+	 * @description 查询该房源是否有撤单
+	 * @param @param home_id
+	 * @param @param broker_id
+	 * @param @return    
+	 * @return List<Inform>    
+	 * @author linhongyu
+	 * @createDate 2019年7月8日
+	 */
+    List<Inform> selectTrue(@Param("home_id")Long home_id,@Param("broker_id")Long broker_id);
 }

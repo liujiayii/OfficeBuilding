@@ -523,6 +523,9 @@
 		and
 		b.region_city_id=#{region_city_id}
 		and hn.whether = 1
+		and hn.types = 1
+		and hn.whether = 1
+		and hn.`types` = 1
 		ORDER BY
 		hn.times
 		DESC
@@ -567,12 +570,13 @@
 			)
 		</if>
 		AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
-		AND (ISNULL(#{brokerId}) OR h.entering_broker_id = #{brokerId})
-		AND (ISNULL(#{broker_id}) OR h.entering_broker_id = #{broker_id})
+		AND (ISNULL(#{brokerId}) OR h.maintain_broker_id = #{brokerId})
+		AND (ISNULL(#{broker_id}) OR h.maintain_broker_id = #{broker_id})
 		AND (ISNULL(#{home_number}) OR o.number LIKE CONCAT('%', #{home_number},'%'))
 		AND (ISNULL(#{buildingId}) OR h.building_id = #{buildingId})
 		AND (ISNULL(#{whether}) OR h.whether = #{whether})
 		AND (ISNULL(#{home_name}) OR h.home_name LIKE CONCAT('%', #{home_name},'%'))
+		GROUP BY h.id
 		ORDER BY
 		h.id DESC
 	</select>
@@ -588,7 +592,7 @@
 		t_broker AS br,
 		t_owner AS o
 		WHERE
-		h.entering_broker_id = br.id
+		h.maintain_broker_id = br.id
 		AND
 		h.id = o.home_id
 		AND
@@ -621,12 +625,13 @@
 		</if>
 		AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
 		AND h.shop_id = #{shopId}
-		AND (ISNULL(#{brokerId}) OR h.entering_broker_id = #{brokerId})
-		AND (ISNULL(#{broker_id}) OR h.entering_broker_id = #{broker_id})
+		AND (ISNULL(#{brokerId}) OR h.maintain_broker_id = #{brokerId})
+		AND (ISNULL(#{broker_id}) OR h.maintain_broker_id = #{broker_id})
 		AND (ISNULL(#{home_number}) OR o.number LIKE CONCAT('%', #{home_number},'%'))
 		AND (ISNULL(#{buildingId}) OR h.building_id = #{buildingId})
 		AND (ISNULL(#{whether}) OR h.whether = #{whether})
 		AND (ISNULL(#{home_name}) OR h.home_name LIKE CONCAT('%', #{home_name},'%'))
+		GROUP BY h.id
 		ORDER BY
 		h.begin_time DESC
 	</select>
@@ -688,4 +693,47 @@
 		</set>
 		where `id` = #{id,jdbcType=BIGINT}
 	</update>
+	
+	
+	<select id="frontListHousesNewByCondition" resultMap="BaseResultMap">
+		SELECT
+		h.*
+		FROM
+		t_building AS b
+		JOIN t_houses_new AS h ON b.id = h.building_id,
+		t_owner AS o
+		WHERE
+		b.region_city_id = #{cityId}
+		AND
+		h.id = o.home_id
+		AND (ISNULL(#{regionId}) OR b.region_id = #{regionId})
+		AND (
+		(ISNULL(#{startSpace})
+		OR h.office_space <![CDATA[>=]]>
+		#{startSpace})
+		AND (ISNULL(#{endSpace})
+		OR h.office_space <![CDATA[<=]]>
+		#{endSpace})
+		)
+		<if test="startMoney !=null or endMoney != null">
+			AND (
+			<if test="startMoney != null">
+				h.money <![CDATA[>=]]>
+				#{startMoney}
+			</if>
+			<if test="startMoney != null and endMoney != null">
+				AND h.money <![CDATA[<=]]>
+				#{endMoney}
+			</if>
+			<if test="endMoney != null and startMoney == null">
+				h.money <![CDATA[<=]]>
+				#{endMoney}
+			</if>
+			)
+		</if>
+		AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
+		AND h.types = 1
+		ORDER BY
+		h.id DESC
+	</select>
 </mapper>

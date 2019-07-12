@@ -118,8 +118,6 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 */
 	@Override
 	public PageInfo<HousesNew> listHousesNewByCondition(Pager pager) throws Exception {
-		System.out.println("2.所有房源实现类："+pager.getFilter());
-		
 		// 获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
@@ -138,7 +136,6 @@ public class HousesNewServiceImpl implements HousesNewService {
 		// 经纪人id
 		Long brokerId = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("brokerId")));
 		Long broker_id = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("broker_id")));
-		System.out.println(brokerId);
 		// 业主电话
 		String homes_number = StringUtils.getFirstString(conditions.get("home_number"));
 		String home_number=null;
@@ -158,7 +155,6 @@ public class HousesNewServiceImpl implements HousesNewService {
 		PageHelper.startPage(pager);
 		List<HousesNew> list = housesNewMapper.listHousesNewByCondition(cityId, regionId, startSpace, endSpace,
 				startMoney, endMoney, fitment, brokerId,buildingId,home_number,home_name, whether,broker_id);
-		
 		return new PageInfo<HousesNew>(list);
 	}
 
@@ -197,12 +193,17 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 */
 	@Override
 	public int insertSelective(HousesNew record, Long brokerId, String number ,String... urls) {
-		PlotDoor plotDoor = new PlotDoor();
+		PlotDoor plotDoor = new PlotDoor(); 
 		plotDoor.setId(record.getDoor_id());
-		System.out.println(record.getDoor_id());
 		plotDoor.setStatus(1);
 		plotDoorMapper.updateByPrimaryKeySelective(plotDoor);
-		record.setHoues_number(DateUtil.getCurrentTimestamp().toString());
+		//我要获取当前的日期
+        Date date = new Date();
+        //设置要获取到什么样的时间
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        //获取String类型的时间
+        String createdate = sdf.format(date);
+		record.setHoues_number(createdate);
 		record.setTimes(new Date());
 		record.setBegin_time(new Date());
 		Integer count = housesNewMapper.insertSelective(record);
@@ -249,10 +250,13 @@ public class HousesNewServiceImpl implements HousesNewService {
 	@Override
 	public int updateByPrimaryKeySelective(HousesNew record, Long brokerId, String... urls) throws Exception {
 		HousesNew housesNew = housesNewMapper.selectByPrimaryKey(record.getId());
-		//判断图片地址是否有修改
-		if (!housesNew.getHouse_picture().equals(record.getHouse_picture())) {
-			//删除原来图片
-			UpdateFile.deleatFile(housesNew.getHouse_picture());
+		//判断
+		if(housesNew.getHouse_picture()!=null){
+			//判断图片地址是否有修改
+			if (!housesNew.getHouse_picture().equals(record.getHouse_picture())) {
+				//删除原来图片
+				UpdateFile.deleatFile(housesNew.getHouse_picture());
+			}
 		}
 		//修改房源字典表状态
 		PlotDoor plotDoor = new PlotDoor();
@@ -636,5 +640,48 @@ public class HousesNewServiceImpl implements HousesNewService {
 	public int updateByPrimaryKey(HousesNew record) {
 		return housesNewMapper.updateByPrimaryKey(record);
 	}
+
+
+	@Override
+	public PageInfo<HousesNew> frontListHousesNewByCondition(Pager pager) throws Exception {
+		// 获取参数
+		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
+		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
+		Integer regionId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("regionId")));
+		Integer startSpace = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("startSpace")));
+		Integer endSpace = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("endSpace")));
+		Double startMoney1 = NumberUtil.dealDouble(StringUtils.getFirstString(conditions.get("startMoney")));
+		Double endMoney1 = NumberUtil.dealDouble(StringUtils.getFirstString(conditions.get("endMoney")));
+		BigDecimal startMoney = null;
+		BigDecimal endMoney = null;
+		if (startMoney1 != null && endMoney1 != null) {
+			startMoney = BigDecimal.valueOf(startMoney1);
+			endMoney = BigDecimal.valueOf(endMoney1);
+		}
+		Integer fitment = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("fitment")));
+
+		// 分页
+		PageHelper.startPage(pager);
+		List<HousesNew> list = housesNewMapper.frontListHousesNewByCondition(cityId, regionId, startSpace, endSpace,
+				startMoney, endMoney, fitment);
+		return new PageInfo<HousesNew>(list);
+	}
+
+
+	/**
+	 *
+	 * @Title: updateTypes
+	 * @description 修改上下架状态
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月9日
+	 */
+	@Override
+	public int updateTypes(HousesNew record) throws Exception {
+		return housesNewMapper.updateByPrimaryKeySelective(record);
+	}
+
 	
 }

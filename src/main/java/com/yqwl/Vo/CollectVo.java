@@ -28,7 +28,27 @@ public class CollectVo extends Collect implements Serializable{
 	private BigDecimal money;
 	private Integer money_unit;
 	private Integer location;
+	/** 页数 */
+	private int page;
+	/** 分页条数 */
+	private int limit;
 	
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
 	public String getWork_name() {
 		return work_name;
 	}
@@ -109,7 +129,7 @@ public class CollectVo extends Collect implements Serializable{
 	public String toString() {
 		return "CollectVo [housesNew=" + housesNew + ", work_name=" + work_name + ", house_picture=" + house_picture
 				+ ", times=" + times + ", types=" + types + ", office_space=" + office_space + ", money=" + money
-				+ ", money_unit=" + money_unit + ", location=" + location + "]";
+				+ ", money_unit=" + money_unit + ", location=" + location + ", page=" + page + ", limit=" + limit + "]";
 	}
 	
 }

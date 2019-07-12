@@ -378,6 +378,7 @@
 		</if>
 		AND (ISNULL(#{fitment}) OR h.fitment = #{fitment})
 		AND h.whether = 1
+		AND b.status = 0
 		GROUP BY b.id
 	</select>
 	<select id="listByBuilding" resultType="com.yqwl.Vo.BuildingVo">
@@ -559,5 +560,8 @@
 		from `t_building`
 		WHERE
 		`region_city_id` = #{cityId}
+		<if test="regionId != null and regionId != ''">
+		and `region_id` = #{regionId}
+		</if>
 	</select>
 </mapper>

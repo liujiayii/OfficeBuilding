@@ -53,4 +53,19 @@ public class InformServiceImpl implements InformService{
 		return num;
 	}
 
+	/**
+	 * @Title: selectTrue
+	 * @description 查询该房源是否有撤单
+	 * @param @param home_id
+	 * @param @param broker_id
+	 * @param @return    
+	 * @return List<Inform>    
+	 * @author linhongyu
+	 * @createDate 2019年7月8日
+	 */
+	@Override
+	public List<Inform> selectTrue(Long home_id, Long broker_id) {
+		return informMapper.selectTrue(home_id, broker_id);
+	}
+
 }

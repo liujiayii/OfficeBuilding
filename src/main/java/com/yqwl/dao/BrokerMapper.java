@@ -60,10 +60,10 @@ public interface BrokerMapper {
 
 	Long getBrokerByShopId(Long id);
 
-	List<Broker> listByCondition(String condition);
-
 	List<Broker> getBrokerByGroupId(Long groupId);
 
 	List<Broker> listAllByStatus(@Param("status")Integer status,@Param("cityId")Integer cityId);
+
+	List<Broker> listByCondition(@Param("condition")String condition, @Param("state")Long state);
 
 }

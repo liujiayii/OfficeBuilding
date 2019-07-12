@@ -59,6 +59,33 @@ public class InformController {
 		}
 	}
 	/**
+	 * @Title: selectTrue
+	 * @description 查询该房源是否有撤单
+	 * @param @param broker_id
+	 * @param @param home_id
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年7月8日
+	 */
+	@RequestMapping(value = "selectTrue", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectTrue(Long broker_id,Long home_id){
+		try {
+			List<Inform> inform=informService.selectTrue(home_id, broker_id);
+		 	if(inform.size()!=0){
+		 		return FastJsonUtil.getResponseJson(0, "有撤单通知", null);
+
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "无撤单通知", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+			
+		}
+	}
+	/**
      * @Title: deleteKey
      * @description 取消撤单
      * @param @param broker_id

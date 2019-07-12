@@ -2,6 +2,8 @@ package com.yqwl.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.Vo.AttentionVo;
 import com.yqwl.pojo.Attention;
 
@@ -76,4 +78,30 @@ public interface AttentionService {
 	 * @createDate 2019年4月30日
 	 */
 	Integer selectCount(AttentionVo records) throws Exception;
+	/**
+	 * @Title: selectInfor
+	 * @description 判断该该房源或商厦是否被收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return Attention    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	Attention selectInfor(Long user_phone,Long houses_new_id,int type) throws Exception;
+	/**
+	 * @Title: deletTnfor
+	 * @description 前台页面取消收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	int deletTnfor(@Param("user_phone")Long user_phone,@Param("houses_new_id")Long houses_new_id,@Param("type")int type);
+
 }

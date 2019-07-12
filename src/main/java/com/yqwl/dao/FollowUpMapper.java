@@ -1,5 +1,6 @@
 package com.yqwl.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -77,5 +78,14 @@ public interface FollowUpMapper {
      * @createDate 2019年6月11日
      */
     List<FollowUpVo> selectHomeId(@Param("home_id") Long home_id);
-    
+    /**
+     * @Title: selectFollowCount
+     * @description 查询经纪人房源跟进条数
+     * @param @param broker_id
+     * @param @return    
+     * @return int    
+     * @author linhongyu
+     * @createDate 2019年7月10日
+     */
+    int selectFollowCount(@Param("broker_id") Long broker_id,@Param("startTime") Date startTime,@Param("endTime") Date endTime);
 }

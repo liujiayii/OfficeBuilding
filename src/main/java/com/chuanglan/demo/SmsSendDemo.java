@@ -28,7 +28,7 @@ public class SmsSendDemo {
 
         String testbytes2 = new String(hexstr2bytes("0xF0 0x9F 0x8C 0xB9"),"utf-8");
 
-        String msg1 = st;
+        String msg1 = "您的验证码是"+st;
         String msg=URLEncoder.encode(msg1,"utf-8");
 
         String phone  = number;

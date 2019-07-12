@@ -253,6 +253,36 @@ public class BackHousesNewController extends BaseController {
 			return dealException(-200, "系统异常", e);
 		}
 	}
+	
+	/**
+	 *
+	 * @Title: updateTypes
+	 * @description 修改上下架状态
+	 * @param @param record
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月9日
+	 */
+	@RequestMapping(value = "updateTypes", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String updateTypes(HousesNew record, HttpSession session) {
+		try {
+			/** 判断是否登录 */
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				int count = housesNewService.updateTypes(record);
+				if (count != 0) {
+					return FastJsonUtil.getResponseJson(0, "修改成功", null);
+				} else {
+					return FastJsonUtil.getResponseJson(-1, "修改失败", null);
+				}
+			}
+			return FastJsonUtil.getResponseJson("-2", "未登录");
+		} catch (Exception e) {
+			return dealException(-200, "系统异常", e);
+		}
+	}
 
 	/**
 	 * 

@@ -207,4 +207,18 @@
 		AND type=1
 		ORDER BY f.remind_time DESC
 	</select>
+	<!-- 统计房源跟进数量 -->
+	<select id="selectFollowCount" resultType="java.lang.Integer">
+		select
+		COUNT(1)
+		from `t_follow_up`
+		<where>
+			`broker_id` = #{broker_id,jdbcType=BIGINT} 
+			<if test="startTime != null and endTime != null ">
+				AND (`remind_time` <![CDATA[>=]]>
+				#{startTime} AND `remind_time` <![CDATA[<=]]>
+				#{endTime})
+			</if>
+		</where>
+	</select>
 </mapper>

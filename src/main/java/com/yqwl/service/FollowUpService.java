@@ -1,5 +1,7 @@
 package com.yqwl.service;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -65,4 +67,28 @@ public interface FollowUpService {
      * @createDate 2019年6月11日
      */
     List<FollowUpVo> selectHomeId(@Param("home_id") Long home_id);
+    /**
+     * @Title: selectByPrimaryCount
+     * @description 查询经纪人房源跟进统计
+     * @param @param shopId
+     * @param @param startTime
+     * @param @param endTime
+     * @param @return    
+     * @return List<Map<String,Object>>    
+     * @author linhongyu
+     * @createDate 2019年7月10日
+     */
+    public List<Map<String, Object>> selectByPrimaryCount(Long shopId,Date startTime,Date endTime) throws Exception;
+    /**
+     * @Title: selectByUserCount
+     * @description 查询经纪人客源跟进统计
+     * @param @param shopId
+     * @param @param startTime
+     * @param @param endTime
+     * @param @return    
+     * @return List<Map<String,Object>>    
+     * @author linhongyu
+     * @createDate 2019年7月11日
+     */
+    public List<Map<String, Object>> selectByUserCount(Long shopId,Date startTime,Date endTime) throws Exception;
 }

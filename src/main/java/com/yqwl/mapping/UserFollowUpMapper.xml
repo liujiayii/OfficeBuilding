@@ -137,4 +137,18 @@
     ORDER BY time DESC
 	LIMIT 1
   </select>
+  <!-- 统计客源跟进数量 -->
+  <select id="selectUserFollowCount" resultType="java.lang.Integer">
+		select
+		COUNT(1)
+		from `t_user_follow_up`
+		<where>
+			`broker_id` = #{broker_id,jdbcType=BIGINT} 
+			<if test="startTime != null and endTime != null">
+				AND (`time` <![CDATA[>=]]>
+				#{startTime} AND `time` <![CDATA[<=]]>
+				#{endTime})
+			</if>
+		</where>
+	 </select>	
 </mapper>

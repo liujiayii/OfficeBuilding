@@ -47,7 +47,7 @@ public class AttentionController {
 	public String insertSelective(Attention record) throws Exception{
 		Attention nemu=attentionService.selectFinfAll(record);
 		if(nemu!=null){
-			return FastJsonUtil.getResponseJson(2, "收藏成功", null);
+			return FastJsonUtil.getResponseJson(2, "该房源已收藏", null);
 		}
 		try {
 			record.setAttention_time(new Date());
@@ -136,6 +136,58 @@ public class AttentionController {
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", map);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
+	/**
+	 * @Title: selectInfor
+	 * @description 判断该该房源或商厦是否被收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return    
+	 * @return String    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	@RequestMapping(value = "selectInfor", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectInfor(Long user_phone,Long houses_new_id,int type){
+		try {
+			Attention att=attentionService.selectInfor(user_phone, houses_new_id, type);
+		 	 if(att==null){
+		 		return FastJsonUtil.getResponseJson(0, "该用户未收藏该房源或商厦", null);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "该用户已收藏该房源或商厦", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
+	/**
+	 * @Title: deletTnfor
+	 * @description 前台页面取消收藏
+	 * @param @param user_phone
+	 * @param @param houses_new_id
+	 * @param @param type
+	 * @param @return    
+	 * @return int    
+	 * @author linhongyu
+	 * @createDate 2019年7月11日
+	 */
+	@RequestMapping(value = "deletTnfor", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String deletTnfor(Long user_phone,Long houses_new_id,int type){
+		try {
+			int att=attentionService.deletTnfor(user_phone, houses_new_id, type);
+		 	 if(att!=0){
+		 		return FastJsonUtil.getResponseJson(0, "取消收藏成功", null);
+		 	}else {
+		 		return FastJsonUtil.getResponseJson(-1, "取消收藏失败", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

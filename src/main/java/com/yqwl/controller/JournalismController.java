@@ -96,7 +96,6 @@ public class JournalismController {
 	public String selectPrevious(Journalism record) {
 		try {
 			Journalism one=journalismService.selectPrevious(record);
-			System.out.println("one"+one);
 			if (one!=null) {
 				return FastJsonUtil.getResponseJson(0, "查询成功", one);
 			} else {
@@ -122,7 +121,6 @@ public class JournalismController {
 	public String selectNext(Journalism record){
 		try {
 			Journalism two=journalismService.selectNext(record);
-			System.out.println("two"+two);
 			if (two!=null) {
 				return FastJsonUtil.getResponseJson(0, "查询成功", two);
 			} else {

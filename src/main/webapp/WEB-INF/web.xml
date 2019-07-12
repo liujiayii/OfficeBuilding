@@ -35,6 +35,5 @@
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>front/index.html</welcome-file>
-    <welcome-file>front/index.jsp</welcome-file>
   </welcome-file-list>
 </web-app>

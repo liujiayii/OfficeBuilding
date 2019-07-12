@@ -60,6 +60,7 @@ public class JournalismServiceImpl implements JournalismService{
 		long b=a+1; //加一
 		Journalism record=new Journalism();
 		record.setPage_view(b);
+		record.setId(id);
 		journalismMapper.updateJourna(record);
 		return journalismMapper.selectByPrimaryKey(id);
 	}

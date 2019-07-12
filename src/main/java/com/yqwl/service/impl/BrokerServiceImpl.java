@@ -119,6 +119,9 @@ public class BrokerServiceImpl implements BrokerService{
 		if (broker == null) {
 			throw new BizException(FastJsonUtil.getResponseJsonNotEmpty(1000, "用户名或密码错误", null));
 		}
+		if (broker.getState() == 2) {
+			throw new BizException(FastJsonUtil.getResponseJsonNotEmpty(1001, "用户被锁定", null));
+		}
 		return broker;
 	}
 	@Override
@@ -141,6 +144,9 @@ public class BrokerServiceImpl implements BrokerService{
 			brokerRole.setBroker_id(broker.getId());
 			brokerRole.setRole_id(long1);
 			brokerRoleMapper.insertSelective(brokerRole);
+		}
+		if (broker.getPassword()!=null&&!broker.getPassword().equals("null")) {
+			broker.setPassword(MD5Util.getMD5Code(broker.getPassword()));
 		}
 		return brokerMapper.updateByPrimaryKeySelective(broker);
 	}
@@ -174,8 +180,9 @@ public class BrokerServiceImpl implements BrokerService{
 	public PageInfo<Broker> ListBackBroker(Pager pager) throws Exception {
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		String condition = StringUtils.getFirstString(conditions.get("condition"));
+		Long state = NumberUtil.dealLong(StringUtils.getFirstString(conditions.get("state")));
 		PageHelper.startPage(pager);
-		List<Broker> list = brokerMapper.listByCondition(condition);
+		List<Broker> list = brokerMapper.listByCondition(condition,state);
 		return new PageInfo<Broker>(list);
 	}
 	@Override

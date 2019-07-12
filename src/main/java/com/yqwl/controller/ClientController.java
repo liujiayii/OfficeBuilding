@@ -41,8 +41,8 @@ public class ClientController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String insert(Client record,Integer validate,HttpSession session){
-		Integer a=(Integer) session.getAttribute("validate");
+	public String insert(Client record,String validate,HttpSession session){
+		String a= (String) session.getAttribute("validate");
 		if(!a.equals(validate)){
 			return FastJsonUtil.getResponseJson(2, "验证码不正确，请从新发送", null);
 		}

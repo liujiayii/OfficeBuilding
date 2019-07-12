@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.yqwl.Vo.BrokerVo;
 import com.yqwl.Vo.BuildingListVo;
@@ -204,13 +205,13 @@ public class BuildingControllers extends BaseController {
 	 */
 	@RequestMapping(value = "listBybuildingByCity", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String listBybuildingByCity(Integer cityId,HttpSession session) {
+	public String listBybuildingByCity(Integer cityId,@RequestParam(required = false)Integer regionId,HttpSession session) {
 		try {
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo == null) {
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
 			}
-			List<Building> buildings = buildingService.listBybuildingByCity(cityId);
+			List<Building> buildings = buildingService.listBybuildingByCity(cityId,regionId);
 			if (buildings.size() > 0) {
 				return FastJsonUtil.getResponseJson(0, "查询成功", buildings);
 			} else {

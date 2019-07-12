@@ -201,7 +201,6 @@ public class BackBrokerController extends BaseController{
 	@ResponseBody
 	public String ListBackBroker(Pager pager,HttpSession session){
 		try {
-			System.out.println(pager);
 			int code = 0;
 			String msg = null;
 			/** 判断是否登录 */
@@ -297,7 +296,6 @@ public class BackBrokerController extends BaseController{
 	 * @author linhongyu
 	 * @createDate 2019年6月11日
 	 */
-	@SuppressWarnings("unused")
 	@ResponseBody
 	@RequestMapping(value = "/selectShopBorker", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String selectShopBorker(HttpSession session,Long id) {
@@ -319,9 +317,37 @@ public class BackBrokerController extends BaseController{
 						list.add(param);
 					}
 				}
-				if (list != null) {
+				if (list.size() != 0) {
 					msg = "查询成功";
 					return FastJsonUtil.getResponseJson(code, msg, list);
+				}
+				code = -1;
+				msg = "查询失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			msg = "未登录";
+			return FastJsonUtil.getResponseJson("-2", msg);
+		} catch (Exception e) {
+			code = -200;
+			msg = "系统异常";
+			return dealException(code, msg, e);
+		}
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/resourceTransfer", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	public String resourceTransfer(HttpSession session,Long groupId) {
+		int code = 0;
+		String msg = null;
+		try {
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo != null) {
+				List<Broker> result = brokerService.getByGroupId(groupId);
+				if (result.size() != 0) {
+					msg = "查询成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
 				}
 				code = -1;
 				msg = "查询失败";

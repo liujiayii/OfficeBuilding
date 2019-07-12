@@ -19,13 +19,8 @@ import javax.servlet.http.HttpSession;
 import com.github.pagehelper.PageInfo;
 import com.yqwl.Vo.BrokerVo;
 import com.yqwl.Vo.HousesNewVo;
-import com.yqwl.pojo.Delegation;
-import com.yqwl.pojo.Group;
 import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Picture;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +65,6 @@ public class HousesNewController {
 			Map<String ,Object > map=new HashMap<String ,Object >();
 			map.put("data", hous);
 		 	map.put("picture", picture);
-		 	System.out.println(map);
 		 	if(hous!=null){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", map);
 		 	}else {
@@ -129,7 +123,7 @@ public class HousesNewController {
 		int code = 0;
 		String msg = null;
 		try {
-			PageInfo<HousesNew> result = housesNewService.listHousesNewByCondition(pager);
+			PageInfo<HousesNew> result = housesNewService.frontListHousesNewByCondition(pager);
 			if (result.getTotal() != 0) {
 				msg = "查询成功";
 				return FastJsonUtil.getResponseJson(code, msg, result);
