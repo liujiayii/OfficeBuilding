@@ -20,7 +20,7 @@ public interface UserService {
 
 	UserVo getByid(Long id) throws Exception;
 
-	PageInfo<User> listAll(Pager pager) throws Exception;
+	PageInfo<UserVo> listAll(Pager pager) throws Exception;
 
 	Integer insertUserFollowUp(UserFollowUp userFollowUp) throws Exception;
 
@@ -51,5 +51,9 @@ public interface UserService {
 	Integer insertUserPhone(UserPhone userPhone) throws Exception;
 
 	List<User> findAll() throws Exception;
+
+	PageInfo<UserVo> listAllByShop(Pager pager, Long brokerId) throws Exception;
+
+	PageInfo<User> listAllByBrokerId(Pager pager, Long brokerId) throws Exception;
 
 }

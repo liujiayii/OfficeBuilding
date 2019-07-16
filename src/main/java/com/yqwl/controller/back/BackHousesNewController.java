@@ -774,25 +774,17 @@ public class BackHousesNewController extends BaseController {
 		try {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
-			if (brokerVo != null) {
+			if (brokerVo == null) {
+				return FastJsonUtil.getResponseJson("-2", "未登录");
+			}
 				record.setBegin_time(new Date());
-				int count = housesNewService.updateSelective(record);
+				record.setWhether(1);
+				int count = housesNewService.updateByPrimaryKey(record);
 				if (count != 0) {
-					if (record.getWhether() == 6) {
-						Long broker_id = record.getEntering_broker_id();
-						Long home_id = record.getId();
-						Inform inform = informMapper.selectByIds(broker_id, home_id);
-						if (inform.getType() == 1) {
-							inform.setType(0);
-							informMapper.updateByPrimaryKeySelective(inform);
-						}
-					}
 					return FastJsonUtil.getResponseJson(0, "开盘成功", null);
 				} else {
 					return FastJsonUtil.getResponseJson(-1, "开盘失败", null);
 				}
-			}
-			return FastJsonUtil.getResponseJson("-2", "未登录");
 		} catch (Exception e) {
 			return dealException(-200, "系统异常", e);
 		}

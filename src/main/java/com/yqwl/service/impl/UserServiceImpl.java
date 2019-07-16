@@ -81,14 +81,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public PageInfo<User> listAll(Pager pager) throws Exception {
+	public PageInfo<UserVo> listAll(Pager pager) throws Exception {
 		// 获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		Integer category = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("category")));
 		String name = StringUtils.getFirstString(conditions.get("name"));
 		PageHelper.startPage(pager);
-		List<User> list = userMapper.listAll(name,category);
-		return new PageInfo<User>(list);
+		List<UserVo> list = userMapper.listAll(name,category);
+		return new PageInfo<UserVo>(list);
 	}
 
 	@Override
@@ -162,6 +162,29 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findAll() throws Exception {
 		return userMapper.findAll();
+	}
+
+	@Override
+	public PageInfo<UserVo> listAllByShop(Pager pager, Long brokerId) throws Exception {
+		// 获取参数
+		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
+		Integer category = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("category")));
+		String name = StringUtils.getFirstString(conditions.get("name"));
+		Long shopId = brokerMapper.getBrokerByShopId(brokerId);
+		PageHelper.startPage(pager);
+		List<UserVo> list = userMapper.listAllByShop(name,category,shopId);
+		return new PageInfo<UserVo>(list);
+	}
+
+	@Override
+	public PageInfo<User> listAllByBrokerId(Pager pager, Long brokerId) throws Exception {
+		// 获取参数
+		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
+		Integer category = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("category")));
+		String name = StringUtils.getFirstString(conditions.get("name"));
+		PageHelper.startPage(pager);
+		List<User> list = userMapper.listAllByBrokerId(name,category,brokerId);
+		return new PageInfo<User>(list);
 	}
 	
 }

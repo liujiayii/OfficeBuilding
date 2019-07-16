@@ -681,12 +681,7 @@
 	<update id="updateSelective" parameterType="com.yqwl.pojo.HousesNew">
 		update `t_houses_new`
 		<set>
-			<if test="begin_time != null">
-				`begin_time` = #{begin_time,jdbcType=TIMESTAMP},
-			</if>
-			<if test="whether != null">
-				`whether` = #{whether,jdbcType=INTEGER},
-			</if>
+				`whether` = 1,
 			<if test="open_broker_id != null">
 				`open_broker_id` = #{open_broker_id,jdbcType=BIGINT},
 			</if>
@@ -735,5 +730,12 @@
 		AND h.types = 1
 		ORDER BY
 		h.id DESC
+	</select>
+	
+	<select id="listByMaintainBrokerId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from `t_houses_new`
+		where `maintain_broker_id` = #{brokerId}
 	</select>
 </mapper>

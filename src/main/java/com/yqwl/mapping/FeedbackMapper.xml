@@ -125,4 +125,31 @@
 		AND f.hone_id = #{hone_id}
 		ORDER BY f.id DESC
 	</select>
+	
+	<!-- 查询该房源的反馈信息 -->
+	<select id="selectListFeed" resultType="com.yqwl.Vo.FeedbackVo">
+		SELECT
+		f.centext,
+		f.time,
+		b.real_name
+		FROM
+		t_feedback f,
+		t_broker b
+		WHERE
+		f.broker_id = b.id
+		AND f.hone_id = #{hone_id}
+		ORDER BY f.id DESC
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 查询该房源的反馈信息数量 -->
+	<select id="selectFeedCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(f.id) count
+		FROM
+		t_feedback f,
+		t_broker b
+		WHERE
+		f.broker_id = b.id
+		AND f.hone_id = #{hone_id}
+	</select>
 </mapper>

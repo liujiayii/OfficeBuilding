@@ -105,10 +105,12 @@ public class BuildingControllers extends BaseController {
 			record.setTimes(new Date());
 			int num = buildingService.updateByPrimaryKeySelective(record);
 			if (num != 0) {
-				for (String string : picture) {
-					photo.setBuilding_id(id);
-					photo.setPhoto(string);
-					photoService.insertSelective(photo);
+				if(picture!=null){
+					for (String string : picture) {
+						photo.setBuilding_id(id);
+						photo.setPhoto(string);
+						photoService.insertSelective(photo);
+					}	
 				}
 				return FastJsonUtil.getResponseJson(0, "修改成功", null);
 			} else {

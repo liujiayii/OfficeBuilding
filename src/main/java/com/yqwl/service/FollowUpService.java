@@ -46,7 +46,7 @@ public interface FollowUpService {
 	 * @author linhongyu
 	 * @createDate 2019年6月10日
 	 */
-	int updateByPrimaryKeySelective(FollowUp record);
+	int updateByPrimaryKeySelective(FollowUp record) throws Exception;
 	/**
 	 * @Title: selectByPrimaryKey
 	 * @description 通过主键id查询一条跟进数据
@@ -56,7 +56,7 @@ public interface FollowUpService {
 	 * @author linhongyu
 	 * @createDate 2019年6月10日
 	 */
-	FollowUp selectByPrimaryKey(Long id);
+	FollowUp selectByPrimaryKey(Long id) throws Exception;
 	/**
      * @Title: selectHomeId
      * @description 查询该房源的跟进信息
@@ -66,7 +66,7 @@ public interface FollowUpService {
      * @author linhongyu
      * @createDate 2019年6月11日
      */
-    List<FollowUpVo> selectHomeId(@Param("home_id") Long home_id);
+    Map<String, Object> selectHomeId(Long home_id,Integer page,Integer limit) throws Exception;
     /**
      * @Title: selectByPrimaryCount
      * @description 查询经纪人房源跟进统计

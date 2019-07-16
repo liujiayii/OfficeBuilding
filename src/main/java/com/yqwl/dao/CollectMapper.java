@@ -62,9 +62,11 @@ public interface CollectMapper {
      * @param @return    
      * @return List<CollectVo>    
      * @author linhongyu
+     * @param limit 
+     * @param page 
      * @createDate 2019年6月13日
      */
-    List<CollectVo> selectListCo(@Param("broker_id") Long broker_id);
+    List<CollectVo> selectListCo(@Param("broker_id") Long broker_id,@Param("page") Integer page, @Param("limit")Integer limit);
     /**
      * @Title: selectTwo
      * @description 判断房源是否已收藏
@@ -76,4 +78,16 @@ public interface CollectMapper {
      * @createDate 2019年6月13日
      */
     Collect selectTwo(Collect record);
+
+	/**
+	 *
+	 * @Title: selectCollCount
+	 * @description 查询经纪人收藏房源信息数量
+	 * @param @param broker_id
+	 * @param @return    
+	 * @return Integer    
+	 * @author linhongyu
+	 * @createDate 2019年7月15日
+	 */
+	Integer selectCollCount(@Param("broker_id")Long broker_id);
 }

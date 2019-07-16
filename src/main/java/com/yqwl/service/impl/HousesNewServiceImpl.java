@@ -269,7 +269,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 		plotDoor.setId(record.getDoor_id());
 		plotDoor.setStatus(1);
 		plotDoorMapper.updateByPrimaryKeySelective(plotDoor);
-		Integer count = housesNewMapper.updateByPrimaryKey(record);
+		Integer count = housesNewMapper.updateByPrimaryKeySelective(record);
 		/** 判断(房源表)插入成功后向(房源图片储存表)插入图片 */
 		if (count != 0&&urls != null&&urls.length>0) {
 			/** 修改图片相当于新增图片，不删除之前保存的 */
@@ -590,7 +590,6 @@ public class HousesNewServiceImpl implements HousesNewService {
 		BigDecimal mon=housesNew.getMoney();
 		Integer unit=housesNew.getMoney_unit();
 		DivideInto divideInto=divideIntoMapper.selectStatus();
-		System.out.println(divideInto+"divideInto");
 		BigDecimal money = null;
 		if(unit==1){
 			money=mon;
@@ -638,7 +637,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 */
 	@Override
 	public int updateByPrimaryKey(HousesNew record) {
-		return housesNewMapper.updateByPrimaryKey(record);
+		return housesNewMapper.updateByPrimaryKeySelective(record);
 	}
 
 

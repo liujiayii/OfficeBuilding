@@ -1,6 +1,7 @@
 package com.yqwl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yqwl.Vo.FeedbackVo;
 import com.yqwl.pojo.Feedback;
@@ -22,7 +23,7 @@ public interface FeedbackService {
 	 * @author linhongyu
 	 * @createDate 2019年6月12日
 	 */
-	int insertSelective(Feedback record);
+	int insertSelective(Feedback record) throws Exception;
 	 /**
      * @Title: selectListKey
      * @description 查询该房源的反馈信息
@@ -30,7 +31,11 @@ public interface FeedbackService {
      * @param @return    
      * @return List<Feedback>    
      * @author linhongyu
+	 * @param limit 
+	 * @param page 
      * @createDate 2019年6月12日
      */
-    List<FeedbackVo> selectListKey(Long hone_id);
+    List<FeedbackVo> selectListKey(Long hone_id) throws Exception;
+    
+    Map<String, Object> selectListFeed(Long hone_id, Integer page, Integer limit) throws Exception;
 }

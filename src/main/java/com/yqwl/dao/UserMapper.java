@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.yqwl.Vo.UserListVo;
+import com.yqwl.Vo.UserVo;
 import com.yqwl.pojo.User;
 
 public interface UserMapper {
@@ -40,7 +41,7 @@ public interface UserMapper {
 	 * @mbggenerated
 	 */
 	int updateByPrimaryKey(User record);
-	List<User> listAll(@Param("name")String name,@Param("category") Integer category);
+	List<UserVo> listAll(@Param("name")String name,@Param("category") Integer category);
 	/**
 	 * @Title: selectListShop
 	 * @description 通过区县id查询分店id
@@ -48,12 +49,12 @@ public interface UserMapper {
 	 * @param @return    
 	 * @return List<User>    
 	 * @author linhongyu
-	 * @createDate 2019�??6�??13�??
+	 * @createDate 2019�??6�??13�??
 	 */
 	List<User> selectListShop(Long region_id);
 	/**
-	 * @Title: getCountByWhether
-	 * @description 通过经纪人id查询客源
+	 * @Title: selectAllSome
+	 * @description 添加决策分析(根据条件查询相关经纪人客源统计)
 	 * @param @param id
 	 * @param @param category
 	 * @param @param startTime
@@ -61,10 +62,16 @@ public interface UserMapper {
 	 * @param @return    
 	 * @return int    
 	 * @author linhongyu
-	 * @createDate 2019�??6�??17�??
+	 * @createDate 2019�??6�??17�??
 	 */
 	int selectAllSome(@Param("id")Long id, @Param("category")int category, @Param("startTime")Date startTime, @Param("endTime")Date endTime);
 	
 	List<User> findAll();
+	
+	List<User> listByBrokerId(Long brokerId);
+	
+	List<UserVo> listAllByShop(@Param("name")String name,@Param("category") Integer category,@Param("shopId") Long shopId);
+	
+	List<User> listAllByBrokerId(@Param("name")String name,@Param("category") Integer category,@Param("brokerId") Long brokerId);
 
 }

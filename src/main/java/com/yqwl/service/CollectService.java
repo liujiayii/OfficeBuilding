@@ -1,6 +1,7 @@
 package com.yqwl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -42,9 +43,11 @@ public interface CollectService {
      * @param @return    
      * @return List<CollectVo>    
      * @author linhongyu
+	 * @param limit 
+	 * @param page 
      * @createDate 2019年6月13日
      */
-    List<CollectVo> selectListCo(@Param("broker_id") Long broker_id) throws Exception;
+    Map<String, Object> selectListCo(@Param("broker_id") Long broker_id, @Param("page")Integer page, @Param("limit")Integer limit) throws Exception;
     /**
      * @Title: selectTwo
      * @description 判断房源是否已收藏

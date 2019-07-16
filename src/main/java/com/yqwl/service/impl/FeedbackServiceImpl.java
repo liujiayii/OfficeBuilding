@@ -1,6 +1,8 @@
 package com.yqwl.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +49,17 @@ public class FeedbackServiceImpl implements FeedbackService{
      * @createDate 2019年6月12日
      */
 	@Override
-	public List<FeedbackVo> selectListKey(Long hone_id) {
+	public List<FeedbackVo> selectListKey(Long hone_id) throws Exception{
 		return feedbackMapper.selectListKey(hone_id);
+	}
+	@Override
+	public Map<String, Object> selectListFeed(Long hone_id, Integer page, Integer limit) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		Integer count=feedbackMapper.selectFeedCount(hone_id);
+		List<FeedbackVo> feedbackVos=feedbackMapper.selectListFeed(hone_id, page, limit);
+		map.put("date", feedbackVos);
+		map.put("count", count);
+		return map;
 	}
 	
 

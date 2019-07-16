@@ -32,7 +32,43 @@ public class CollectVo extends Collect implements Serializable{
 	private int page;
 	/** 分页条数 */
 	private int limit;
+	private Integer count;
+	private String real_name;
+	private Integer whether;
+	private Integer fitment;
 	
+	public String getReal_name() {
+		return real_name;
+	}
+
+	public void setReal_name(String real_name) {
+		this.real_name = real_name;
+	}
+
+	public Integer getWhether() {
+		return whether;
+	}
+
+	public void setWhether(Integer whether) {
+		this.whether = whether;
+	}
+
+	public Integer getFitment() {
+		return fitment;
+	}
+
+	public void setFitment(Integer fitment) {
+		this.fitment = fitment;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
 	public int getPage() {
 		return page;
 	}
@@ -129,7 +165,9 @@ public class CollectVo extends Collect implements Serializable{
 	public String toString() {
 		return "CollectVo [housesNew=" + housesNew + ", work_name=" + work_name + ", house_picture=" + house_picture
 				+ ", times=" + times + ", types=" + types + ", office_space=" + office_space + ", money=" + money
-				+ ", money_unit=" + money_unit + ", location=" + location + ", page=" + page + ", limit=" + limit + "]";
+				+ ", money_unit=" + money_unit + ", location=" + location + ", page=" + page + ", limit=" + limit
+				+ ", count=" + count + ", real_name=" + real_name + ", whether=" + whether + ", fitment=" + fitment
+				+ "]";
 	}
 	
 }

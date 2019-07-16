@@ -2,6 +2,7 @@ package com.yqwl.controller.back;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -21,7 +22,7 @@ import com.yqwl.service.CollectService;
 /**
  *
  * @ClassName: CollectController
- * @description 用一句话描述这个类的作用
+ * @description 经纪人收藏
  * @author linhongyu
  * @createDate 2019年6月12日
  */
@@ -104,13 +105,14 @@ public class CollectController {
 	 */
 	@RequestMapping(value = "selectListCo", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String selectListCo(Long broker_id,HttpSession session){
+	public String selectListCo(Long broker_id,Integer page,Integer limit,HttpSession session){
 		try {
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if(brokerVo==null){
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
 			}
-			List<CollectVo> collectVos= collectService.selectListCo(broker_id);
+			page=(page-1)*limit;
+			Map<String, Object> collectVos= collectService.selectListCo(broker_id,page,limit);
 		 	if(collectVos.size()>0){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", collectVos);
 		 	}else {

@@ -29,14 +29,18 @@ import com.yqwl.dao.BrokerMapper;
 import com.yqwl.dao.BrokerRoleMapper;
 import com.yqwl.dao.FunctionMapper;
 import com.yqwl.dao.GroupMapper;
+import com.yqwl.dao.HousesNewMapper;
 import com.yqwl.dao.RoleMapper;
 import com.yqwl.dao.ShopMapper;
+import com.yqwl.dao.UserMapper;
 import com.yqwl.pojo.Broker;
 import com.yqwl.pojo.BrokerRole;
 import com.yqwl.pojo.Function;
 import com.yqwl.pojo.Group;
+import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Role;
 import com.yqwl.pojo.Shop;
+import com.yqwl.pojo.User;
 import com.yqwl.service.BrokerService;
 
 
@@ -61,6 +65,10 @@ public class BrokerServiceImpl implements BrokerService{
 	private FunctionMapper functionMapper;
 	@Autowired
 	private BrokerRoleMapper brokerRoleMapper;
+	@Autowired
+	private HousesNewMapper housesNewMapper;
+	@Autowired
+	private UserMapper userMapper;
 	/**
 	 * @Title: selectByPrimaryKey
 	 * @description 通过id查询经纪人
@@ -192,6 +200,31 @@ public class BrokerServiceImpl implements BrokerService{
 	@Override
 	public List<Broker> listAllByStatus(Integer status,Integer cityId) throws Exception {
 		return brokerMapper.listAllByStatus(status,cityId);
+	}
+	@Override
+	public Integer resourceTransfer(Long brokerId, Long houseTarget, Long userTarget) throws Exception {
+		Integer count = 0;
+		if (houseTarget != null) {
+			List<HousesNew> list = housesNewMapper.listByMaintainBrokerId(brokerId);
+			for (HousesNew housesNew : list) {
+				housesNew.setMaintain_broker_id(houseTarget);
+				if (housesNew.getSolid_broker_id() != null&&housesNew.getSolid_broker_id() == brokerId) {
+					housesNew.setSolid_broker_id(houseTarget);
+				}
+				if (housesNew.getKey_broker_id() != null&&housesNew.getKey_broker_id() == brokerId) {
+					housesNew.setKey_broker_id(houseTarget);
+				}
+				count += housesNewMapper.updateByPrimaryKeySelective(housesNew);
+			}
+		}
+		if (userTarget != null) {
+			List<User> list = userMapper.listByBrokerId(userTarget);
+			for (User user : list) {
+				user.setBroker_id(userTarget);
+				count += userMapper.updateByPrimaryKeySelective(user);
+			}
+		}
+		return count;
 	}
 	
 

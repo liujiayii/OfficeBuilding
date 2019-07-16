@@ -130,4 +130,6 @@ public interface HousesNewMapper {
 	List<HousesNew> frontListHousesNewByCondition(@Param("cityId")Integer cityId, @Param("regionId")Integer regionId, @Param("startSpace")Integer startSpace,
 			@Param("endSpace")Integer endSpace, @Param("startMoney")BigDecimal startMoney, @Param("endMoney")BigDecimal endMoney, @Param("fitment")Integer fitment);
 
+	List<HousesNew> listByMaintainBrokerId(Long brokerId);
+
 }

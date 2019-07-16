@@ -2,6 +2,8 @@ package com.yqwl.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yqwl.Vo.FeedbackVo;
 import com.yqwl.pojo.Feedback;
 
@@ -63,4 +65,17 @@ public interface FeedbackMapper {
      * @createDate 2019年6月12日
      */
     List<FeedbackVo> selectListKey(Long hone_id);
+    /**
+     * @Title: selectListFeed
+     * @description 查询该房源的反馈信息
+     * @param @param hone_id
+     * @param @param page
+     * @param @param limit
+     * @param @return    
+     * @return List<FeedbackVo>    
+     * @author linhongyu
+     * @createDate 2019年7月15日
+     */
+    List<FeedbackVo> selectListFeed(@Param("hone_id")Long hone_id,@Param("page") Integer page, @Param("limit")Integer limit);
+    Integer selectFeedCount(@Param("hone_id")Long hone_id);
 }

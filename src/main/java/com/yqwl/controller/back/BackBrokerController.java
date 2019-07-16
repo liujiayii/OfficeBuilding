@@ -335,22 +335,34 @@ public class BackBrokerController extends BaseController{
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @Title: resourceTransfer
+	 * @description 资源转移
+	 * @param session
+	 * @param brokerId
+	 * @param houseTarget
+	 * @param userTarget
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年7月15日 上午10:34:23
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/resourceTransfer", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
-	public String resourceTransfer(HttpSession session,Long groupId) {
+	public String resourceTransfer(HttpSession session,Long brokerId,Long houseTarget,Long userTarget) {
 		int code = 0;
 		String msg = null;
 		try {
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo != null) {
-				List<Broker> result = brokerService.getByGroupId(groupId);
-				if (result.size() != 0) {
-					msg = "查询成功";
+				Integer result = brokerService.resourceTransfer(brokerId,houseTarget,userTarget);
+				if (result != 0) {
+					msg = "转移成功";
 					return FastJsonUtil.getResponseJson(code, msg, result);
 				}
 				code = -1;
-				msg = "查询失败";
+				msg = "转移失败";
 				return FastJsonUtil.getResponseJson(code, msg, null);
 			}
 			msg = "未登录";

@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import com.yqwl.Vo.FollowUpVo;
 import com.yqwl.pojo.FollowUp;
 
-import net.sf.jsqlparser.statement.select.Select;
 
 public interface FollowUpMapper {
     /**
@@ -77,7 +76,17 @@ public interface FollowUpMapper {
      * @author linhongyu
      * @createDate 2019年6月11日
      */
-    List<FollowUpVo> selectHomeId(@Param("home_id") Long home_id);
+    List<FollowUpVo> selectHomeId(@Param("home_id") Long home_id,@Param("page")Integer page,@Param("limit")Integer limit);
+    /**
+     * @Title: selectFollowsCount
+     * @description 查询房源跟进条数
+     * @param @param home_id
+     * @param @return    
+     * @return Integer    
+     * @author linhongyu
+     * @createDate 2019年7月15日
+     */
+    Integer selectFollowsCount(@Param("home_id") Long home_id);
     /**
      * @Title: selectFollowCount
      * @description 查询经纪人房源跟进条数

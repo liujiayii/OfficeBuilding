@@ -51,4 +51,6 @@ public interface BrokerService {
 	List<Broker> getByGroupId(Long groupId) throws Exception;
 
 	List<Broker> listAllByStatus(Integer status,Integer cityId) throws Exception;
+
+	Integer resourceTransfer(Long brokerId, Long houseTarget, Long userTarget) throws Exception;
 }

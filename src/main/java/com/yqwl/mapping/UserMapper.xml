@@ -204,15 +204,18 @@
       `remark` = #{remark,jdbcType=VARCHAR}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-	<select id="listAll" resultMap="BaseResultMap">
+	<select id="listAll" resultType="com.yqwl.Vo.UserVo">
 		SELECT
-		<include refid="Base_Column_List" />
+		u.*,
+		b.real_name
 		FROM
-		`t_user`
+		`t_user` AS u LEFT JOIN t_broker AS b ON u.broker_id = b.id 
 		WHERE
-		(ISNULL(#{category}) OR category = #{category})
+		(ISNULL(#{category}) OR u.category = #{category})
 		AND
-		(ISNULL(#{name}) OR name LIKE CONCAT("%",#{name},"%"))
+		(ISNULL(#{name}) OR u.name LIKE CONCAT("%",#{name},"%"))
+		ORDER BY
+		u.`id` DESC
 	</select>
 
 	<!-- 添加决策分析(根据条件查询相关经纪人客源统计) -->
@@ -235,5 +238,51 @@
 		<include refid="Base_Column_List" />
 		FROM
 		`t_user`
+	</select>
+	
+	<select id="listByBrokerId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		`t_user`
+		WHERE 
+		`broker_id` = #{brokerId}
+	</select>
+	
+	<select id="listAllByShop" resultType="com.yqwl.Vo.UserVo">
+		SELECT
+			u.*,
+			b.real_name
+		FROM
+			`t_user` AS u,
+			t_group AS g,
+			t_shop AS s,
+			t_broker AS b
+		WHERE
+			u.broker_id = b.id
+		AND b.group_id = g.id
+		AND g.shop_id = s.id
+		AND s.id = #{shopId}
+		AND
+		(ISNULL(#{category}) OR u.category = #{category})
+		AND
+		(ISNULL(#{name}) OR u.name LIKE CONCAT("%",#{name},"%"))
+		ORDER BY
+		u.`id` DESC
+	</select>
+	
+	<select id="listAllByBrokerId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM
+			`t_user` 
+		WHERE
+		(ISNULL(#{category}) OR category = #{category})
+		AND
+		(ISNULL(#{name}) OR name LIKE CONCAT("%",#{name},"%"))
+		AND 
+		`broker_id` = #{brokerId}
+		ORDER BY
+		`id` DESC
 	</select>
 </mapper>

@@ -9,6 +9,16 @@ import com.yqwl.pojo.UserPhone;
 public class UserVo extends User {
 	private List<UserFollowUp> list;
 	private List<UserPhone> phones;
+	private String real_name;
+	
+	public String getReal_name() {
+		return real_name;
+	}
+
+	public void setReal_name(String real_name) {
+		this.real_name = real_name;
+	}
+
 	public List<UserFollowUp> getList() {
 		return list;
 	}

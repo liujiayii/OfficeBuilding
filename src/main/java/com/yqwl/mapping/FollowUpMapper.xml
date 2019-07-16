@@ -193,7 +193,7 @@
 	</select>
 
 	<!-- 查询该房源的跟进信息 -->
-	<select id="selectHomeId" parameterType="java.lang.Long" resultType="com.yqwl.Vo.FollowUpVo">
+	<select id="selectHomeId"  resultType="com.yqwl.Vo.FollowUpVo">
 		SELECT
 		b.real_name,
 		f.content,
@@ -205,7 +205,20 @@
 		f.broker_id=b.id
 		AND f.home_id=#{home_id,jdbcType=BIGINT}
 		AND type=1
-		ORDER BY f.remind_time DESC
+		ORDER BY f.id DESC
+		LIMIT #{page},#{limit}
+	</select>
+	<!-- 查询房源跟进条数 -->
+	<select id="selectFollowsCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(f.id) count
+		FROM
+		t_follow_up f,
+		t_broker b
+		WHERE
+		f.broker_id=b.id
+		AND f.home_id=#{home_id,jdbcType=BIGINT}
+		AND type=1
 	</select>
 	<!-- 统计房源跟进数量 -->
 	<select id="selectFollowCount" resultType="java.lang.Integer">

@@ -2,6 +2,7 @@ package com.yqwl.controller.back;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -69,13 +70,14 @@ public class FeedbackController {
      */
 	@RequestMapping(value = "selectListKey", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String selectListKey(Long hone_id,HttpSession session){
+	public String selectListKey(Long hone_id,Integer page,Integer limit,HttpSession session){
 		try {
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if(brokerVo==null){
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
 			}
-			List<FeedbackVo> feedbacks=feedbackService.selectListKey(hone_id);
+			page=(page-1)*limit;
+			Map<String, Object> feedbacks=feedbackService.selectListFeed(hone_id, page, limit);
 		 	if(feedbacks.size()>0){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", feedbacks);
 		 	}else {

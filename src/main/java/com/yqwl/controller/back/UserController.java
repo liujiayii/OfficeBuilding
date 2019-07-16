@@ -261,7 +261,7 @@ public class UserController extends BaseController {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo!=null) {
-				PageInfo<User> result = userService.listAll(pager);
+				PageInfo<UserVo> result = userService.listAll(pager);
 				if (result.getTotal() != 0) {
 					msg = "查询成功";
 					return FastJsonUtil.getResponseJson(code, msg, result);
@@ -276,6 +276,88 @@ public class UserController extends BaseController {
 		}
 	}
 	
+	/**
+	 * 
+	 * @Title: listAllByShop
+	 * @description 本店客源
+	 * @param pager
+	 * @param session
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年7月15日 下午1:53:52
+	 */
+	@RequestMapping(value = "listAllByShop", method = RequestMethod.GET, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String listAllByShop(Pager pager,HttpSession session){
+		try {
+			int code = 0;
+			String msg = null;
+			/** 判断是否登录 */
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo!=null) {
+				PageInfo<UserVo> result = userService.listAllByShop(pager,brokerVo.getId());
+				if (result.getTotal() != 0) {
+					msg = "查询成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "查询失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			return FastJsonUtil.getResponseJson("-2", "未登录");
+		} catch (Exception e) {
+			return dealException(-200, "系统异常", e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @Title: listAllByShop
+	 * @description 我的客源
+	 * @param pager
+	 * @param session
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年7月15日 下午1:54:15
+	 */
+	@RequestMapping(value = "listAllByBrokerId", method = RequestMethod.GET, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String listAllByBrokerId(Pager pager,HttpSession session){
+		try {
+			int code = 0;
+			String msg = null;
+			/** 判断是否登录 */
+			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
+			if (brokerVo!=null) {
+				PageInfo<User> result = userService.listAllByBrokerId(pager,brokerVo.getId());
+				if (result.getTotal() != 0) {
+					msg = "查询成功";
+					return FastJsonUtil.getResponseJson(code, msg, result);
+				}
+				code = -1;
+				msg = "查询失败";
+				return FastJsonUtil.getResponseJson(code, msg, null);
+			}
+			return FastJsonUtil.getResponseJson("-2", "未登录");
+		} catch (Exception e) {
+			return dealException(-200, "系统异常", e);
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @Title: insertUserFollowUp
+	 * @description 客户跟进
+	 * @param session
+	 * @param userFollowUp
+	 * @return
+	 * String
+	 * @author likai
+	 * @createDate 2019年7月15日 上午11:33:00
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/insertUserFollowUp", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	public String insertUserFollowUp(HttpSession session,UserFollowUp userFollowUp) {

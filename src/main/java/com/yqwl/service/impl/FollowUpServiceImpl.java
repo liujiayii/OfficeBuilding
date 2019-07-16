@@ -103,8 +103,13 @@ public class FollowUpServiceImpl implements FollowUpService{
      * @createDate 2019年6月11日
      */
 	@Override
-	public List<FollowUpVo> selectHomeId(Long home_id) {
-		return followUpMapper.selectHomeId(home_id);
+	public Map<String, Object> selectHomeId(Long home_id,Integer page,Integer limit) {
+		Map<String, Object> map = new HashMap<>();
+		Integer count=followUpMapper.selectFollowsCount(home_id);
+		List<FollowUpVo> followUpVos=followUpMapper.selectHomeId(home_id,page,limit);
+		map.put("date", followUpVos);
+		map.put("count", count);
+		return map;
 	}
 
 	/**

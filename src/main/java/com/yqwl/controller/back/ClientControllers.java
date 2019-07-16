@@ -48,6 +48,7 @@ public class ClientControllers extends BaseController{
 			if(brokerVo==null){
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
 			}
+			page=(page-1)*limit;
 			Map<String, Object> map = clientService.selectClient(page,limit);
 		 	if(map!=null){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", map);

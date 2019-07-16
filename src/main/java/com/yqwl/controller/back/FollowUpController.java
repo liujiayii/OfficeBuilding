@@ -19,8 +19,10 @@ import com.yqwl.common.utils.Constants;
 import com.yqwl.common.utils.FastJsonUtil;
 import com.yqwl.dao.InformMapper;
 import com.yqwl.pojo.FollowUp;
+import com.yqwl.pojo.HousesNew;
 import com.yqwl.pojo.Inform;
 import com.yqwl.service.FollowUpService;
+import com.yqwl.service.HousesNewService;
 /**
  *
  * @ClassName: FollowUpController
@@ -36,6 +38,8 @@ public class FollowUpController {
 	private FollowUpService followUpService;
 	@Resource
 	private InformMapper informMapper;
+	@Resource
+	private HousesNewService housesNewService;
 	/**
 	 * @Title: insertSelective
 	 * @description 点击电话时添加一条跟进数据
@@ -57,6 +61,9 @@ public class FollowUpController {
 			int nun=followUpService.insertSelective(record);
 			Long id=record.getId();
 		 	if(nun!=0){
+		 		HousesNew housesNew=new HousesNew();
+		 		housesNew.setMaintain_time(new Date());
+		 		housesNewService.updateByPrimaryKey(housesNew);
 		 		return FastJsonUtil.getResponseJson(0, "添加成功", id);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "添加失败", null);
@@ -126,6 +133,9 @@ public class FollowUpController {
 		 			inform.setBroker_id(followUp.getBrokers_id());
 		 			informMapper.insertSelective(inform);
 		 		}
+		 		HousesNew housesNew=new HousesNew();
+		 		housesNew.setMaintain_time(new Date());
+		 		housesNewService.updateByPrimaryKey(housesNew);
 		 		return FastJsonUtil.getResponseJson(0, "跟进成功", null);
 		 	}else {
 		 		return FastJsonUtil.getResponseJson(-1, "跟进失败，请从新录入", null);
@@ -147,13 +157,14 @@ public class FollowUpController {
 	 */
 	@RequestMapping(value = "selectHomeId", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
 	@ResponseBody
-	public String selectHomeId(Long home_id,HttpSession session){
+	public String selectHomeId(Long home_id,Integer page,Integer limit,HttpSession session){
 		try {
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if(brokerVo==null){
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
 			}
-			List<FollowUpVo> followUp=followUpService.selectHomeId(home_id);
+			page=(page-1)*limit;
+			Map<String, Object> followUp=followUpService.selectHomeId(home_id,page,limit);
 		 	if(followUp.size()>0){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", followUp);
 		 	}else {
@@ -209,9 +220,9 @@ public class FollowUpController {
 	public String selectNumberFollow(Long shopId, Date startTime, Date endTime,HttpSession session){
 		try {
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
-			/*if(brokerVo==null){
+			if(brokerVo==null){
 				return FastJsonUtil.getResponseJson(-2, "未登录", null);
-			}*/
+			}
 			List<Map<String, Object>> followUp=followUpService.selectByPrimaryCount(shopId, startTime, endTime);
 		 	if(followUp.size()!=0){
 		 		return FastJsonUtil.getResponseJson(0, "查询成功", followUp);

@@ -1,5 +1,8 @@
 package com.yqwl.service.impl;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,8 +62,13 @@ public class CollectServiceImpl implements CollectService{
      * @createDate 2019年6月13日
      */
 	@Override
-	public List<CollectVo> selectListCo(Long broker_id) throws Exception{
-		return collectMapper.selectListCo(broker_id);
+	public Map<String, Object> selectListCo(Long broker_id,Integer page,Integer limit) throws Exception{
+		Map<String, Object> map = new HashMap<>();
+		List<CollectVo> collectVos=collectMapper.selectListCo(broker_id,page,limit);
+		Integer count=collectMapper.selectCollCount(broker_id);
+		map.put("date", collectVos);
+		map.put("count", count);
+		return map;
 	}
 
 	/**
