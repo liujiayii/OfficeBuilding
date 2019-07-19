@@ -362,7 +362,7 @@ public class BackBrokerController extends BaseController{
 					return FastJsonUtil.getResponseJson(code, msg, result);
 				}
 				code = -1;
-				msg = "转移失败";
+				msg = "无信息可转移";
 				return FastJsonUtil.getResponseJson(code, msg, null);
 			}
 			msg = "未登录";

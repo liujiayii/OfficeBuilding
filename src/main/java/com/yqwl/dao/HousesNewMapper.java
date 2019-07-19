@@ -62,7 +62,7 @@ public interface HousesNewMapper {
 
 	public HousesNewVo selectByFindID(long id);
 
-	List<HousesNew> listHousesNewByCondition(@Param("cityId") Integer cityId, @Param("regionId") Integer regionId,
+	List<HousesVo> listHousesNewByCondition(@Param("cityId") Integer cityId, @Param("regionId") Integer regionId,
 			@Param("startSpace") Integer startSpace, @Param("endSpace") Integer endSpace,
 			@Param("startMoney") BigDecimal startMoney, @Param("endMoney") BigDecimal endMoney,
 			@Param("fitment") Integer fitment, @Param("brokerId") Long brokerId, @Param("buildingId") Long buildingId,

@@ -223,7 +223,7 @@ public class BackShopController extends BaseController {
 	
 	/**
 	 * 
-	 * @Title: listAll
+	 * @Title: listAllOnPage
 	 * @description 分页查询所有店铺
 	 * @param session
 	 * @return

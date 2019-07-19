@@ -480,6 +480,7 @@
 		t_houses_new hn,t_building b
 		<where>
 			b.id=hn.building_id
+			AND hn.types=1
 			<if test="area != null and ratio != null and area != 0 and ratio != 0">
 				AND (`office_space` <![CDATA[>=]]>
 				#{area} AND `office_space` <![CDATA[<=]]>
@@ -533,15 +534,24 @@
 	</select>
 	
 	
-	<select id="listHousesNewByCondition" resultMap="BaseResultMap">
+	<select id="listHousesNewByCondition" resultType="com.yqwl.Vo.HousesVo">
 		SELECT
-		h.*
+		h.*,
+		b.mansion_name,
+		pd.door_num,
+		pb.name
 		FROM
 		t_building AS b
 		JOIN t_houses_new AS h ON b.id = h.building_id,
-		t_owner AS o
+		t_owner AS o,
+		t_plot_door AS pd,
+		t_plot_build AS pb
 		WHERE
 		b.region_city_id = #{cityId}
+		AND
+		h.door_id = pd.id
+		AND
+		pd.build_id = pb.id
 		AND
 		h.id = o.home_id
 		AND (ISNULL(#{regionId}) OR b.region_id = #{regionId})
@@ -578,21 +588,30 @@
 		AND (ISNULL(#{home_name}) OR h.home_name LIKE CONCAT('%', #{home_name},'%'))
 		GROUP BY h.id
 		ORDER BY
-		h.id DESC
+		h.begin_time DESC
 	</select>
 
 	<select id="ListBackHousesNew" resultType="com.yqwl.Vo.HousesVo">
 		SELECT
 		h.*,
 		br.real_name,
-		br.phonemunber
+		br.phonemunber,
+		b.mansion_name,
+		pd.door_num,
+		pb.name
 		FROM
 		t_building AS b
 		JOIN t_houses_new AS h ON b.id = h.building_id,
 		t_broker AS br,
-		t_owner AS o
+		t_owner AS o,
+		t_plot_door AS pd,
+		t_plot_build AS pb
 		WHERE
 		h.maintain_broker_id = br.id
+		AND
+		h.door_id = pd.id
+		AND
+		pd.build_id = pb.id
 		AND
 		h.id = o.home_id
 		AND
@@ -681,7 +700,9 @@
 	<update id="updateSelective" parameterType="com.yqwl.pojo.HousesNew">
 		update `t_houses_new`
 		<set>
-				`whether` = 1,
+			<if test="whether != null">
+				`whether` = #{whether,jdbcType=INTEGER},
+			</if>
 			<if test="open_broker_id != null">
 				`open_broker_id` = #{open_broker_id,jdbcType=BIGINT},
 			</if>

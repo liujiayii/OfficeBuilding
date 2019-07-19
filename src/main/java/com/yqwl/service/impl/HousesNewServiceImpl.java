@@ -117,7 +117,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 * 列表查询房源
 	 */
 	@Override
-	public PageInfo<HousesNew> listHousesNewByCondition(Pager pager) throws Exception {
+	public PageInfo<HousesVo> listHousesNewByCondition(Pager pager) throws Exception {
 		// 获取参数
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId")));
@@ -153,9 +153,9 @@ public class HousesNewServiceImpl implements HousesNewService {
 
 		// 分页
 		PageHelper.startPage(pager);
-		List<HousesNew> list = housesNewMapper.listHousesNewByCondition(cityId, regionId, startSpace, endSpace,
+		List<HousesVo> list = housesNewMapper.listHousesNewByCondition(cityId, regionId, startSpace, endSpace,
 				startMoney, endMoney, fitment, brokerId,buildingId,home_number,home_name, whether,broker_id);
-		return new PageInfo<HousesNew>(list);
+		return new PageInfo<HousesVo>(list);
 	}
 
 	@Override
@@ -193,10 +193,11 @@ public class HousesNewServiceImpl implements HousesNewService {
 	 */
 	@Override
 	public int insertSelective(HousesNew record, Long brokerId, String number ,String... urls) {
-		PlotDoor plotDoor = new PlotDoor(); 
+		PlotDoor plotDoor = plotDoorMapper.selectByPrimaryKey(record.getDoor_id());
 		plotDoor.setId(record.getDoor_id());
 		plotDoor.setStatus(1);
 		plotDoorMapper.updateByPrimaryKeySelective(plotDoor);
+		Long shopId = brokerMapper.getBrokerByShopId(brokerId);
 		//我要获取当前的日期
         Date date = new Date();
         //设置要获取到什么样的时间
@@ -206,6 +207,8 @@ public class HousesNewServiceImpl implements HousesNewService {
 		record.setHoues_number(createdate);
 		record.setTimes(new Date());
 		record.setBegin_time(new Date());
+		record.setShop_id(shopId);
+		record.setLocation(plotDoor.getFloor());
 		Integer count = housesNewMapper.insertSelective(record);
 		/** 判断(房源表)插入成功后向(房源图片储存表)插入图片 */
 		if (count != 0&&urls != null&&urls.length>0) {
@@ -555,6 +558,7 @@ public class HousesNewServiceImpl implements HousesNewService {
 			if (brokers!=null) {
 				String Wname=brokers.getReal_name();
 				map.put("Wname", Wname);//维护经纪人姓名
+				map.put("WnameId", housesNew.getMaintain_broker_id());
 			} else {
 				map.put("Wname", null);
 			}

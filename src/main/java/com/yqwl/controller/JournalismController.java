@@ -131,4 +131,28 @@ public class JournalismController {
 			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
 		}
 	}
+	/**
+	 *
+	 * @Title: selectJourCount
+	 * @description 条数
+	 * @param @param records    
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年7月17日
+	 */
+	@RequestMapping(value = "selectJourCount", method = RequestMethod.POST, produces = Constants.HTML_PRODUCE_TYPE)
+	@ResponseBody
+	public String selectJourCount(JournalismVo records) throws Exception {
+		try {
+			Integer count = journalismService.selectJourCount(records);
+			if (count!= 0) {
+				return FastJsonUtil.getResponseJson(0, "查询成功", count);
+			} else {
+				return FastJsonUtil.getResponseJson(-1, "查询失败", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return FastJsonUtil.getResponseJson(-200, "系统异常", e);
+		}
+	}
 }

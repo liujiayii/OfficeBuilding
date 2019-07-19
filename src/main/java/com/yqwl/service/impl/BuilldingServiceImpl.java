@@ -98,6 +98,7 @@ public class BuilldingServiceImpl implements BuildingService {
 		Map<String, Object> conditions = MapUtil.formSerializeToMap(pager.getFilter());
 		String condition = new String(StringUtils.getFirstString(conditions.get("record")).trim().getBytes("ISO-8859-1"), "UTF-8");
 		Integer cityId = NumberUtil.dealInteger(StringUtils.getFirstString(conditions.get("cityId"))); 
+		System.out.println("城市"+cityId);
 		//分页
 		PageHelper.startPage(pager);
 		List<BuildingVo> list = buildingMapper.listByBuilding(condition,cityId);

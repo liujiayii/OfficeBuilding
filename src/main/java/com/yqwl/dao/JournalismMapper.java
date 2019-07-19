@@ -100,4 +100,15 @@ public interface JournalismMapper {
      * @createDate 2019年4月28日
      */
     int updateJourna(Journalism record);
+
+	/**
+	 *
+	 * @Title: selectJourCount
+	 * @description 条数
+	 * @param @param records    
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年7月17日
+	 */
+	Integer selectJourCount(JournalismVo records);
  }

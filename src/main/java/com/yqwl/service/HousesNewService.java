@@ -28,7 +28,7 @@ public interface HousesNewService {
 	/* 通过id查询房源详细数据 **/
 	public HousesNewVo selectByFindID(long id) throws Exception;
 
-	public PageInfo<HousesNew> listHousesNewByCondition(Pager pager) throws Exception;
+	public PageInfo<HousesVo> listHousesNewByCondition(Pager pager) throws Exception;
 
 	/* 查询可能喜欢的房源信息 **/
 	List<HousesNewVo> selectLike(HousesNewVo record) throws Exception;

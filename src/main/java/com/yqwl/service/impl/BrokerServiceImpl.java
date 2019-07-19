@@ -218,7 +218,7 @@ public class BrokerServiceImpl implements BrokerService{
 			}
 		}
 		if (userTarget != null) {
-			List<User> list = userMapper.listByBrokerId(userTarget);
+			List<User> list = userMapper.listByBrokerId(brokerId);
 			for (User user : list) {
 				user.setBroker_id(userTarget);
 				count += userMapper.updateByPrimaryKeySelective(user);

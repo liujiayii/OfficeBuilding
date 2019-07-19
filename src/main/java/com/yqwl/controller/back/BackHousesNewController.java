@@ -1,5 +1,6 @@
 package com.yqwl.controller.back;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,7 +88,7 @@ public class BackHousesNewController extends BaseController {
 			/** 判断是否登录 */
 			BrokerVo brokerVo = (BrokerVo) session.getAttribute(Constants.Login_User);
 			if (brokerVo != null) {
-				PageInfo<HousesNew> result = housesNewService.listHousesNewByCondition(pager);
+				PageInfo<HousesVo> result = housesNewService.listHousesNewByCondition(pager);
 				if (result.getTotal() != 0) {
 					msg = "查询成功";
 					return FastJsonUtil.getResponseJson(code, msg, result);
@@ -777,13 +778,15 @@ public class BackHousesNewController extends BaseController {
 			if (brokerVo == null) {
 				return FastJsonUtil.getResponseJson("-2", "未登录");
 			}
-				record.setBegin_time(new Date());
-				record.setWhether(1);
+				if(record.getWhether()==22){
+					record.setBegin_time(new Date());
+					record.setWhether(1);
+				}
 				int count = housesNewService.updateByPrimaryKey(record);
 				if (count != 0) {
-					return FastJsonUtil.getResponseJson(0, "开盘成功", null);
+					return FastJsonUtil.getResponseJson(0, "修改房源状态或开盘成功", null);
 				} else {
-					return FastJsonUtil.getResponseJson(-1, "开盘失败", null);
+					return FastJsonUtil.getResponseJson(-1, "修改房源状态或开盘失败", null);
 				}
 		} catch (Exception e) {
 			return dealException(-200, "系统异常", e);
@@ -810,6 +813,7 @@ public class BackHousesNewController extends BaseController {
 				return FastJsonUtil.getResponseJson("-2", "未登录");
 				}
 				Date date = new Date();
+				String time1 = new SimpleDateFormat("yyyy-MM-dd").format(date);
 				List<ArrayList<String>> lists = new ArrayList<ArrayList<String>>();
 				for (Long bigInteger : id) {
 					ArrayList<String> list = new ArrayList<String>();
@@ -818,7 +822,8 @@ public class BackHousesNewController extends BaseController {
 					List<FeedbackVo> feedbacks = feedbackService.selectListKey(bigInteger);
 					List<Inform> inform = informMapper.selectTypeSix(bigInteger);
 					if(date1!=null){
-						if (date == date1.getBegin_time()) {
+						String time2 = new SimpleDateFormat("yyyy-MM-dd").format(date1.getBegin_time());
+						if (time1.equals(time2)) {
 							list.add("新");
 						}
 					}

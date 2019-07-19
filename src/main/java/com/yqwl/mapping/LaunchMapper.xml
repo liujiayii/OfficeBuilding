@@ -292,7 +292,7 @@
 		l.times,
 		l.status
 		FROM
-		t_Launch l
+		t_launch l
 		WHERE
 		l.broker_id=0
 		AND
@@ -306,7 +306,7 @@
 		SELECT
 		COUNT(l.id) count
 		FROM
-		t_Launch l
+		t_launch l
 		WHERE
 		l.broker_id=0
 		AND
@@ -339,7 +339,7 @@
 		SELECT
 		l.*
 		FROM
-		t_Launch AS l
+		t_launch AS l
 		WHERE
 		l.broker_id = #{broker_id}
 		ORDER BY l.times DESC
@@ -350,7 +350,7 @@
 		SELECT
 		COUNT(l.id) count
 		FROM
-		t_Launch AS l
+		t_launch AS l
 		WHERE
 		l.broker_id = #{broker_id}
 	</select>

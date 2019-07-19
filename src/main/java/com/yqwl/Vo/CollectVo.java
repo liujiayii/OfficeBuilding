@@ -28,6 +28,9 @@ public class CollectVo extends Collect implements Serializable{
 	private BigDecimal money;
 	private Integer money_unit;
 	private Integer location;
+	private String name;
+	private String mansion_name;
+	private Integer door_num;
 	/** 页数 */
 	private int page;
 	/** 分页条数 */
@@ -37,6 +40,30 @@ public class CollectVo extends Collect implements Serializable{
 	private Integer whether;
 	private Integer fitment;
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMansion_name() {
+		return mansion_name;
+	}
+
+	public void setMansion_name(String mansion_name) {
+		this.mansion_name = mansion_name;
+	}
+
+	public Integer getDoor_num() {
+		return door_num;
+	}
+
+	public void setDoor_num(Integer door_num) {
+		this.door_num = door_num;
+	}
+
 	public String getReal_name() {
 		return real_name;
 	}
@@ -165,9 +192,9 @@ public class CollectVo extends Collect implements Serializable{
 	public String toString() {
 		return "CollectVo [housesNew=" + housesNew + ", work_name=" + work_name + ", house_picture=" + house_picture
 				+ ", times=" + times + ", types=" + types + ", office_space=" + office_space + ", money=" + money
-				+ ", money_unit=" + money_unit + ", location=" + location + ", page=" + page + ", limit=" + limit
-				+ ", count=" + count + ", real_name=" + real_name + ", whether=" + whether + ", fitment=" + fitment
-				+ "]";
+				+ ", money_unit=" + money_unit + ", location=" + location + ", name=" + name + ", mansion_name="
+				+ mansion_name + ", door_num=" + door_num + ", page=" + page + ", limit=" + limit + ", count=" + count
+				+ ", real_name=" + real_name + ", whether=" + whether + ", fitment=" + fitment + "]";
 	}
 	
 }

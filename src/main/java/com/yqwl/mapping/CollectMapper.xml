@@ -103,7 +103,7 @@
 	</update>
 	<!-- 查询经纪人收藏数据 -->
 	<select id="selectListCo" resultType="com.yqwl.Vo.CollectVo">
-		SELECT
+		SELECT 
 		c.id,
 		c.home_id,
 		h.work_name,
@@ -116,14 +116,23 @@
 		h.times,
 		h.fitment,
 		b.real_name,
-		h.whether
+		h.whether,
+		pd.door_num,
+		bu.mansion_name,
+		pl.name
 		FROM
 		t_collect c,
 		t_houses_new h,
-		t_broker b
+		t_broker b,
+		t_plot_door pd,
+		t_plot_build pl,
+		t_building bu	
 		WHERE
 		c.home_id = h.id
 		AND h.entering_broker_id = b.id
+		AND h.door_id=pd.id
+		AND h.building_id=bu.id
+		AND pd.build_id=pl.id
 		AND c.broker_id = #{broker_id,jdbcType=BIGINT}
 		ORDER BY c.time DESC
 		LIMIT #{page},#{limit}

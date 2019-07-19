@@ -13,6 +13,28 @@ import com.yqwl.pojo.HousesNew;
 public class HousesVo extends HousesNew{
 	private String real_name;
 	private Long phonemunber;
+	private String mansion_name;
+	private String door_num;
+	private String name;
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getDoor_num() {
+		return door_num;
+	}
+	public void setDoor_num(String door_num) {
+		this.door_num = door_num;
+	}
+	public String getMansion_name() {
+		return mansion_name;
+	}
+	public void setMansion_name(String mansion_name) {
+		this.mansion_name = mansion_name;
+	}
 	public String getReal_name() {
 		return real_name;
 	}

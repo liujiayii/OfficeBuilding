@@ -125,7 +125,7 @@ public class FollowUpController {
 			record.setRemind_time(new Date());
 			int num=followUpService.updateByPrimaryKeySelective(record);
 		 	if(num!=0){
-		 		if(record.getRetreat()!=1){
+		 		if(record.getRetreat()==1){
 		 			FollowUp followUp=followUpService.selectByPrimaryKey(record.getId());
 		 			Inform inform=new Inform();
 		 			inform.setFollow_id(followUp.getId());

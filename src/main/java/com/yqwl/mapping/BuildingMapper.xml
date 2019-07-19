@@ -390,7 +390,7 @@
 		WHERE
 		b.region_city_id = #{cityId}
 		AND h.whether = 1
-		AND (
+		AND ((
 		ISNULL(#{condition})
 		OR b.mansion_name LIKE CONCAT('%', #{condition},
 		'%')
@@ -414,7 +414,7 @@
 		ISNULL(#{condition})
 		OR h.work_name LIKE CONCAT('%', #{condition},
 		'%')
-		)
+		))
 		AND b.`status` = 0
 		
 	</select>

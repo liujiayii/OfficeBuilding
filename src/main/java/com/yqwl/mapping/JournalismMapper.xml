@@ -192,7 +192,7 @@
     ,
     <include refid="Blob_Column_List" />
     from `t_journalism`
-    ORDER BY `time` 
+    ORDER BY `time` DESC
 	LIMIT 1
   </select>
   
@@ -224,6 +224,14 @@
 		LIMIT
 		#{page},#{limit}
 	</select> 
+	<select id="selectJourCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1)
+		FROM
+		t_journalism 
+		WHERE
+		genre=#{genre}
+	</select>
 	<!-- 查询上一篇新闻 -->
 	<select id="selectPrevious" parameterType="com.yqwl.pojo.Journalism" resultMap="BaseResultMap">
 		SELECT

@@ -155,5 +155,18 @@ public class JournalismServiceImpl implements JournalismService{
 		}
 		return num;
 	}
+	/**
+	 *
+	 * @Title: selectJourCount
+	 * @description 条数
+	 * @param @param records    
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年7月17日
+	 */
+	@Override
+	public Integer selectJourCount(JournalismVo records) {
+		return journalismMapper.selectJourCount(records);
+	}
 
 }

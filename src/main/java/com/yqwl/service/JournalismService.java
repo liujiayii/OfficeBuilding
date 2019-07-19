@@ -1,6 +1,7 @@
 package com.yqwl.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yqwl.Vo.JournalismVo;
 import com.yqwl.pojo.Journalism;
@@ -95,4 +96,14 @@ public interface JournalismService {
      * @createDate 2019年4月30日
      */
     int deleteByPrimaryKey(Long id) throws Exception;
+    /**
+	 *
+	 * @Title: selectJourCount
+	 * @description 条数
+	 * @param @param records    
+	 * @return void    
+	 * @author linhongyu
+	 * @createDate 2019年7月17日
+	 */
+	Integer selectJourCount(JournalismVo records);
 }
