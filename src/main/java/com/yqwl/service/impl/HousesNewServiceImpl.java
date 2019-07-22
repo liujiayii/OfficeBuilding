@@ -275,7 +275,14 @@ public class HousesNewServiceImpl implements HousesNewService {
 		Integer count = housesNewMapper.updateByPrimaryKeySelective(record);
 		/** 判断(房源表)插入成功后向(房源图片储存表)插入图片 */
 		if (count != 0&&urls != null&&urls.length>0) {
-			/** 修改图片相当于新增图片，不删除之前保存的 */
+			Long houses_new_id=record.getId();
+			List<Picture> pictures=pictureMapper.selectPic(houses_new_id);
+			if(pictures.size()>0){
+				for (Picture picture : pictures) {
+					pictureMapper.deleteByPrimaryKey(picture.getId());
+				}
+			}
+			/** 修改图片相当于新增图片，不删除之前保存的 *///删除之前的图片之后，从新添加图片
 			for (String url : urls) {
 				Picture picture = new Picture();
 				picture.setBroker_id(brokerId);

@@ -142,16 +142,18 @@ public class JournalismServiceImpl implements JournalismService{
 		int num=journalismMapper.deleteByPrimaryKey(id);
 		Long journalism_id=id;
 		List<NewsPic> newsPics=newsPicMapper.selectPic(journalism_id);
-		for(int i=0;i<newsPics.size();i++){
-			Long ids=newsPics.get(i).getId();
-			NewsPic name = newsPicMapper.selectByPrimaryKey(ids);
-			String url=name.getPicture();
-				try {
-					UpdateFiles.deleatFile(url);
-					newsPicMapper.deleteByPrimaryKey(ids);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		if(newsPics.size()>0){
+			for(int i=0;i<newsPics.size();i++){
+				Long ids=newsPics.get(i).getId();
+				NewsPic name = newsPicMapper.selectByPrimaryKey(ids);
+				String url=name.getPicture();
+					try {
+						UpdateFiles.deleatFile(url);
+						newsPicMapper.deleteByPrimaryKey(ids);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+			}
 		}
 		return num;
 	}
